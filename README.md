@@ -24,7 +24,28 @@
 
 ---
 
+```php
+
+$tenant = Tenant::find(2);
+
+$db_manager = new DatabaseManager();
+//$created = $db_manager->createDatabase($tenant);
+//$created = $db_manager->deleteDatabase($tenant);
+//$created = $db_manager->databaseExists($tenant);
+
+```
+
 
 ---
 ## Resource
 - https://tenancyforlaravel.com/docs/v3/tenants/
+
+---
+## Commands
+```shell script
+php artisan migrate --path=/VaahCms/Modules/Saas/Database/Migrations
+
+php artisan migrate:rollback  --path=/VaahCms/Modules/Saas/Database/Migrations
+
+php artisan db:seed --class=VaahCms\Modules\Saas\Database\Seeds\SampleDataTableSeeder
+```
