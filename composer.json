@@ -1,0 +1,27 @@
+{
+    "name": "vaahcms/saas",
+    "description": "Module for multi-tenancy SaaS product development",
+    "authors": [
+        {
+            "name": "vaah",
+            "email": "support@vaah.dev"
+        }
+    ],
+    "require": {
+        "php": "^7.0"
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "VaahCms\\Modules\\Saas\\Providers\\SaasServiceProvider"
+            ],
+            "aliases": {
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "VaahCms\\Modules\\Saas\\": ""
+        }
+    }
+}
