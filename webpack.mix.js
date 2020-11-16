@@ -15,14 +15,40 @@ const fs_extra = require('fs-extra');
  |
  */
 
-let path = './../../../public/vaahcms/modules/saas/assets';
+let publish_folder;
+let output_folder;
+let source_vue_folder;
 
-mix.setPublicPath(path);
-let css_path = path+'/css/';
+source_vue_folder = __dirname+'/Vue';
 
-var path_vue = __dirname+"/Vue/app.js";
 
-mix.js(path_vue,  './builds').version();
+if (mix.inProduction()) {
+    /*
+     |--------------------------------------------------------------------------
+     | Only in Production
+     |--------------------------------------------------------------------------
+     */
+    console.log('---------------------');
+    console.log('IN PRODUCTION MODE');
+    console.log('---------------------');
+
+    publish_folder = './Resources/assets/';
+    output_folder = "./";
+
+    mix.setPublicPath(publish_folder);
+    mix.js(source_vue_folder+"/app.js",  output_folder+'/build/app.js');
+
+} else {
+
+    publish_folder = './../../../public/vaahcms/modules/';
+    output_folder = "./saas/assets/";
+
+    mix.setPublicPath(publish_folder);
+
+    mix.js(source_vue_folder+"/app.js",  output_folder+'/build/app.js');
+
+}
+
 
 mix.webpackConfig({
     watchOptions: {

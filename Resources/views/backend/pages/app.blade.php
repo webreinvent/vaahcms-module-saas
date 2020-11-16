@@ -7,10 +7,10 @@
 
 @section('vaahcms_extend_backend_js')
 
-    @if(env('APP_MODULE_Saas_ENV') == 'develop')
+    @if(env('APP_MODULE_SAAS_ENV') == 'develop')
         <script src="http://localhost:8080/saas/assets/build/app.js" defer></script>
     @else
-        <script src="{{vh_module_assets_url("Saas", "builds/app.js")}}"></script>
+        <script src="{{vh_module_assets_url("Saas", "build/app.js")}}"></script>
     @endif
 
 @endsection

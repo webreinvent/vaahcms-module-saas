@@ -18,17 +18,7 @@ class BackendController extends Controller
 
     public function index()
     {
-
-        $tenant = Tenant::find(2);
-
-        $db_manager = new DatabaseManager();
-        //$created = $db_manager->createDatabase($tenant);
-        //$created = $db_manager->deleteDatabase($tenant);
-        //$created = $db_manager->databaseExists();
-
-
-
-        return view('saas::backend.pages.index');
+        return view('saas::backend.pages.app');
     }
 
     public function getAssets(Request $request)
