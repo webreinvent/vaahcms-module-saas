@@ -16,32 +16,10 @@ import GetAssets from './middleware/GetAssets'
 import Backend from './../layouts/Backend'
 import Index from './../pages/dashboard/Index'
 
-routes_list =     {
-    path: '/',
-    component: Backend,
-    props: true,
-    meta: {
-        middleware: [
-            GetAssets
-        ]
-    },
-    children: [
-        {
-            path: '/',
-            name: 'cms.index',
-            component: Index,
-            props: true,
-            meta: {
-                middleware: [
-                    GetAssets
-                ]
-            },
-        },
+import routes_server  from './routes-servers'
 
-    ]
-};
 
-routes.push(routes_list);
+routes = routes.concat(routes, routes_server);
 
 /*
 |--------------------------------------------------------------------------
