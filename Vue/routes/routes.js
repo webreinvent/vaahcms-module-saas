@@ -16,10 +16,11 @@ import GetAssets from './middleware/GetAssets'
 import Backend from './../layouts/Backend'
 import Index from './../pages/dashboard/Index'
 
+import routes_tenants  from './routes-tenants'
 import routes_server  from './routes-servers'
 
 
-routes = routes.concat(routes, routes_server);
+routes = routes.concat(routes, routes_tenants, routes_server);
 
 /*
 |--------------------------------------------------------------------------

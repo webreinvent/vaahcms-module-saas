@@ -27,3 +27,6 @@ Route::group(
             ->name( 'vh.backend.saas.assets' );
         //------------------------------------------------
     });
+
+include('backend/routes-tenants.php');
+include('backend/routes-servers.php');
