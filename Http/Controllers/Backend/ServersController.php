@@ -23,8 +23,15 @@ class ServersController extends Controller
     public function getAssets(Request $request)
     {
 
-        $data = [];
-        $data['permission'] = [];
+
+        $data['hosted_by'] = [
+            'MySql',
+            'CPanel-MySql',
+        ];
+
+        $data['drivers'] = [
+            'mysql',
+        ];
 
         $response['status'] = 'success';
         $response['data'] = $data;

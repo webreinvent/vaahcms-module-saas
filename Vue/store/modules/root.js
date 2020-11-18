@@ -6,6 +6,7 @@ let current_url = document.getElementById('current_url').getAttribute('content')
 let debug = document.getElementById('debug').getAttribute('content');
 //---------/Variables
 
+let ajax_url = base_url+'/backend/saas';
 
 export default {
     namespaced: true,
@@ -14,6 +15,7 @@ export default {
         debug: debug,
         base_url: base_url,
         current_url: current_url,
+        ajax_url: ajax_url,
         assets: null,
         assets_reload: null,
         permissions: null,
@@ -37,7 +39,7 @@ export default {
 
                 let params = {};
 
-                let url = state.current_url + '/assets';
+                let url = state.ajax_url + '/assets';
                 let data = await Vaah.ajax(url, params);
 
                 if (!root_assets) {

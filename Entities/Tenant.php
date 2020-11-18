@@ -16,6 +16,9 @@ class Tenant extends Model {
     protected $table = 'vh_saas_tenants';
     //-------------------------------------------------
     protected $dates = [
+        'is_database_created_at',
+        'is_active_at',
+        'is_deactivated_at',
         'created_at',
         'updated_at',
         'deleted_at'
@@ -25,12 +28,25 @@ class Tenant extends Model {
     //-------------------------------------------------
     protected $fillable = [
         'uuid',
+        'vh_saas_server_id',
         'name',
         'slug',
-        'is_active',
+        'path',
+        'domain',
+        'sub_domain',
+
+        'database_name',
+        'database_charset',
+        'database_collation',
+        'is_database_created_at',
+        'is_active_at',
+        'is_deactivated_at',
+        'notes',
+
+        'meta',
         'created_by',
         'updated_by',
-        'deleted_by',
+        'deleted_by'
     ];
 
     //-------------------------------------------------
@@ -408,12 +424,6 @@ class Tenant extends Model {
             return $response;
         }
 
-    }
-    //-------------------------------------------------
-    public static function getActiveItems()
-    {
-        $item = static::where('is_active', 1)->get();
-        return $item;
     }
     //-------------------------------------------------
     //-------------------------------------------------

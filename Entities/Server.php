@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Entities\User;
@@ -16,6 +17,7 @@ class Server extends Model {
     protected $table = 'vh_saas_servers';
     //-------------------------------------------------
     protected $dates = [
+        'is_active_at',
         'created_at',
         'updated_at',
         'deleted_at'
@@ -27,15 +29,29 @@ class Server extends Model {
         'uuid',
         'name',
         'slug',
-        'is_active',
+        'hosted_by',
+        'driver',
+        'hostname',
+        'port',
+        'username',
+        'password',
+        'count_tenants',
+        'count_db_instances',
+        'is_active_at',
+        'meta',
         'created_by',
         'updated_by',
-        'deleted_by',
+        'deleted_by'
     ];
 
     //-------------------------------------------------
     protected $appends  = [
     ];
+    //-------------------------------------------------
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Crypt::encrypt($value);
+    }
     //-------------------------------------------------
 
     public function createdByUser()
@@ -61,6 +77,13 @@ class Server extends Model {
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
     }
     //-------------------------------------------------
+    public function tenants()
+    {
+        return $this->hasMany(Tenant::class,
+            'vh_saas_server_id', 'id'
+        );
+    }
+    //-------------------------------------------------
     public function getTableColumns() {
         return $this->getConnection()->getSchemaBuilder()
             ->getColumnListing($this->getTable());
@@ -71,6 +94,7 @@ class Server extends Model {
         return $query->select( array_diff( $this->getTableColumns(),$columns) );
     }
 
+    //-------------------------------------------------
     //-------------------------------------------------
     public function scopeBetweenDates($query, $from, $to)
     {
@@ -412,10 +436,38 @@ class Server extends Model {
     //-------------------------------------------------
     public static function getActiveItems()
     {
-        $item = static::where('is_active', 1)->get();
+        $item = static::whereNotNull('is_active_at')->get();
         return $item;
     }
     //-------------------------------------------------
+    public static function countTenants($id)
+    {
+
+        $item = static::withTrashed()->where('id', $id)->first();
+
+        if(!$item)
+        {
+            return 0;
+        }
+
+        return $item->tenants()->count();
+
+    }
+    //-------------------------------------------------
+    public static function countDatabaseInstances($id)
+    {
+
+        $item = static::withTrashed()->where('id', $id)->first();
+
+        if(!$item)
+        {
+            return 0;
+        }
+
+        return $item->tenants()
+            ->whereNotNull('vh_saas_tenants.is_database_created_at')
+            ->count();
+    }
     //-------------------------------------------------
     //-------------------------------------------------
 

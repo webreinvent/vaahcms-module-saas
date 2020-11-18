@@ -37,6 +37,16 @@ export default {
         new_item:{
             name: null,
             slug: null,
+            hosted_by: null,
+            driver: null,
+            hostname: null,
+            port: null,
+            username: null,
+            password: null,
+            count_tenants: null,
+            count_db_instances: null,
+            is_active_at: null,
+            meta: null
         },
 
     },

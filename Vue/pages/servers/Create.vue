@@ -86,6 +86,58 @@
                     </b-field>
 
 
+                    <b-field label="Server Host Type" :label-position="labelPosition">
+                        <b-select placeholder="Select a name">
+                            <option
+                                v-for="(option, index) in page.assets.hosted_by"
+                                :value="option"
+                                :key="index">
+                                {{ option }}
+                            </option>
+                        </b-select>
+                    </b-field>
+
+                    <b-field label="Database Driver" :label-position="labelPosition">
+                        <b-select placeholder="Select a name">
+                            <option
+                                v-for="(option, index) in page.assets.drivers"
+                                :value="option"
+                                :key="index">
+                                {{ option }}
+                            </option>
+                        </b-select>
+                    </b-field>
+
+                    <b-field label="Host" :label-position="labelPosition">
+                        <b-input name="servers-host" dusk="servers-host" v-model="new_item.host"></b-input>
+                    </b-field>
+
+
+                    <b-field label="Port" :label-position="labelPosition">
+                        <b-input name="servers-port" dusk="servers-port" v-model="new_item.port"></b-input>
+                    </b-field>
+
+                    <b-field label="Username" :label-position="labelPosition">
+                        <b-input name="servers-username"
+                                 dusk="servers-username" v-model="new_item.username"></b-input>
+                    </b-field>
+
+                    <b-field label="Password" :label-position="labelPosition">
+                        <b-input name="servers-password" dusk="servers-password"
+                                 type="password"
+                                 password-reveal
+                                 v-model="new_item.password"></b-input>
+                    </b-field>
+
+
+                    <b-field >
+                        <b-button type="is-primary"
+                                  icon-left="database">
+                            Test Database Connection
+                        </b-button>
+                    </b-field>
+
+
                 </div>
             </div>
             <!--/content-->
