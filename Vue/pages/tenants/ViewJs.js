@@ -1,6 +1,13 @@
 let namespace = 'tenants';
 
 
+import GlobalComponents from '../../vaahvue/helpers/GlobalComponents'
+
+import TableTrView from '../../vaahvue/reusable/TableTrView'
+import TableTrActedBy from '../../vaahvue/reusable/TableTrActedBy'
+import TableTrTag from '../../vaahvue/reusable/TableTrTag'
+import TableTrStatus from '../../vaahvue/reusable/TableTrStatus'
+import TableTrUrl from "../../vaahvue/reusable/TableTrUrl";
 
 export default {
     computed:{
@@ -11,7 +18,12 @@ export default {
         item() {return this.$store.getters[namespace+'/state'].active_item},
     },
     components:{
-
+        ...GlobalComponents,
+        TableTrView,
+        TableTrStatus,
+        TableTrActedBy,
+        TableTrTag,
+        TableTrUrl,
     },
     data()
     {

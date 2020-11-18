@@ -29,7 +29,8 @@ class VhSaasTenants extends Migration
             $table->string('database_charset')->nullable()->default('utf8mb4');
             $table->string('database_collation')->nullable()->default('utf8mb4_unicode_ci');
             $table->dateTime('is_database_created_at')->nullable();
-            $table->dateTime('is_active_at')->nullable();
+            $table->dateTime('activated_at')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->dateTime('is_deactivated_at')->nullable();
             $table->string('notes')->nullable();
 

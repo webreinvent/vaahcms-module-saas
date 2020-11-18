@@ -104,19 +104,61 @@
 
                                 <tbody>
 
-                                <tr>
-                                    <th align="right">Name</th>
-                                    <td colspan="2">
-                                        {{item.name}}
-                                    </td>
-                                </tr>
+                                <template v-for="(value, label) in item">
 
-                                <tr>
-                                    <th align="right">Slug</th>
-                                    <td colspan="2">
-                                        {{item.slug}}
-                                    </td>
-                                </tr>
+                                    <template v-if="label == 'status'">
+                                        <TableTrStatus :value="value"
+                                                       :label="label">
+                                        </TableTrStatus>
+                                    </template>
+
+                                    <template v-if="label == 'avatar'">
+                                        <TableTrUrl :value="value"
+                                                    :label="label">
+                                        </TableTrUrl>
+                                    </template>
+
+                                    <template v-else-if="label == 'is_active'">
+                                        <TableTrStatus v-if="value == 1" :value="'Yes'"
+                                                       :label="label">
+                                        </TableTrStatus>
+                                        <TableTrStatus v-else :value="'No'"
+                                                       :label="label">
+                                        </TableTrStatus>
+                                    </template>
+
+                                    <template v-else-if="label == 'created_by'">
+                                        <TableTrActedBy :value="item['created_by_user']"
+                                                        :label="label">
+                                        </TableTrActedBy>
+                                    </template>
+
+                                    <template v-else-if="label == 'updated_by'">
+                                        <TableTrActedBy :value="item['updated_by_user']"
+                                                        :label="label">
+                                        </TableTrActedBy>
+                                    </template>
+
+                                    <template v-else-if="label == 'deleted_by'">
+                                        <TableTrActedBy :value="item['deleted_by_user']"
+                                                        :label="label">
+                                        </TableTrActedBy>
+                                    </template>
+
+                                    <template v-else-if="label == 'created_by_user'
+                                      || label == 'updated_by_user' || label == 'deleted_by_user' || label == 'name'  || label == 'thumbnail' ">
+
+                                    </template>
+
+                                    <template v-else>
+                                        <TableTrView :value="value"
+                                                     :label="label"
+                                                     :is_copiable="isCopiable(label)"
+                                                     :is_upper_case="isUpperCase(label)">
+                                        </TableTrView>
+                                    </template>
+
+                                </template>
 
                                 </tbody>
 

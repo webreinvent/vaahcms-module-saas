@@ -20,6 +20,9 @@ function () {
      Route::any('/list', 'ServersController@getList')
     ->name('vh.backend.saas.servers.list');
      //---------------------------------------------------------
+    Route::any('/connect', 'ServersController@connect')
+        ->name('vh.backend.saas.servers.connect');
+     //---------------------------------------------------------
      Route::any('/item/{uuid}', 'ServersController@getItem')
     ->name('vh.backend.saas.servers.item');
      //---------------------------------------------------------

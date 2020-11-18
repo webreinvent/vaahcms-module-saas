@@ -21,7 +21,7 @@ class VhSaasServers extends Migration
             $table->string('name')->nullable(); // server label
             $table->string('slug')->nullable(); // server label
 
-            $table->string('hosted_by')->nullable(); //cPanel | mysql
+            $table->string('host_type')->nullable(); //cPanel | mysql
 
             $table->string('driver')->nullable(); // mysql | redis
             $table->string('host')->nullable();
@@ -30,7 +30,8 @@ class VhSaasServers extends Migration
             $table->string('password')->nullable();
             $table->integer('count_tenants')->nullable(); // count database in the server
             $table->integer('count_db_instances')->nullable(); // count database in the server
-            $table->dateTime('is_active_at')->nullable();
+            $table->dateTime('activated_at')->nullable();
+            $table->boolean('is_active')->nullable();
             $table->text('meta')->nullable();
 
             // COMMON FIELDS

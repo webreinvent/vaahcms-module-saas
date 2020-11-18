@@ -4,40 +4,45 @@ use Illuminate\Database\Connection;
 use Illuminate\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager as BaseDatabaseManager;
+use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
 
 class DatabaseManager
 {
 
-    protected $app;
-
-    protected $database;
-
-    protected $config;
+    protected $tenant=null;
+    protected $server=null;
 
     protected $db_manager;
 
-    public function __construct()
+    public function __construct(Server $server, Tenant $tenant=null)
     {
+        $this->server = $server;
 
+        if($tenant)
+        {
+            $this->tenant = $tenant;
+        }
+
+        $this->setDBManager();
     }
 
     //--------------------------------------------------------
-    public function setDBManager(Tenant $tenant)
+    public function setDBManager()
     {
         $manager = null;
-        switch ($tenant->server->hosted_by)
+        switch ($this->server->host_type)
         {
             case 'mysql':
-                $manager = new MySQLDatabaseManager($tenant->server, $tenant);
+                $manager = new MySQLDatabaseManager($this->server, $this->tenant);
                 break;
 
             case 'cpanel-mysql':
-                $manager = new CpanelMySqlDatabaseManager($tenant->server, $tenant);
+                $manager = new CpanelMySqlDatabaseManager($this->server, $this->tenant);
                 break;
 
             default:
-                $manager = new MySQLDatabaseManager($tenant->server, $tenant);
+                $manager = new MySQLDatabaseManager($this->server, $this->tenant);
                 break;
         }
 
@@ -45,24 +50,27 @@ class DatabaseManager
 
     }
     //--------------------------------------------------------
-    public function createDatabase(Tenant $tenant)
+    public function createDatabase()
     {
-        $this->setDBManager($tenant);
         $response = $this->db_manager->createDatabase();
         return $response;
     }
     //--------------------------------------------------------
-    public function deleteDatabase(Tenant $tenant)
+    public function deleteDatabase()
     {
-        $this->setDBManager($tenant);
         $response = $this->db_manager->deleteDatabase();
         return $response;
     }
     //--------------------------------------------------------
-    public function databaseExists(Tenant $tenant)
+    public function databaseExists()
     {
-        $this->setDBManager($tenant);
         $response = $this->db_manager->databaseExists();
+        return $response;
+    }
+    //--------------------------------------------------------
+    public function testConnection()
+    {
+        $response = $this->db_manager->testConnection();
         return $response;
     }
     //--------------------------------------------------------

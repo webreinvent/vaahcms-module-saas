@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use VaahCms\Modules\Saas\Entities\Server;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 
 
 class ServersController extends Controller
@@ -24,7 +25,7 @@ class ServersController extends Controller
     {
 
 
-        $data['hosted_by'] = [
+        $data['host_types'] = [
             'MySql',
             'CPanel-MySql',
         ];
@@ -124,6 +125,38 @@ class ServersController extends Controller
 
     }
     //----------------------------------------------------------
+    public function connect(Request $request)
+    {
+        $rules = array(
+            'host_type' => 'required',
+            'driver' => 'required',
+            'host' => 'required',
+            'port' => 'required',
+            'username' => 'required',
+        );
+
+        $validator = \Validator::make( $request->new_item, $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return response()->json($response);
+        }
+
+        $data = [];
+
+        $item = new Server();
+        $item->fill($request->new_item);
+
+
+        $db_manager = new DatabaseManager($item);
+        $response = $db_manager->testConnection();
+
+
+        return response()->json($response);
+
+    }
     //----------------------------------------------------------
 
 

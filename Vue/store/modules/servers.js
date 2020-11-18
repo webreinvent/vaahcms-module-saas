@@ -37,9 +37,9 @@ export default {
         new_item:{
             name: null,
             slug: null,
-            hosted_by: null,
+            host_type: null,
             driver: null,
-            hostname: null,
+            host: null,
             port: null,
             username: null,
             password: null,

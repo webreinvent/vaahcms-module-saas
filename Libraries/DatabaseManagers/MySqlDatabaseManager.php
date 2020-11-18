@@ -24,12 +24,12 @@ class MySqlDatabaseManager
             $this->tenant = $tenant;
         }
 
-        $this->setServerConnection();
+        $this->setConnectionConfig();
 
     }
 
     //--------------------------------------------------------
-    protected function getServerConfig()
+    protected function getConfig()
     {
         $config = [
             'driver' => $this->server->driver,
@@ -49,15 +49,16 @@ class MySqlDatabaseManager
 
     }
     //--------------------------------------------------------
-    public function testServerConnection()
+    public function testConnection()
     {
-        $config = $this->getServerConfig();
+        $config = $this->getConfig();
 
         Config::set('database.connections.'.$this->server->slug, $config);
 
         try{
             DB::connection($this->server->slug);
             $response['status'] = 'success';
+            $response['messages'][] = 'Successfully connected with the database host.';
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -65,11 +66,12 @@ class MySqlDatabaseManager
         }
 
         return $response;
+
     }
     //--------------------------------------------------------
-    protected function setServerConnection()
+    protected function setConnectionConfig()
     {
-        $config = $this->getServerConfig();
+        $config = $this->getConfig();
 
         Config::set('database.connections.'.$this->server->slug, $config);
 
@@ -87,6 +89,7 @@ class MySqlDatabaseManager
             $this->server_connection
                 ->statement("CREATE DATABASE `{$database}` CHARACTER SET `$charset` COLLATE `$collation`");
             $response['status'] = 'success';
+            $response['messages'][] = 'Database Created';
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -103,6 +106,7 @@ class MySqlDatabaseManager
             $this->server_connection
                 ->statement("DROP DATABASE `{$this->tenant->database_name}`");
             $response['status'] = 'success';
+            $response['messages'][] = 'Database Deleted';
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -119,6 +123,7 @@ class MySqlDatabaseManager
             $this->server_connection
                 ->select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$this->tenant->database_name'");
             $response['status'] = 'success';
+            $response['messages'][] = 'Database Already Exist';
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';

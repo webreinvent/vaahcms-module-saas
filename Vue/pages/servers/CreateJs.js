@@ -1,5 +1,9 @@
 let namespace = 'servers';
 
+import GlobalComponents from '../../vaahvue/helpers/GlobalComponents'
+
+
+
 export default {
     computed:{
         root() {return this.$store.getters['root/state']},
@@ -10,12 +14,15 @@ export default {
         new_item_errors() {return this.$store.getters[namespace+'/state'].new_item_errors},
     },
     components:{
+        ...GlobalComponents,
+
     },
     data()
     {
         return {
             is_content_loading: false,
             is_btn_loading: null,
+            is_btn_loading_connect: null,
             labelPosition: 'on-border',
             params: {},
             local_action: null,
@@ -24,7 +31,19 @@ export default {
     watch: {
         $route(to, from) {
             this.updateView()
-        }
+        },
+        'new_item.name': {
+            deep: true,
+            handler(new_val, old_val) {
+
+                if(new_val)
+                {
+                    this.new_item.slug = this.$vaah.strToSlug(new_val);
+                    this.updateNewItem();
+                }
+
+            }
+        },
     },
     mounted() {
 
@@ -44,6 +63,16 @@ export default {
                 state_name: name,
                 state_value: value,
                 namespace: namespace,
+            };
+            this.$vaah.updateState(update);
+        },
+        //---------------------------------------------------------------------
+        updateNewItem: function()
+        {
+            let update = {
+                state_name: 'new_item',
+                state_value: this.new_item,
+                namespace: this.namespace,
             };
             this.$vaah.updateState(update);
         },
@@ -113,10 +142,25 @@ export default {
 
         },
         //---------------------------------------------------------------------
-        updateNewItem: function()
-        {
-            this.update('new_item', this.new_item);
+        connect: function () {
+            this.is_btn_loading_connect = true;
+
+            this.$Progress.start();
+
+            this.params = {
+                new_item: this.new_item
+            };
+
+            let url = this.ajax_url+'/connect';
+            this.$vaah.ajax(url, this.params, this.connectAfter);
         },
+        //---------------------------------------------------------------------
+        connectAfter: function (data, res) {
+            this.is_btn_loading_connect = false;
+            this.$Progress.finish();
+        },
+        //---------------------------------------------------------------------
+
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         setLocalAction: function (action) {

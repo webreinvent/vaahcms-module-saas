@@ -86,10 +86,11 @@
                     </b-field>
 
 
-                    <b-field label="Server Host Type" :label-position="labelPosition">
-                        <b-select placeholder="Select a name">
+                    <b-field label="Server Host Type"
+                             :label-position="labelPosition">
+                        <b-select v-model="new_item.host_type" placeholder="Select a name">
                             <option
-                                v-for="(option, index) in page.assets.hosted_by"
+                                v-for="(option, index) in page.assets.host_types"
                                 :value="option"
                                 :key="index">
                                 {{ option }}
@@ -97,8 +98,9 @@
                         </b-select>
                     </b-field>
 
-                    <b-field label="Database Driver" :label-position="labelPosition">
-                        <b-select placeholder="Select a name">
+                    <b-field label="Database Driver"
+                             :label-position="labelPosition">
+                        <b-select v-model="new_item.driver" placeholder="Select a name">
                             <option
                                 v-for="(option, index) in page.assets.drivers"
                                 :value="option"
@@ -132,6 +134,8 @@
 
                     <b-field >
                         <b-button type="is-primary"
+                                  :loading="is_btn_loading_connect"
+                                  @click="connect()"
                                   icon-left="database">
                             Test Database Connection
                         </b-button>

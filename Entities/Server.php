@@ -29,9 +29,9 @@ class Server extends Model {
         'uuid',
         'name',
         'slug',
-        'hosted_by',
+        'host_type',
         'driver',
-        'hostname',
+        'host',
         'port',
         'username',
         'password',
@@ -50,7 +50,10 @@ class Server extends Model {
     //-------------------------------------------------
     public function setPasswordAttribute($value)
     {
-        $this->attributes['password'] = Crypt::encrypt($value);
+        if($value)
+        {
+            $this->attributes['password'] = Crypt::encrypt($value);
+        }
     }
     //-------------------------------------------------
 
@@ -154,11 +157,21 @@ class Server extends Model {
         $item->slug = Str::slug($inputs['slug']);
         $item->save();
 
+        static::updateCounts($item);
+
+
         $response['status'] = 'success';
         $response['data']['item'] = $item;
         $response['messages'][] = 'Saved successfully.';
         return $response;
 
+    }
+    //-------------------------------------------------
+    public static function updateCounts(Server $server)
+    {
+        $server->count_tenants = static::countTenants($server->id);
+        $server->count_db_instances = static::countDatabaseInstances($server->id);
+        $server->save();
     }
     //-------------------------------------------------
     public static function getList($request)
@@ -421,6 +434,11 @@ class Server extends Model {
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'host_type' => 'required|max:150',
+            'driver' => 'required|max:150',
+            'host' => 'required|max:150',
+            'port' => 'required|max:150',
+            'username' => 'required|max:150',
         );
 
         $validator = \Validator::make( $inputs, $rules);
@@ -468,6 +486,15 @@ class Server extends Model {
             ->whereNotNull('vh_saas_tenants.is_database_created_at')
             ->count();
     }
+    //-------------------------------------------------
+    public static function testServerConnection($inputs)
+    {
+
+
+
+    }
+    //-------------------------------------------------
+    //-------------------------------------------------
     //-------------------------------------------------
     //-------------------------------------------------
 
