@@ -7,8 +7,9 @@ use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
 use Illuminate\Support\Facades\Config;
 
-class MySQLDatabaseManager
+class MySqlDatabaseManager
 {
+
     protected $tenant;
     protected $server;
     protected $server_connection;
@@ -44,7 +45,7 @@ class MySQLDatabaseManager
             $config['password'] = Crypt::decrypt($this->server->password);
         }
 
-       return $config;
+        return $config;
 
     }
     //--------------------------------------------------------
@@ -134,13 +135,6 @@ class MySQLDatabaseManager
         $this->app['config']['database.default'] = $connection;
         $this->database->setDefaultConnection($connection);
     }
-    //--------------------------------------------------------
-    //--------------------------------------------------------
-    //--------------------------------------------------------
-    //--------------------------------------------------------
-    //--------------------------------------------------------
-    //--------------------------------------------------------
-    //--------------------------------------------------------
     //--------------------------------------------------------
 
 }
