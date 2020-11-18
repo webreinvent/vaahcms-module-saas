@@ -95,11 +95,6 @@ export default {
 
             if(data && data)
             {
-                if(data.is_active == 1){
-                    data.is_active = 'Yes';
-                }else{
-                    data.is_active = 'No';
-                }
                 this.update('active_item', data);
             } else
             {
@@ -114,14 +109,16 @@ export default {
             console.log('--->action', action);
 
             this.$Progress.start();
-            this.page.bulk_action.action = action;
-            this.update('bulk_action', this.page.bulk_action);
+
+
             let params = {
-                inputs: [this.item.id],
+                inputs: this.item.id,
                 data: null
             };
 
-            let url = this.ajax_url+'/actions/'+this.page.bulk_action.action;
+            console.log('--->', this.page);
+
+            let url = this.ajax_url+'/actions/'+action;
             this.$vaah.ajax(url, params, this.actionsAfter);
 
         },
@@ -132,6 +129,7 @@ export default {
             {
                 this.resetBulkAction();
                 this.$emit('eReloadList');
+                this.$emit('eReloadItem');
 
                 if(action == 'bulk-delete')
                 {

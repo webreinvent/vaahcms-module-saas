@@ -2,7 +2,7 @@
 
     {
         "name": "Tenant V1",
-        "path": "mysql",
+        "path": "v1",
         "domain": "v1.com",
         "sub_domain": "v1.tenant.com",
         "vh_saas_server_id": 1,
@@ -16,7 +16,7 @@
     },
     {
         "name": "Tenant V2",
-        "path": "mysql",
+        "path": "v2",
         "domain": "v2.com",
         "sub_domain": "v2.tenant.com",
         "vh_saas_server_id": 1,

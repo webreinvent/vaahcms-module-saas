@@ -3,7 +3,9 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Entities\User;
 
@@ -17,7 +19,7 @@ class Tenant extends Model {
     //-------------------------------------------------
     protected $dates = [
         'is_database_created_at',
-        'is_active_at',
+        'activated_at',
         'is_deactivated_at',
         'created_at',
         'updated_at',
@@ -39,7 +41,8 @@ class Tenant extends Model {
         'database_charset',
         'database_collation',
         'is_database_created_at',
-        'is_active_at',
+        'activated_at',
+        'is_active',
         'is_deactivated_at',
         'notes',
 
@@ -413,6 +416,7 @@ class Tenant extends Model {
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'database_name' => 'required|alpha_dash|max:20',
         );
 
         $validator = \Validator::make( $inputs, $rules);
@@ -424,7 +428,224 @@ class Tenant extends Model {
             return $response;
         }
 
+        $exist = static::withTrashed()->where('database_name', $inputs['database_name'])
+            ->first();
+
+
+        if($exist)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Database name already exist';
+            return $response;
+        }
+
+
     }
+    //-------------------------------------------------
+    public static function createDatabase($request)
+    {
+
+        if(!$request->has('inputs'))
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Select IDs';
+            return $response;
+        }
+
+        $item = static::where('id', $request->inputs)->withTrashed()->first();
+        $server = Server::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->createDatabase();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_active = 1;
+            $item->activated_at = \Carbon::now();
+            $item->is_database_created_at = \Carbon::now();
+            $item->is_deactivated_at = null;
+            $item->save();
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+    //-------------------------------------------------
+    public static function deleteDatabase($request)
+    {
+
+        if(!$request->has('inputs'))
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Select IDs';
+            return $response;
+        }
+
+        $item = static::where('id', $request->inputs)->withTrashed()->first();
+        $server = Server::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->deleteDatabase();
+
+        if($response['status'] == 'success')
+        {
+
+            $item->is_active = null;
+            $item->activated_at = null;
+            $item->is_database_created_at = null;
+            $item->is_deactivated_at = \Carbon::now();
+            $item->save();
+
+            $response['data'] = [];
+
+        }
+
+        return $response;
+
+
+    }
+    //-------------------------------------------------
+    public static function artisanCommandValidation($value, $key='uuid')
+    {
+        $tenant = static::withTrashed()->where($key, $value)->first();
+
+        if(!$tenant)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant does not exist';
+            return $response;
+        }
+
+        //check database is created for the tenant
+        if(!$tenant->is_database_created_at)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant database is not created';
+            return $response;
+        }
+
+        $server = Server::find($tenant->vh_saas_server_id);
+
+        if(!$server)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant database server does not exist';
+            return $response;
+        }
+
+        $db_manager = new DatabaseManager($server, $tenant);
+
+        //check server connection
+        $is_connected = $db_manager->testConnection();
+        if($is_connected['status'] == 'failed')
+        {
+            return $is_connected;
+        }
+
+        //check if database does not exist on the server
+        $db_exist = $db_manager->databaseExists();
+        if($db_exist['status'] == 'failed')
+        {
+            return $db_exist;
+        }
+    }
+    //-------------------------------------------------
+    public static function migrate($inputs, $value, $key='uuid')
+    {
+        $rules = array(
+            'command' => 'required',
+        );
+
+        if(isset($inputs['command']))
+        {
+            $rules['path'] = 'required';
+        }
+
+        $validator = Validator::make( $inputs, $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return $response;
+        }
+
+        $is_valid = static::artisanCommandValidation($value, $key='uuid');
+
+        if($is_valid['status'] == 'failed')
+        {
+            return $is_valid;
+        }
+
+        $tenant = static::withTrashed()->where($key, $value)->first();
+        $server = Server::find($tenant->vh_saas_server_id);
+        $db_manager = new DatabaseManager($server, $tenant);
+
+        //connect to database
+        $connection = $db_manager->connectToDatabase();
+
+        if(isset($connection['status']) && $connection['status'] == 'failed')
+        {
+            return $connection;
+        }
+
+        $db_connection_name = $connection['data']['connection_name'];
+
+        $response = \VaahArtisan::migrate($inputs['command'], $db_connection_name, $inputs['path']);
+
+        return $response;
+
+    }
+    //-------------------------------------------------
+    public static function seed($inputs, $value, $key='uuid')
+    {
+        $rules = array(
+            'command' => 'required',
+        );
+
+        if(isset($inputs['command']))
+        {
+            $rules['class'] = 'required';
+        }
+
+        $validator = Validator::make( $inputs, $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return $response;
+        }
+
+        $is_valid = static::artisanCommandValidation($value, $key='uuid');
+
+        if($is_valid['status'] == 'failed')
+        {
+            return $is_valid;
+        }
+
+        $tenant = static::withTrashed()->where($key, $value)->first();
+        $server = Server::find($tenant->vh_saas_server_id);
+        $db_manager = new DatabaseManager($server, $tenant);
+
+        //connect to database
+        $connection = $db_manager->connectToDatabase();
+
+        if(isset($connection['status']) && $connection['status'] == 'failed')
+        {
+            return $connection;
+        }
+
+        $db_connection_name = $connection['data']['connection_name'];
+
+        $response = \VaahArtisan::seed($inputs['command'], $db_connection_name, $inputs['class']);
+
+        return $response;
+
+    }
+
+    //-------------------------------------------------
+    //-------------------------------------------------
     //-------------------------------------------------
     //-------------------------------------------------
     //-------------------------------------------------

@@ -28,4 +28,9 @@ function () {
      Route::post('/actions/{action_name}', 'TenantsController@postActions')
     ->name('vh.backend.saas.tenants.actions');
      //---------------------------------------------------------
+    Route::any('/item/{uuid}/migrate', 'TenantsController@postMigrate')
+        ->name('vh.backend.saas.tenants.item.migrate');
+     //---------------------------------------------------------
+
+     //---------------------------------------------------------
 });

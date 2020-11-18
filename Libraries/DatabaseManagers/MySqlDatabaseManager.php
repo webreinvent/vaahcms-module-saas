@@ -12,6 +12,7 @@ class MySqlDatabaseManager
 
     protected $tenant;
     protected $server;
+    protected $config;
     protected $server_connection;
 
     //--------------------------------------------------------
@@ -24,7 +25,13 @@ class MySqlDatabaseManager
             $this->tenant = $tenant;
         }
 
-        $this->setConnectionConfig();
+        $this->config = $this->getConfig();
+
+        if($tenant)
+        {
+            $this->config['database'] = $tenant->database_name;
+        }
+
 
     }
 
@@ -45,13 +52,15 @@ class MySqlDatabaseManager
             $config['password'] = Crypt::decrypt($this->server->password);
         }
 
+
+
         return $config;
 
     }
     //--------------------------------------------------------
     public function testConnection()
     {
-        $config = $this->getConfig();
+        $config = $this->config;
 
         Config::set('database.connections.'.$this->server->slug, $config);
 
@@ -69,23 +78,43 @@ class MySqlDatabaseManager
 
     }
     //--------------------------------------------------------
-    protected function setConnectionConfig()
+    public function connectToDatabase()
     {
-        $config = $this->getConfig();
+        $connection_name = $this->server->slug;
 
-        Config::set('database.connections.'.$this->server->slug, $config);
+        if($this->tenant)
+        {
+            $connection_name = $connection_name.'-'.$this->tenant->slug;
+        }
 
-        $this->server_connection = DB::connection($this->server->slug);
+        try{
+            Config::set('database.connections.'.$connection_name, $this->config);
+            $this->server_connection = DB::connection($connection_name);
+            $response['status'] = 'success';
+            $response['data']['connection_name'] = $connection_name;
+            $response['data']['config'] = $this->config;
 
+        }catch(\Exception $e)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = $e->getMessage();
+
+        }
+
+
+        return $response;
     }
     //--------------------------------------------------------
     public function createDatabase()
     {
+
+
         $database = $this->tenant->database_name;
         $charset = $this->tenant->database_charset;
         $collation = $this->tenant->database_collation;
 
         try{
+            $this->connectToDatabase();
             $this->server_connection
                 ->statement("CREATE DATABASE `{$database}` CHARACTER SET `$charset` COLLATE `$collation`");
             $response['status'] = 'success';
@@ -102,7 +131,9 @@ class MySqlDatabaseManager
     //--------------------------------------------------------
     public function deleteDatabase()
     {
+
         try{
+            $this->connectToDatabase();
             $this->server_connection
                 ->statement("DROP DATABASE `{$this->tenant->database_name}`");
             $response['status'] = 'success';
@@ -120,6 +151,7 @@ class MySqlDatabaseManager
     public function databaseExists()
     {
         try{
+            $this->connectToDatabase();
             $this->server_connection
                 ->select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$this->tenant->database_name'");
             $response['status'] = 'success';

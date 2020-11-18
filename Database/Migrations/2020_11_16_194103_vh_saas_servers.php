@@ -16,15 +16,15 @@ class VhSaasServers extends Migration
 
         Schema::create('vh_saas_servers', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('uuid')->nullable();
+            $table->uuid('uuid')->nullable()->index();
 
             $table->string('name')->nullable(); // server label
-            $table->string('slug')->nullable(); // server label
+            $table->string('slug')->nullable()->index(); // server label
 
             $table->string('host_type')->nullable(); //cPanel | mysql
 
             $table->string('driver')->nullable(); // mysql | redis
-            $table->string('host')->nullable();
+            $table->string('host')->nullable()->index();
             $table->string('port')->nullable();
             $table->string('username')->nullable();
             $table->string('password')->nullable();

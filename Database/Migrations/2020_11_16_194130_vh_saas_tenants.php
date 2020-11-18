@@ -16,14 +16,14 @@ class VhSaasTenants extends Migration
 
         Schema::create('vh_saas_tenants', function (Blueprint $table) {
             $table->increments('id');
-            $table->uuid('uuid')->nullable();
+            $table->uuid('uuid')->nullable()->index();
             $table->integer('vh_saas_server_id')->nullable();
 
             $table->string('name')->nullable();
-            $table->string('slug')->nullable();
-            $table->string('path')->nullable();
-            $table->string('domain')->nullable();
-            $table->string('sub_domain')->nullable();
+            $table->string('slug')->nullable()->index();
+            $table->string('path')->nullable()->index();
+            $table->string('domain')->nullable()->index();
+            $table->string('sub_domain')->nullable()->index();
 
             $table->string('database_name')->nullable();
             $table->string('database_charset')->nullable()->default('utf8mb4');

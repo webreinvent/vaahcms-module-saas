@@ -75,11 +75,10 @@ class DatabaseManager
     }
     //--------------------------------------------------------
 
-    public function connectToTenant(TenantWithDatabase $tenant)
+    public function connectToDatabase()
     {
-        $this->database->purge('tenant');
-        $this->createTenantConnection($tenant);
-        $this->setDefaultConnection('tenant');
+        $response = $this->db_manager->connectToDatabase();
+        return $response;
     }
 
     //--------------------------------------------------------

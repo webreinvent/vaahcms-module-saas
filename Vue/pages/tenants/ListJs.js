@@ -269,10 +269,11 @@ export default {
         actionsAfter: function (data, res) {
             if(data)
             {
-                this.$root.$emit('eReloadItem');
+
                 this.resetBulkAction();
                 this.getList();
-                this.$store.dispatch('root/reloadPermissions');
+                this.getItem();
+
             } else
             {
                 this.$Progress.finish();

@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Validator;
 use VaahCms\Modules\Saas\Entities\Tenant;
 
 
@@ -109,6 +110,17 @@ class TenantsController extends Controller
 
                 break;
             //------------------------------------
+            case 'create-database':
+
+                $response = Tenant::createDatabase($request);
+
+                break;
+            //------------------------------------
+            case 'delete-database':
+
+                $response = Tenant::deleteDatabase($request);
+
+                break;
             //------------------------------------
 
         }
@@ -117,6 +129,16 @@ class TenantsController extends Controller
 
     }
     //----------------------------------------------------------
+    public function postMigrate(Request $request, $uuid)
+    {
+
+        $inputs = $request->all();
+
+        $response = Tenant::migrate($inputs, $uuid);
+
+        return response()->json($response);
+
+    }
     //----------------------------------------------------------
 
 

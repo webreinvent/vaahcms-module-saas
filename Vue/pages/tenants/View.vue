@@ -37,6 +37,20 @@
                                 </button>
 
                                 <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.is_database_created_at"
+                                                 @click="actions('delete-database')">
+                                    <b-icon icon="database"></b-icon>
+                                    Delete Database
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-else
+                                                 @click="actions('create-database')">
+                                    <b-icon icon="database"></b-icon>
+                                    Create Database
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
                                                  v-if="!item.deleted_at"
                                                  @click="actions('bulk-trash')"
                                 >
@@ -146,7 +160,8 @@
                                     </template>
 
                                     <template v-else-if="label == 'created_by_user'
-                                      || label == 'updated_by_user' || label == 'deleted_by_user' || label == 'name'  || label == 'thumbnail' ">
+                                      || label == 'updated_by_user' || label == 'deleted_by_user'
+                                      || label == 'name'  || label == 'thumbnail' ">
 
                                     </template>
 
