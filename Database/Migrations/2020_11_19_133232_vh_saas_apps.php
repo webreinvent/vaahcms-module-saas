@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class VhSaasTenants extends Migration
+class VhSaasApps extends Migration
 {
     /**
      * Run the migrations.
@@ -14,27 +14,27 @@ class VhSaasTenants extends Migration
     public function up()
     {
 
-        Schema::create('vh_saas_tenants', function (Blueprint $table) {
+        Schema::create('vh_saas_apps', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid')->nullable()->index();
-            $table->integer('vh_saas_server_id')->nullable()->index();
-
+            $table->string('app_type')->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable()->index();
-            $table->string('path')->nullable()->index();
-            $table->string('domain')->nullable()->index();
-            $table->string('sub_domain')->nullable()->index();
+            $table->string('excerpt')->nullable();
 
-            $table->string('database_name')->nullable();
-            $table->string('database_charset')->nullable()->default('utf8mb4');
-            $table->string('database_collation')->nullable()->default('utf8mb4_unicode_ci');
-            $table->dateTime('is_database_created_at')->nullable();
+            $table->string('version')->nullable();
+            $table->integer('version_number')->nullable();
+
+            $table->string('relative_path')->nullable();
+            $table->string('migration_path')->nullable();
+            $table->string('seed_class')->nullable();
+            $table->string('sample_data_class')->nullable();
+
             $table->dateTime('activated_at')->nullable();
             $table->boolean('is_active')->nullable();
+
             $table->dateTime('is_deactivated_at')->nullable();
             $table->string('notes')->nullable();
-
-            $table->text('meta')->nullable();
 
             // COMMON FIELDS
             $table->integer('created_by')->nullable();
@@ -56,6 +56,6 @@ class VhSaasTenants extends Migration
     */
     public function down()
     {
-        Schema::dropIfExists('vh_saas_tenants');
+        Schema::dropIfExists('vh_saas_apps');
     }
 }

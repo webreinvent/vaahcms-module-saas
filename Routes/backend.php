@@ -29,4 +29,5 @@ Route::group(
     });
 
 include('backend/routes-tenants.php');
+include('backend/routes-apps.php');
 include('backend/routes-servers.php');
