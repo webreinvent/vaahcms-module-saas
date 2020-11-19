@@ -1,4 +1,4 @@
-let namespace = 'apps';
+let namespace = 'tenantapps';
 
 export default {
     computed:{
@@ -24,17 +24,7 @@ export default {
     watch: {
         $route(to, from) {
             this.updateView()
-        },
-        'new_item.name': {
-            deep: true,
-            handler(new_val, old_val) {
-                if(new_val)
-                {
-                    this.new_item.slug = this.$vaah.strToSlug(new_val);
-                    this.updateNewItem();
-                }
-            }
-        },
+        }
     },
     mounted() {
 
@@ -136,7 +126,7 @@ export default {
         //---------------------------------------------------------------------
         saveAndClose: function () {
             this.update('active_item', null);
-            this.$router.push({name:'apps.list'});
+            this.$router.push({name:'tenantapps.list'});
         },
         //---------------------------------------------------------------------
         saveAndNew: function () {
@@ -146,7 +136,7 @@ export default {
         //---------------------------------------------------------------------
         saveAndClone: function () {
             this.fillNewItem();
-            this.$router.push({name:'apps.create'});
+            this.$router.push({name:'tenantapps.create'});
         },
         //---------------------------------------------------------------------
         getNewItem: function()
@@ -187,24 +177,6 @@ export default {
             return this.$vaah.hasPermission(this.permissions, slug);
         },
         //---------------------------------------------------------------------
-        setNewItemValues: function () {
-
-            let new_item = this.new_item;
-
-            console.log('--->', new_item);
-
-            let module = this.$vaah.findInArrayByKey(this.page.assets.modules, 'name', new_item.name);
-
-            for(let key in module)
-            {
-                new_item[key] = module[key];
-            }
-
-            console.log('--->new_item', new_item);
-
-            this.update('new_item', new_item);
-
-        }
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------

@@ -1,4 +1,4 @@
-let namespace = 'apps';
+let namespace = 'tenantapps';
 export default {
     computed: {
         root() {return this.$store.getters['root/state']},
@@ -57,7 +57,7 @@ export default {
         //---------------------------------------------------------------------
         setActiveItem: function (item) {
             this.update('active_item', item);
-            this.$router.push({name: 'apps.view', params:{id:item.id}})
+            this.$router.push({name: 'tenantapps.view', params:{id:item.id}})
         },
         //---------------------------------------------------------------------
         changeStatus: function (id) {
@@ -92,10 +92,6 @@ export default {
             return this.$vaah.hasPermission(this.permissions, slug);
         },
         //---------------------------------------------------------------------
-        getItemTenants: function (item) {
-            this.update('active_item', item);
-            this.$router.push({name: 'apps.tenants', params:{id:item.id}})
-        },
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------

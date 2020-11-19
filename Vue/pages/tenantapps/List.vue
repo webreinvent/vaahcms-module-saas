@@ -20,7 +20,7 @@
                         <header class="card-header">
 
                             <div class="card-header-title">
-                                apps
+                                tenantapps
                             </div>
 
                             <div class="card-header-buttons">
@@ -28,7 +28,7 @@
                                     <p   class="control">
                                         <b-button tag="router-link"
                                                   type="is-light"
-                                                  :to="{name: 'apps.create'}"
+                                                  :to="{name: 'tenantapps.create'}"
                                                   icon-left="plus">
                                             Create
                                         </b-button>
@@ -59,7 +59,7 @@
                                 <div class="level">
 
                                     <!--left-->
-                                    <div class="level-left" v-if="page.list_view">
+                                    <div class="level-left" >
                                         <div  class="level-item">
                                             <b-field >
 
@@ -105,7 +105,7 @@
 
 
                                     <!--right-->
-                                    <div class="level-right ">
+                                    <div class="level-right">
 
                                         <div class="level-item">
 
@@ -151,8 +151,7 @@
                                 <!--filters-->
                                 <div class="level" v-if="page.show_filters">
 
-
-                                    <div class="level-left" >
+                                    <div class="level-left">
 
 
 

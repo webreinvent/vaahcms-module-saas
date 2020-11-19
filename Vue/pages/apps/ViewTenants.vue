@@ -1,4 +1,4 @@
-<script src="./ViewPermissionJs.js"></script>
+<script src="./ViewTenantsJs.js"></script>
 <template>
     <div class="column" v-if="page.assets">
 
@@ -10,7 +10,7 @@
             <!--header-->
             <header v-if="item" class="card-header">
                 <div  class="card-header-title">
-                    <span>{{$vaah.limitString(item.name, 30)}}</span>
+                    <span>{{$vaah.limitString(item.name, 30)}} > Tenants</span>
                 </div>
 
                 <div class="card-header-buttons">
@@ -84,47 +84,14 @@
                         <div class="level-left">
                             <div class="level-item">
 
-                                <b-field label="">
-                                    <b-select placeholder="- Select a module -"
-                                              v-model="filter.module"
-                                              @input="setSection()"
-                                    >
-                                        <option value="">
-                                            - Select a module -
-                                        </option>
-                                        <option
-                                                v-for="option in page.assets.module"
-                                                :value="option.module"
-                                                :key="option.module">
-                                            {{  option.module.charAt(0).toUpperCase() + option.module.slice(1) }}
-                                        </option>
-                                    </b-select>
 
-                                    <div v-for="item in page.assets.module">
-                                        <b-select placeholder="- Select a section -"
-                                                  v-if="item.module === filter.module"
-                                                  v-model="filter.section"
-                                                  @input="getItemPermissions()">
-                                            <option value="">
-                                                - Select a section -
-                                            </option>
-                                            <option
-                                                    v-for="option in moduleSectionList"
-                                                    :value="option.section"
-                                                    :key="option.section">
-                                                {{  option.section.charAt(0).toUpperCase() + option.section.slice(1) }}
-                                            </option>
-                                        </b-select>
-                                    </div>
-                                    
-                                </b-field>
 
 
                             </div>
                         </div>
                         <div class="level-right">
                             <b-field>
-                                <b-input style="width: 100%" placeholder="Search Permissions"
+                                <b-input style="width: 100%" placeholder="Search Tenants"
                                          type="search"
                                          icon="search"
                                          @input="delayedSearch"
@@ -165,9 +132,9 @@
 
                         <template slot-scope="props">
 
-                            <b-table-column field="id" label="Permission" >
+                            <b-table-column field="id" label="Tenant Name" >
                                 <b-tooltip label="Copy Slug" type="is-dark">
-                                    <b-button type="is-small"
+                                    <b-button size="is-small"
                                               class="is-light"
                                               @click="$vaah.copy(props.row.slug)">
                                         {{ props.row.name }}
@@ -176,7 +143,16 @@
                             </b-table-column>
 
 
-                            <b-table-column v-if="hasPermission('can-update-roles') || hasPermission('can-manage-roles')" field="name" class="has-text-centered" label="Has Role">
+                            <b-table-column field="id" label="App Version" >
+                                <b-button size="is-small"
+                                          :type="{'is-danger': props.row.pivot.version_number < item.version_number}"
+                                          class="is-light">
+                                    v{{ props.row.pivot.version }}/v{{item.version}}
+                                </b-button>
+                            </b-table-column>
+
+
+                            <b-table-column field="has_role" class="has-text-centered" label="Has App">
                                 <b-button v-if="props.row.pivot.is_active === 1" rounded size="is-small"
                                           type="is-success" @click="changePermission(props.row)">
                                     Yes
@@ -188,37 +164,24 @@
                             </b-table-column>
 
 
-                            <b-table-column v-else field="name" class="has-text-centered" label="Has Role">
-                                <b-button v-if="props.row.pivot.is_active === 1" disabled rounded size="is-small"
-                                          type="is-success">
-                                    Yes
-                                </b-button>
-                                <b-button v-else disabled rounded size="is-small" type="is-danger">
-                                    No
-                                </b-button>
-                            </b-table-column>
 
-
-                            <b-table-column v-if="( hasPermission('can-update-permissions') || hasPermission('can-manage-permissions') ) && ( hasPermission('can-update-roles') || hasPermission('can-manage-roles') )"  field="status" label="Permission Status" numeric>
-                                <b-button v-if="props.row.is_active == 1" rounded class="is-success" type="is-small" @click="changeItemStatus(props.row.id)">
+                            <b-table-column  field="status" label="Tenant Status" numeric>
+                                <b-button v-if="props.row.is_active == 1" rounded
+                                          class="is-success"
+                                          type="is-small" @click="changeItemStatus(props.row.id)">
                                     Active
                                 </b-button>
 
-                                <b-button v-else rounded class="is-danger" type="is-small" @click="changeItemStatus(props.row.id)">
+                                <b-button v-else rounded class="is-danger"
+                                          type="is-small"
+                                          @click="changeItemStatus(props.row.id)">
                                     Inactive
                                 </b-button>
                             </b-table-column>
 
 
-                            <b-table-column v-else  field="status" label="Permission Status" numeric>
-                                <b-button v-if="props.row.is_active == 1" disabled rounded class="is-success" type="is-small">
-                                    Active
-                                </b-button>
 
-                                <b-button v-else disabled rounded class="is-danger" type="is-small">
-                                    Inactive
-                                </b-button>
-                            </b-table-column>
+
                         </template>
 
                     </b-table>
@@ -245,6 +208,9 @@
 
 
     </div>
+
+
+
 </template>
 
 

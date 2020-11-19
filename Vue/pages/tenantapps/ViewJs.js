@@ -1,13 +1,6 @@
-let namespace = 'tenants';
+let namespace = 'tenantapps';
 
 
-import GlobalComponents from '../../vaahvue/helpers/GlobalComponents'
-
-import TableTrView from '../../vaahvue/reusable/TableTrView'
-import TableTrActedBy from '../../vaahvue/reusable/TableTrActedBy'
-import TableTrTag from '../../vaahvue/reusable/TableTrTag'
-import TableTrStatus from '../../vaahvue/reusable/TableTrStatus'
-import TableTrUrl from "../../vaahvue/reusable/TableTrUrl";
 
 export default {
     computed:{
@@ -18,12 +11,7 @@ export default {
         item() {return this.$store.getters[namespace+'/state'].active_item},
     },
     components:{
-        ...GlobalComponents,
-        TableTrView,
-        TableTrStatus,
-        TableTrActedBy,
-        TableTrTag,
-        TableTrUrl,
+
     },
     data()
     {
@@ -95,12 +83,17 @@ export default {
 
             if(data && data)
             {
+                if(data.is_active == 1){
+                    data.is_active = 'Yes';
+                }else{
+                    data.is_active = 'No';
+                }
                 this.update('active_item', data);
             } else
             {
                 //if item does not exist or delete then redirect to list
                 this.update('active_item', null);
-                this.$router.push({name: 'tenants.list'});
+                this.$router.push({name: 'tenantapps.list'});
             }
         },
         //---------------------------------------------------------------------
@@ -109,16 +102,14 @@ export default {
             console.log('--->action', action);
 
             this.$Progress.start();
-
-
+            this.page.bulk_action.action = action;
+            this.update('bulk_action', this.page.bulk_action);
             let params = {
                 inputs: [this.item.id],
                 data: null
             };
 
-            console.log('--->', this.page);
-
-            let url = this.ajax_url+'/actions/'+action;
+            let url = this.ajax_url+'/actions/'+this.page.bulk_action.action;
             this.$vaah.ajax(url, params, this.actionsAfter);
 
         },
@@ -129,11 +120,10 @@ export default {
             {
                 this.resetBulkAction();
                 this.$emit('eReloadList');
-                this.$emit('eReloadItem');
 
                 if(action == 'bulk-delete')
                 {
-                    this.$router.push({name: 'tenants.list'});
+                    this.$router.push({name: 'tenantapps.list'});
                 } else
                 {
                     this.getItem();
@@ -199,7 +189,7 @@ export default {
         //---------------------------------------------------------------------
         resetActiveItem: function () {
             this.update('active_item', null);
-            this.$router.push({name:'tenants.list'});
+            this.$router.push({name:'tenantapps.list'});
         },
         //---------------------------------------------------------------------
         hasPermission: function(slug)

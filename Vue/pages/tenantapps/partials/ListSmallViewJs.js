@@ -1,4 +1,4 @@
-let namespace = 'apps';
+let namespace = 'tenantapps';
 export default {
     computed: {
         root() {return this.$store.getters['root/state']},
@@ -14,7 +14,7 @@ export default {
     data()
     {
         let obj = {
-            icon_copy: "<i class='fas fa-copy'></i>"
+
         };
 
         return obj;
@@ -57,23 +57,7 @@ export default {
         //---------------------------------------------------------------------
         setActiveItem: function (item) {
             this.update('active_item', item);
-            this.$router.push({name: 'apps.view', params:{id:item.id}})
-        },
-        //---------------------------------------------------------------------
-        changeStatus: function (id) {
-            this.$Progress.start();
-            let url = this.ajax_url+'/actions/bulk-change-status';
-            let params = {
-                inputs: [id],
-                data: null
-            };
-            this.$vaah.ajax(url, params, this.changeStatusAfter);
-        },
-        //---------------------------------------------------------------------
-        changeStatusAfter: function (data,res) {
-            this.$emit('eReloadList');
-            this.update('is_list_loading', false);
-
+            this.$router.push({name: 'tenantapps.view', params:{id:item.id}})
         },
 
         //---------------------------------------------------------------------
@@ -91,12 +75,6 @@ export default {
         {
             return this.$vaah.hasPermission(this.permissions, slug);
         },
-        //---------------------------------------------------------------------
-        getItemTenants: function (item) {
-            this.update('active_item', item);
-            this.$router.push({name: 'apps.tenants', params:{id:item.id}})
-        },
-        //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
     }

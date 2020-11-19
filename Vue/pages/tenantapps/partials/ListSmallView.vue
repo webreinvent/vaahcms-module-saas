@@ -1,4 +1,4 @@
-<script src="./ListLargeViewJs.js"></script>
+<script src="./ListSmallViewJs.js"></script>
 <template>
     <div>
         <b-table :data="page.list_is_empty ? [] : page.list.data"
@@ -14,37 +14,21 @@
                 </b-table-column>
 
                 <b-table-column field="name" label="Name">
-                    {{ props.row.name }}
+                    {{ $vaah.limitString(props.row.name, 15) }}
                 </b-table-column>
 
                 <b-table-column field="slug" label="Slug">
                     <vh-copy class="text-copyable"
                              :data="props.row.slug"
-                             :label="props.row.slug"
+                             :label="$vaah.limitString(props.row.slug, 15)"
                              @copied="copiedData"
                     >
                     </vh-copy>
                 </b-table-column>
 
 
-                <b-table-column field="count_Apps" label="Apps" >
-                    <b-tooltip label="View Apps" type="is-dark">
-                        <b-button rounded size="is-small"
-                                  type="is-primary"
-                                  @click="getItemTenants(props.row)">
-                            {{ props.row.count_apps_active }} / {{props.row.count_apps}}
-                        </b-button>
-                    </b-tooltip>
-                </b-table-column>
-
-                <b-table-column field="updated_at" label="Updated At">
-                    {{ $vaah.fromNow(props.row.updated_at) }}
-                </b-table-column>
-
-
                 <b-table-column field="actions" label=""
                                 width="40">
-
                     <b-tooltip label="View" type="is-dark">
                         <b-button size="is-small"
                                   @click="setActiveItem(props.row)"
@@ -52,8 +36,8 @@
                         </b-button>
                     </b-tooltip>
 
-
                 </b-table-column>
+
 
 
             </template>
@@ -69,4 +53,3 @@
         </b-table>
     </div>
 </template>
-

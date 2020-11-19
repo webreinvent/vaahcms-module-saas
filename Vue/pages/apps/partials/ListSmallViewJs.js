@@ -76,6 +76,10 @@ export default {
             return this.$vaah.hasPermission(this.permissions, slug);
         },
         //---------------------------------------------------------------------
+        getItemTenants: function (item) {
+            this.update('active_item', item);
+            this.$router.push({name: 'apps.tenants', params:{id:item.id}})
+        },
         //---------------------------------------------------------------------
     }
 }

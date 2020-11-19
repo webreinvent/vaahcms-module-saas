@@ -1,6 +1,6 @@
 import GlobalComponents from '../../vaahvue/helpers/GlobalComponents'
 
-let namespace = 'roles';
+let namespace = 'apps';
 
 export default {
     props: ['id'],
@@ -34,7 +34,7 @@ export default {
     watch: {
         $route(to, from) {
             this.updateView();
-            this.getItemPermissions();
+            this.getItemTenants();
         }
     },
     mounted() {
@@ -70,11 +70,11 @@ export default {
         //---------------------------------------------------------------------
         async getAssets() {
             await this.$store.dispatch(namespace+'/getAssets');
-            this.getItemPermissions();
+            this.getItemTenants();
             console.log('from assets')
         },
         //---------------------------------------------------------------------
-        getItemPermissions: function (page = 1) {
+        getItemTenants: function (page = 1) {
 
             this.filter.page = page;
 
@@ -85,11 +85,11 @@ export default {
                 filter: this.filter
             };
 
-            let url = this.ajax_url+'/item/'+this.id+'/permissions';
-            this.$vaah.ajax(url, this.params, this.getItemPermissionsAfter);
+            let url = this.ajax_url+'/item/'+this.id+'/tenants';
+            this.$vaah.ajax(url, this.params, this.getItemTenantsAfter);
         },
         //---------------------------------------------------------------------
-        getItemPermissionsAfter: function (data, res) {
+        getItemTenantsAfter: function (data, res) {
 
             let self = this;
             this.$Progress.finish();
@@ -103,7 +103,7 @@ export default {
             {
                 //if item does not exist or delete then redirect to list
                 this.update('active_item', null);
-                this.$router.push({name: 'role.list'});
+                this.$router.push({name: 'apps.list'});
             }
 
 
@@ -148,11 +148,9 @@ export default {
         },
         //---------------------------------------------------------------------
         actionsAfter: function (data,res) {
-            this.getItemPermissions(this.filter.page);
+            this.getItemTenants(this.filter.page);
             this.update('is_list_loading', false);
             this.$emit('eReloadList');
-            this.$store.dispatch('root/reloadPermissions');
-
         },
         //---------------------------------------------------------------------
         delayedSearch: function()
@@ -171,7 +169,7 @@ export default {
         //---------------------------------------------------------------------
         resetActiveItem: function () {
             this.update('active_item', null);
-            this.$router.push({name:'role.list'});
+            this.$router.push({name:'apps.list'});
         },
         //---------------------------------------------------------------------
         bulkActions: function (input) {
@@ -214,7 +212,7 @@ export default {
         },
         //---------------------------------------------------------------------
         changeItemStatusAfter: function (data,res) {
-            this.getItemPermissions(this.filter.page);
+            this.getItemTenants(this.filter.page);
             this.$store.dispatch('root/reloadPermissions');
         },
         //---------------------------------------------------------------------
@@ -242,7 +240,7 @@ export default {
 
                 this.getModuleSection();
 
-                this.getItemPermissions();
+                this.getItemTenants();
         },
         //---------------------------------------------------------------------
         getModuleSection: function () {
@@ -268,10 +266,9 @@ export default {
 
             this.search_item=null;
 
-            this.getItemPermissions();
+            this.getItemTenants();
 
         },
-        //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
     }

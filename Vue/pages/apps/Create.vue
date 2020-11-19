@@ -96,7 +96,7 @@
                              v-if="new_item.app_type == 'Module'"
                              :label-position="labelPosition">
                         <b-select v-model="new_item.name"
-                                  @input="setNewItemValues()"
+                                  v-on:input="setNewItemValues()"
                                   placeholder="Select module">
                             <option
                                 v-for="(option, index) in page.assets.modules"
@@ -151,6 +151,22 @@
                                  type="textarea"
                                  maxlength="200"
                                  v-model="new_item.notes"></b-input>
+                    </b-field>
+
+                    <b-field label="Is Active" :label-position="labelPosition">
+                        <b-radio-button name="apps-is_active"
+                                        dusk="apps-is_active"
+                                        type="is-success"
+                                        v-model="new_item.is_active"
+                                        :native-value=1>
+                            <span>Yes</span>
+                        </b-radio-button>
+
+                        <b-radio-button type="is-danger"  name="apps-is_active" dusk="apps-is_active"
+                                        v-model="new_item.is_active"
+                                        :native-value=0>
+                            <span>No</span>
+                        </b-radio-button>
                     </b-field>
 
 

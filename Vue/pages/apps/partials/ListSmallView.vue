@@ -26,6 +26,15 @@
                     </vh-copy>
                 </b-table-column>
 
+                <b-table-column field="count_tenants" label="Tenants" >
+                    <b-tooltip label="View Tenants" type="is-dark">
+                        <b-button rounded size="is-small"
+                                  type="is-primary"
+                                  @click="getItemTenants(props.row)">
+                            {{ props.row.count_tenants_active }} / {{props.row.count_tenants}}
+                        </b-button>
+                    </b-tooltip>
+                </b-table-column>
 
                 <b-table-column field="actions" label=""
                                 width="40">

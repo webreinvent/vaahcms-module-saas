@@ -1,17 +1,15 @@
-import AppsList from "./../pages/apps/List";
-import AppsCreate from "../pages/apps/Create";
-import AppsView from "./../pages/apps/View";
-import AppsEdit from "./../pages/apps/Edit";
-import ViewTenants from "./../pages/apps/ViewTenants";
-
+import TenantAppsList from "./../pages/tenantapps/List";
+import TenantAppsCreate from "../pages/tenantapps/Create";
+import TenantAppsView from "./../pages/tenantapps/View";
+import TenantAppsEdit from "./../pages/tenantapps/Edit";
 
 import GetAssets from './middleware/GetAssets'
 import LayoutBackend from "./../layouts/Backend";
 
-let routes_apps=[];
+let routes_tenantapps=[];
 
 let list =     {
-    path: '/apps',
+    path: '/tenantapps',
     component: LayoutBackend,
     props: true,
     meta: {
@@ -22,8 +20,8 @@ let list =     {
     children: [
         {
             path: '/',
-            name: 'apps.list',
-            component: AppsList,
+            name: 'tenantapps.list',
+            component: TenantAppsList,
             props: true,
             meta: {
                 middleware: [
@@ -33,8 +31,8 @@ let list =     {
             children: [
                 {
                     path: 'create',
-                    name: 'apps.create',
-                    component: AppsCreate,
+                    name: 'tenantapps.create',
+                    component: TenantAppsCreate,
                     props: true,
                     meta: {
                         middleware: [
@@ -44,8 +42,8 @@ let list =     {
                 },
                 {
                     path: 'view/:id',
-                    name: 'apps.view',
-                    component: AppsView,
+                    name: 'tenantapps.view',
+                    component: TenantAppsView,
                     props: true,
                     meta: {
                         middleware: [
@@ -55,26 +53,15 @@ let list =     {
                 },
                 {
                     path: 'edit/:id',
-                    name: 'apps.edit',
-                    component: AppsEdit,
+                    name: 'tenantapps.edit',
+                    component: TenantAppsEdit,
                     props: true,
                     meta: {
                         middleware: [
                             GetAssets
                         ]
                     },
-                },
-                {
-                    path: 'tenants/:id',
-                    name: 'apps.tenants',
-                    component: ViewTenants,
-                    props: true,
-                    meta: {
-                        middleware: [
-                            GetAssets
-                        ]
-                    },
-                },
+                }
 
             ]
         }
@@ -83,6 +70,6 @@ let list =     {
 };
 
 
-routes_apps.push(list);
+routes_tenantapps.push(list);
 
-export default routes_apps;
+export default routes_tenantapps;

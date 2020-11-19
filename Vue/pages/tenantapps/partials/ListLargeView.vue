@@ -27,16 +27,6 @@
                 </b-table-column>
 
 
-                <b-table-column field="count_Apps" label="Apps" >
-                    <b-tooltip label="View Apps" type="is-dark">
-                        <b-button rounded size="is-small"
-                                  type="is-primary"
-                                  @click="getItemTenants(props.row)">
-                            {{ props.row.count_apps_active }} / {{props.row.count_apps}}
-                        </b-button>
-                    </b-tooltip>
-                </b-table-column>
-
                 <b-table-column field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>

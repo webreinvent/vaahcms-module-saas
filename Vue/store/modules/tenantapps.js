@@ -5,7 +5,7 @@ let base_url = document.getElementsByTagName('base')[0].getAttribute("href");
 let debug = document.getElementById('debug').getAttribute('content');
 //---------/Variables
 
-let ajax_url = base_url+"/backend/saas/apps";
+let ajax_url = base_url+"/backend/saas/tenantapps";
 
 export default {
     namespaced: true,
@@ -19,7 +19,6 @@ export default {
         is_list_loading: false,
         list_view: true,
         active_item: null,
-        active_tenant: null,
         is_item_loading: false,
         show_filters: false,
         query_string: {
@@ -36,18 +35,8 @@ export default {
             action: null,
         },
         new_item:{
-            app_type: null,
             name: null,
             slug: null,
-            excerpt: null,
-            version	: null,
-            version_number	: null,
-            relative_path: null,
-            migration_path: null,
-            seed_class: null,
-            sample_data_class: null,
-            is_active: null,
-            notes: null,
         },
 
     },
@@ -91,7 +80,7 @@ export default {
             let list_view;
             let update;
 
-            if(payload && payload.name && payload.name == 'apps.list')
+            if(payload && payload.name && payload.name == 'tenantapps.list')
             {
                 list_view = 'large';
 
@@ -104,16 +93,11 @@ export default {
 
             }
 
-            if(payload.name == 'apps.create'
-            || payload.name == 'apps.view'
-            || payload.name == 'apps.edit')
+            if(payload.name == 'tenantapps.create'
+            || payload.name == 'tenantapps.view'
+            || payload.name == 'tenantapps.edit')
             {
                 list_view = 'medium';
-            };
-
-            if(payload.name == 'apps.tenants.view')
-            {
-                list_view = 'tiny';
             };
 
             let view = {

@@ -1,13 +1,12 @@
-let namespace = 'apps';
+let namespace = 'tenantapps';
 
 export default {
+    props: ['id'],
     computed:{
         root() {return this.$store.getters['root/state']},
-        permissions() {return this.$store.getters['root/state'].permissions},
         page() {return this.$store.getters[namespace+'/state']},
         ajax_url() {return this.$store.getters[namespace+'/state'].ajax_url},
-        new_item() {return this.$store.getters[namespace+'/state'].new_item},
-        new_item_errors() {return this.$store.getters[namespace+'/state'].new_item_errors},
+        item() {return this.$store.getters[namespace+'/state'].active_item},
     },
     components:{
     },
@@ -19,30 +18,19 @@ export default {
             labelPosition: 'on-border',
             params: {},
             local_action: null,
+            title: null,
         }
     },
     watch: {
         $route(to, from) {
             this.updateView()
-        },
-        'new_item.name': {
-            deep: true,
-            handler(new_val, old_val) {
-                if(new_val)
-                {
-                    this.new_item.slug = this.$vaah.strToSlug(new_val);
-                    this.updateNewItem();
-                }
-            }
-        },
+        }
     },
     mounted() {
-
         //----------------------------------------------------
         this.onLoad();
         //----------------------------------------------------
-        this.resetActiveItem();
-        //----------------------------------------------------
+
         //----------------------------------------------------
     },
     methods: {
@@ -65,42 +53,57 @@ export default {
         //---------------------------------------------------------------------
         onLoad: function()
         {
+            this.is_content_loading = true;
 
             this.updateView();
             this.getAssets();
-
+            this.getItem();
         },
         //---------------------------------------------------------------------
         async getAssets() {
             await this.$store.dispatch(namespace+'/getAssets');
         },
         //---------------------------------------------------------------------
-        resetActiveItem: function()
-        {
-            this.update('active_item', null);
+        getItem: function () {
+            this.$Progress.start();
+            this.params = {};
+            let url = this.ajax_url+'/item/'+this.$route.params.id;
+            this.$vaah.ajaxGet(url, this.params, this.getItemAfter);
         },
         //---------------------------------------------------------------------
-        create: function (action) {
-            this.is_btn_loading = true;
+        getItemAfter: function (data, res) {
+            this.$Progress.finish();
+            this.is_content_loading = false;
 
-            //  this.$Progress.start();
+            if(data)
+            {
+                this.title = data.name;
+                this.update('active_item', data);
+            } else
+            {
+                //if item does not exist or delete then redirect to list
+                this.update('active_item', null);
+                this.$router.push({name: 'tenantapps.list'});
+            }
+        },
+        //---------------------------------------------------------------------
+        store: function () {
+            this.$Progress.start();
 
-            this.params = {
-                new_item: this.new_item,
-                action: action
+            let params = {
+                item: this.item,
             };
 
-            let url = this.ajax_url+'/create';
-            this.$vaah.ajax(url, this.params, this.createAfter);
+            let url = this.ajax_url+'/store/'+this.item.id;
+            this.$vaah.ajax(url, params, this.storeAfter);
         },
         //---------------------------------------------------------------------
-        createAfter: function (data, res) {
-            this.is_btn_loading = false;
+        storeAfter: function (data, res) {
+
             this.$Progress.finish();
 
             if(data)
             {
-
                 this.$emit('eReloadList');
 
                 if(this.local_action === 'save-and-close')
@@ -118,35 +121,36 @@ export default {
                     this.saveAndClone()
                 }
 
+                if(this.local_action === 'save')
+                {
+                    this.$router.push({name: 'tenantapps.view', params:{id:this.id}});
+                    this.$root.$emit('eReloadItem');
+                }
+
             }
 
-
         },
-        //---------------------------------------------------------------------
-        updateNewItem: function()
-        {
-            this.update('new_item', this.new_item);
-        },
-        //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         setLocalAction: function (action) {
             this.local_action = action;
-            this.create();
+            this.store();
         },
         //---------------------------------------------------------------------
         saveAndClose: function () {
             this.update('active_item', null);
-            this.$router.push({name:'apps.list'});
+            this.$router.push({name:'tenantapps.list'});
         },
         //---------------------------------------------------------------------
         saveAndNew: function () {
             this.update('active_item', null);
             this.resetNewItem();
+            this.$router.push({name:'tenantapps.create'});
         },
         //---------------------------------------------------------------------
         saveAndClone: function () {
             this.fillNewItem();
-            this.$router.push({name:'apps.create'});
+            this.update('active_item', null);
+            this.$router.push({name:'tenantapps.create'});
         },
         //---------------------------------------------------------------------
         getNewItem: function()
@@ -177,37 +181,10 @@ export default {
 
             for(let key in new_item)
             {
-                new_item[key] = this.new_item[key];
+                new_item[key] = this.item[key];
             }
             this.update('new_item', new_item);
-        },
-        //---------------------------------------------------------------------
-        hasPermission: function(slug)
-        {
-            return this.$vaah.hasPermission(this.permissions, slug);
-        },
-        //---------------------------------------------------------------------
-        setNewItemValues: function () {
-
-            let new_item = this.new_item;
-
-            console.log('--->', new_item);
-
-            let module = this.$vaah.findInArrayByKey(this.page.assets.modules, 'name', new_item.name);
-
-            for(let key in module)
-            {
-                new_item[key] = module[key];
-            }
-
-            console.log('--->new_item', new_item);
-
-            this.update('new_item', new_item);
-
         }
-        //---------------------------------------------------------------------
-        //---------------------------------------------------------------------
-        //---------------------------------------------------------------------
         //---------------------------------------------------------------------
     }
 }
