@@ -54,7 +54,10 @@ class Tenant extends Model {
 
     //-------------------------------------------------
     protected $appends  = [
+
     ];
+    //-------------------------------------------------
+
     //-------------------------------------------------
 
     public function createdByUser()
@@ -78,6 +81,17 @@ class Tenant extends Model {
         return $this->belongsTo(User::class,
             'deleted_by', 'id'
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
+    //-------------------------------------------------
+    public function apps()
+    {
+        return $this->belongsToMany( App::class,
+            'vh_saas_tenant_apps',
+            'vh_saas_tenant_id', 'vh_saas_app_id'
+        )->withPivot('version',
+            'version_number', 'is_active',
+            'last_migrated_at', 'last_seeded_at',
+            'created_at', 'updated_at');
     }
     //-------------------------------------------------
     public function getTableColumns() {
@@ -110,6 +124,8 @@ class Tenant extends Model {
 
         $query->whereBetween('updated_at',[$from,$to]);
     }
+    //-------------------------------------------------
+
     //-------------------------------------------------
     public static function createItem($request)
     {
@@ -148,6 +164,10 @@ class Tenant extends Model {
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);
         $item->save();
+
+        App::syncAppsWithTenants();
+
+        static::updateCounts($item);
 
         $response['status'] = 'success';
         $response['data']['item'] = $item;
@@ -645,7 +665,55 @@ class Tenant extends Model {
     }
 
     //-------------------------------------------------
+    public static function countApps($id)
+    {
+
+        $item = static::withTrashed()->where('id', $id)->first();
+
+        if(!$item)
+        {
+            return 0;
+        }
+
+        return $item->apps()
+            ->count();
+    }
     //-------------------------------------------------
+    public static function countAppsActive($id)
+    {
+
+        $item = static::withTrashed()->where('id', $id)->first();
+
+        if(!$item)
+        {
+            return 0;
+        }
+
+        return $item->apps()
+            ->wherePivotNotNull('is_active')
+            ->count();
+
+    }
+    //-------------------------------------------------
+    public static function updateCounts(Tenant $tenant)
+    {
+        $tenant->count_apps_active = static::countAppsActive($tenant->id);
+        $tenant->count_apps = static::countApps($tenant->id);
+        $tenant->save();
+    }
+    //-------------------------------------------------
+    public static function updateCountsForAll()
+    {
+        $all = static::all();
+
+        if($all)
+        {
+            foreach($all as $item)
+            {
+                static::updateCounts($item);
+            }
+        }
+    }
     //-------------------------------------------------
     //-------------------------------------------------
     //-------------------------------------------------

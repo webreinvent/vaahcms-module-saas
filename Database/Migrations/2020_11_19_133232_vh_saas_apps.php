@@ -30,6 +30,10 @@ class VhSaasApps extends Migration
             $table->string('seed_class')->nullable();
             $table->string('sample_data_class')->nullable();
 
+
+            $table->integer('count_tenants_active')->nullable();
+            $table->integer('count_tenants')->nullable();
+
             $table->dateTime('activated_at')->nullable();
             $table->boolean('is_active')->nullable();
 

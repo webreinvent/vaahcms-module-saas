@@ -23,13 +23,12 @@ class VhSaasTenantApps extends Migration
             $table->string('version')->nullable();
             $table->integer('version_number')->nullable();
 
-            $table->boolean('is_active')->nullable();
+            $table->boolean('is_active')->nullable()->index();
 
             $table->dateTime('last_migrated_at')->nullable();
             $table->dateTime('last_seeded_at')->nullable();
 
             $table->timestamps();
-
 
         });
     }

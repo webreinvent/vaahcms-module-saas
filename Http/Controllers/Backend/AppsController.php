@@ -143,6 +143,11 @@ class AppsController extends Controller
 
     }
     //----------------------------------------------------------
+    public function getItemTenants(Request $request, $id)
+    {
+        $response = App::getItemTenants($request, $id);
+        return response()->json($response);
+    }
     //----------------------------------------------------------
 
 

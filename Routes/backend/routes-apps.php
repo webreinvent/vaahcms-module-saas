@@ -23,10 +23,17 @@ function () {
      Route::any('/item/{uuid}', 'AppsController@getItem')
     ->name('vh.backend.saas.apps.item');
      //---------------------------------------------------------
+    Route::post('/item/{id}/tenants', 'AppsController@getItemTenants')
+        ->name('vh.backend.saas.apps.item.tenants');
+     //---------------------------------------------------------
      Route::post('/store/{uuid}', 'AppsController@postStore')
     ->name('vh.backend.saas.apps.store');
      //---------------------------------------------------------
      Route::post('/actions/{action_name}', 'AppsController@postActions')
     ->name('vh.backend.saas.apps.actions');
+     //---------------------------------------------------------
+
+
+     //---------------------------------------------------------
      //---------------------------------------------------------
 });

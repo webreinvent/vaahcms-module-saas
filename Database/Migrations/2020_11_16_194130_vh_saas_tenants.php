@@ -25,6 +25,9 @@ class VhSaasTenants extends Migration
             $table->string('domain')->nullable()->index();
             $table->string('sub_domain')->nullable()->index();
 
+            $table->integer('count_apps_active')->nullable();
+            $table->integer('count_apps')->nullable();
+
             $table->string('database_name')->nullable();
             $table->string('database_charset')->nullable()->default('utf8mb4');
             $table->string('database_collation')->nullable()->default('utf8mb4_unicode_ci');

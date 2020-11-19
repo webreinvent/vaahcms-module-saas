@@ -25,6 +25,7 @@ class App extends Model {
     //-------------------------------------------------
     protected $fillable = [
         'uuid',
+        'app_type',
         'name',
         'slug',
         'excerpt',
@@ -34,6 +35,8 @@ class App extends Model {
         'migration_path',
         'seed_class',
         'sample_data_class',
+        'count_tenants_active',
+        'count_tenants',
         'activated_at',
         'is_active',
         'is_deactivated_at',
@@ -69,6 +72,17 @@ class App extends Model {
         return $this->belongsTo(User::class,
             'deleted_by', 'id'
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
+    //-------------------------------------------------
+    public function tenants()
+    {
+        return $this->belongsToMany( Tenant::class,
+            'vh_saas_tenant_apps',
+            'vh_saas_app_id', 'vh_saas_tenant_id'
+        )->withPivot('version',
+            'version_number', 'is_active',
+            'last_migrated_at', 'last_seeded_at',
+            'created_at', 'updated_at');
     }
     //-------------------------------------------------
     public function getTableColumns() {
@@ -168,6 +182,8 @@ class App extends Model {
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);
         $item->save();
+
+
 
         $response['status'] = 'success';
         $response['data']['item'] = $item;
@@ -454,6 +470,123 @@ class App extends Model {
         $item = static::where('is_active', 1)->get();
         return $item;
     }
+    //-------------------------------------------------
+    public static function countTenants($id)
+    {
+
+        $item = static::withTrashed()->where('id', $id)->first();
+
+        if(!$item)
+        {
+            return 0;
+        }
+
+        return $item->tenants()
+            ->count();
+    }
+    //-------------------------------------------------
+    public static function countTenantsActive($id)
+    {
+
+        $item = static::withTrashed()->where('id', $id)->first();
+
+        if(!$item)
+        {
+            return 0;
+        }
+
+        return $item->tenants()
+            ->wherePivotNotNull('is_active')
+            ->count();
+
+    }
+    //-------------------------------------------------
+
+    //-------------------------------------------------
+    public static function updateCounts(App $app)
+    {
+        $app->count_tenants_active = static::countTenantsActive($app->id);
+        $app->count_tenants = static::countTenants($app->id);
+        $app->save();
+    }
+    //-------------------------------------------------
+    public static function updateCountsForAll()
+    {
+        $all = static::all();
+
+        if($all)
+        {
+            foreach($all as $item)
+            {
+                static::updateCounts($item);
+            }
+        }
+    }
+    //-------------------------------------------------
+    public static function getItemTenants($request, $id)
+    {
+        $item = static::withTrashed()->where('id', $id)->first();
+        $response['data']['item'] = $item;
+
+        if($request->has("q"))
+        {
+            $list = $item->tenants()->where(function ($q) use ($request){
+                $q->where('name', 'LIKE', '%'.$request->q.'%')
+                    ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
+            });
+        } else
+        {
+            $list = $item->tenants();
+        }
+
+
+        $list->orderBy('pivot_is_active', 'desc');
+
+
+        $list = $list->paginate(config('vaahcms.per_page'));
+
+
+        $response['data']['list'] = $list;
+        $response['status'] = 'success';
+
+        return $response;
+
+
+    }
+    //-------------------------------------------------
+    public static function syncAppsWithTenants()
+    {
+        $all_tenants = Tenant::select('id')->get()->pluck('id')->toArray();
+        $all_apps = App::select('id', 'version', 'version_number')->get();
+
+        if(!$all_apps)
+        {
+            return false;
+        }
+
+
+
+        foreach ($all_apps as $app)
+        {
+
+            $pivots = [
+                'version' => $app->version,
+                'version_number' => $app->version_number,
+            ];
+
+            $pivotData = array_fill(0, count($all_tenants), $pivots);
+            $syncData  = array_combine($all_tenants, $pivotData);
+
+            $app->tenants()->syncWithoutDetaching($syncData);
+
+        }
+
+
+
+
+    }
+    //-------------------------------------------------
+    //-------------------------------------------------
     //-------------------------------------------------
     //-------------------------------------------------
     //-------------------------------------------------

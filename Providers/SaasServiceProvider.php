@@ -4,6 +4,10 @@
 use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
+use VaahCms\Modules\Saas\Entities\App;
+use VaahCms\Modules\Saas\Entities\Tenant;
+use VaahCms\Modules\Saas\Observers\AppObserver;
+use VaahCms\Modules\Saas\Observers\TenantObserver;
 use VaahCms\Modules\Saas\Providers\RouteServiceProvider;
 use VaahCms\Modules\Saas\Providers\EventServiceProvider;
 
@@ -34,6 +38,10 @@ class SaasServiceProvider extends ServiceProvider
         $this->registerSeeders();
         $this->registerBladeDirectives();
         $this->registerBladeComponents();
+
+        App::observe(AppObserver::class);
+        Tenant::observe(TenantObserver::class);
+
     }
 
 
@@ -174,7 +182,7 @@ class SaasServiceProvider extends ServiceProvider
 
     /**
      * Register an additional directory of factories.
-     * 
+     *
      * @return void
      */
     public function registerFactories()
