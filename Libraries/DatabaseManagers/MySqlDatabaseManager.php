@@ -40,7 +40,9 @@ class MySqlDatabaseManager
             'driver' => $this->server->driver,
             'host' => $this->server->host,
             'port' => $this->server->port,
+            'database' => '',
             'username' => $this->server->username,
+            'password' => '',
 
         ];
 
@@ -82,7 +84,7 @@ class MySqlDatabaseManager
     //--------------------------------------------------------
     public function testServerConnection()
     {
-        
+
         $this->setDatabaseConnectionName($this->server_connection_name, $this->server_config);
 
         try{
@@ -105,13 +107,12 @@ class MySqlDatabaseManager
     {
 
 
-        $connection_name = $this->server->slug;
-
         try{
-            Config::set($this->server_connection_name, $this->server_config);
-            $this->server_connection = DB::connection($connection_name);
+            $this->setDatabaseConnectionName($this->server_connection_name, $this->server_config);
+            $this->server_connection = DB::connection($this->server_connection_name);
+
             $response['status'] = 'success';
-            $response['data']['connection_name'] = $connection_name;
+            $response['data']['connection_name'] = $this->server_connection_name;
             $response['data']['config'] = $this->server_config;
 
         }catch(\Exception $e)
@@ -127,14 +128,13 @@ class MySqlDatabaseManager
     //--------------------------------------------------------
     public function connectToDatabase()
     {
-        $connection_name = $this->server->slug;
 
         try{
-            Config::set($this->tenant_connection_name, $this->tenant_config);
-            $this->server_connection = DB::connection($connection_name);
+            $this->setDatabaseConnectionName($this->tenant_connection_name, $this->tenant_config);
+            $this->tenant_connection = DB::connection($this->tenant_connection_name);
             $response['status'] = 'success';
-            $response['data']['connection_name'] = $connection_name;
-            $response['data']['config'] = $this->config;
+            $response['data']['connection_name'] = $this->tenant_connection_name;
+            $response['data']['config'] = $this->tenant_config;
 
         }catch(\Exception $e)
         {
@@ -150,15 +150,15 @@ class MySqlDatabaseManager
     public function createDatabase()
     {
 
-
         $database = $this->tenant->database_name;
         $charset = $this->tenant->database_charset;
         $collation = $this->tenant->database_collation;
 
         try{
             $this->connectToServer();
+            $sql = "CREATE DATABASE `{$database}` CHARACTER SET `$charset` COLLATE `$collation`";
             $this->server_connection
-                ->statement("CREATE DATABASE `{$database}` CHARACTER SET `$charset` COLLATE `$collation`");
+                ->statement($sql);
             $response['status'] = 'success';
             $response['messages'][] = 'Database Created';
         }catch(\Exception $e)
@@ -193,9 +193,12 @@ class MySqlDatabaseManager
     public function databaseExists()
     {
         try{
-            $this->connectToDatabase();
-            $this->server_connection
-                ->select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$this->tenant->database_name'");
+            $this->connectToServer();
+
+            $sql = "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$this->tenant->database_name'";
+
+            $this->server_connection->select($sql);
+
             $response['status'] = 'success';
             $response['messages'][] = 'Database Already Exist';
         }catch(\Exception $e)
@@ -208,12 +211,6 @@ class MySqlDatabaseManager
         return $response;
     }
 
-    //--------------------------------------------------------
-    public function setDefaultConnection(string $connection)
-    {
-        $this->app['config']['database.default'] = $connection;
-        $this->database->setDefaultConnection($connection);
-    }
     //--------------------------------------------------------
 
 }

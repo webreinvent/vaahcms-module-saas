@@ -7,6 +7,7 @@ import TableTrActedBy from '../../vaahvue/reusable/TableTrActedBy'
 import TableTrTag from '../../vaahvue/reusable/TableTrTag'
 import TableTrStatus from '../../vaahvue/reusable/TableTrStatus'
 import TableTrUrl from "../../vaahvue/reusable/TableTrUrl";
+import TableTrMeta from "../../vaahvue/reusable/TableTrMeta";
 
 export default {
     computed:{
@@ -23,10 +24,12 @@ export default {
         TableTrActedBy,
         TableTrTag,
         TableTrUrl,
+        TableTrMeta,
     },
     data()
     {
         return {
+            show_model: false,
             is_btn_loading: false,
             is_content_loading: false,
         }

@@ -26,6 +26,7 @@ export default {
             labelPosition: 'on-border',
             params: {},
             local_action: null,
+            namespace: namespace,
         }
     },
     watch: {
@@ -142,6 +143,7 @@ export default {
 
         },
         //---------------------------------------------------------------------
+        //---------------------------------------------------------------------
         connect: function () {
             this.is_btn_loading_connect = true;
 
@@ -188,8 +190,22 @@ export default {
             let new_item = {
                 name: null,
                 slug: null,
+                host_type: null,
+                driver: null,
+                host: null,
+                port: null,
+                username: null,
+                password: null,
+                count_tenants: null,
+                count_db_instances: null,
                 is_active: null,
-                details: null,
+                meta: {
+                    cpanel_domain: null,
+                    cpanel_api_token: null,
+                    cpanel_username: null,
+                    protocol: 'https',
+                    port: 2083,
+                }
             };
             return new_item;
         },

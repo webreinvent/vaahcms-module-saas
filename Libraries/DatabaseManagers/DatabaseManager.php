@@ -68,9 +68,9 @@ class DatabaseManager
         return $response;
     }
     //--------------------------------------------------------
-    public function testConnection()
+    public function testServerConnection()
     {
-        $response = $this->db_manager->testConnection();
+        $response = $this->db_manager->testServerConnection();
         return $response;
     }
     //--------------------------------------------------------

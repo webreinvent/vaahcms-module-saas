@@ -45,7 +45,7 @@ export default {
             password: null,
             count_tenants: null,
             count_db_instances: null,
-            is_active_at: null,
+            is_active: null,
             meta: {
                 cpanel_domain: null,
                 cpanel_api_token: null,

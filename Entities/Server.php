@@ -56,6 +56,27 @@ class Server extends Model {
         }
     }
     //-------------------------------------------------
+    public function setMetaAttribute($value)
+    {
+
+        if(isset($value['cpanel_api_token']))
+        {
+            $value['cpanel_api_token'] = \Crypt::encrypt($value['cpanel_api_token']);
+        }
+
+        if(isset($value['password']))
+        {
+            $value['password'] = \Crypt::encrypt($value['password']);
+        }
+
+        $this->attributes['meta'] = json_encode($value);
+    }
+    //-------------------------------------------------
+    public function getMetaAttribute($value)
+    {
+        return json_decode($value);
+    }
+    //-------------------------------------------------
 
     public function createdByUser()
     {
@@ -438,8 +459,13 @@ class Server extends Model {
             'driver' => 'required|max:150',
             'host' => 'required|max:150',
             'port' => 'required|max:150',
-            'username' => 'required|max:150',
         );
+
+        if(isset($inputs['host_type']) && $inputs['host_type'] == 'MySql')
+        {
+            $rules['username'] = 'required|max:150';
+        }
+
 
         $validator = \Validator::make( $inputs, $rules);
         if ( $validator->fails() ) {

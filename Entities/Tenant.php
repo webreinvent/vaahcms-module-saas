@@ -559,7 +559,8 @@ class Tenant extends Model {
         $db_manager = new DatabaseManager($server, $tenant);
 
         //check server connection
-        $is_connected = $db_manager->testConnection();
+        $is_connected = $db_manager->testServerConnection();
+
         if($is_connected['status'] == 'failed')
         {
             return $is_connected;

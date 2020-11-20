@@ -145,6 +145,13 @@
                                         </TableTrActedBy>
                                     </template>
 
+                                    <template v-else-if="label == 'meta'">
+                                        <TableTrMeta :value="item['meta']"
+                                                        :label="label">
+                                        </TableTrMeta>
+                                    </template>
+
+
                                     <template v-else-if="label == 'created_by_user'
                                       || label == 'updated_by_user' || label == 'deleted_by_user' || label == 'name'  || label == 'thumbnail' ">
 
@@ -160,11 +167,15 @@
 
                                 </template>
 
+
+
                                 </tbody>
 
 
 
                             </table>
+
+
                         </div>
 
                     </div>

@@ -121,23 +121,46 @@
                         <b-input name="servers-port" dusk="servers-port" v-model="new_item.port"></b-input>
                     </b-field>
 
-                    <b-field label="Username" :label-position="labelPosition">
-                        <b-input name="servers-username"
-                                 dusk="servers-username" v-model="new_item.username"></b-input>
+                    <b-field label="Is Active" :label-position="labelPosition">
+                        <b-radio-button name="servers-is_active"
+                                        dusk="servers-is_active"
+                                        type="is-success"
+                                        v-model="new_item.is_active"
+                                        :native-value=1>
+                            <span>Yes</span>
+                        </b-radio-button>
+
+                        <b-radio-button type="is-danger"  name="servers-is_active" dusk="servers-is_active"
+                                        v-model="new_item.is_active"
+                                        :native-value=0>
+                            <span>No</span>
+                        </b-radio-button>
                     </b-field>
 
-                    <b-field label="Password" :label-position="labelPosition">
-                        <b-input name="servers-password" dusk="servers-password"
-                                 type="password"
-                                 password-reveal
-                                 v-model="new_item.password"></b-input>
-                    </b-field>
+                    <div v-if="new_item.host_type == 'MySql'">
 
+                        <b-field label="Username" :label-position="labelPosition">
+                            <b-input name="servers-username"
+                                     autocomplete="new-password"
+                                     dusk="servers-username" v-model="new_item.username"></b-input>
+                        </b-field>
+
+                        <b-field label="Password" :label-position="labelPosition">
+                            <b-input name="servers-password" dusk="servers-password"
+                                     autocomplete="new-password"
+                                     type="password"
+                                     password-reveal
+                                     v-model="new_item.password"></b-input>
+                        </b-field>
+
+
+
+                    </div>
 
 
                     <div v-if="new_item.host_type == 'CPanel-MySql'">
 
-                        <hr/><br/>
+
 
                         <b-field label="CPanel Domain" :label-position="labelPosition">
                             <b-input name="servers-host" dusk="servers-host"
@@ -174,6 +197,9 @@
                         </b-field>
 
                     </div>
+
+
+
 
                     <hr/>
 
