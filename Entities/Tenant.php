@@ -38,6 +38,8 @@ class Tenant extends Model {
         'sub_domain',
 
         'database_name',
+        'database_username',
+        'database_password',
         'database_charset',
         'database_collation',
         'is_database_created_at',
@@ -81,6 +83,13 @@ class Tenant extends Model {
         return $this->belongsTo(User::class,
             'deleted_by', 'id'
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
+    //-------------------------------------------------
+    public function server()
+    {
+        return $this->belongsTo(Server::class,
+            'vh_saas_server_id', 'id'
+        )->select('id', 'name', 'slug');
     }
     //-------------------------------------------------
     public function apps()
@@ -462,17 +471,10 @@ class Tenant extends Model {
 
     }
     //-------------------------------------------------
-    public static function createDatabase($request)
+    public static function createDatabase($tenant_column_value, $tenant_column_name='id')
     {
 
-        if(!$request->has('inputs'))
-        {
-            $response['status'] = 'failed';
-            $response['errors'][] = 'Select IDs';
-            return $response;
-        }
-
-        $item = static::where('id', $request->inputs)->withTrashed()->first();
+        $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
         $server = Server::find($item->vh_saas_server_id);
 
         $db_manager = new DatabaseManager($server, $item);
@@ -491,17 +493,10 @@ class Tenant extends Model {
         return $response;
     }
     //-------------------------------------------------
-    public static function deleteDatabase($request)
+    public static function deleteDatabase($tenant_column_value, $tenant_column_name='id')
     {
 
-        if(!$request->has('inputs'))
-        {
-            $response['status'] = 'failed';
-            $response['errors'][] = 'Select IDs';
-            return $response;
-        }
-
-        $item = static::where('id', $request->inputs)->withTrashed()->first();
+        $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
         $server = Server::find($item->vh_saas_server_id);
 
         $db_manager = new DatabaseManager($server, $item);
@@ -525,9 +520,9 @@ class Tenant extends Model {
 
     }
     //-------------------------------------------------
-    public static function artisanCommandValidation($value, $key='uuid')
+    public static function databaseActionValidation($value, $key='id')
     {
-        $tenant = static::withTrashed()->where($key, $value)->first();
+        $tenant = static::where($key, $value)->first();
 
         if(!$tenant)
         {
@@ -536,11 +531,11 @@ class Tenant extends Model {
             return $response;
         }
 
-        //check database is created for the tenant
-        if(!$tenant->is_database_created_at)
+
+        if(!$tenant->is_active)
         {
             $response['status'] = 'failed';
-            $response['errors'][] = 'Tenant database is not created';
+            $response['errors'][] = "Tenant is not active";
             return $response;
         }
 
@@ -549,7 +544,15 @@ class Tenant extends Model {
         if(!$server)
         {
             $response['status'] = 'failed';
-            $response['errors'][] = 'Tenant database server does not exist';
+            $response['errors'][] = "Tenant's server does not exist";
+            return $response;
+        }
+
+
+        if(!$server->is_active)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "Tenant's server is not active";
             return $response;
         }
 
@@ -570,7 +573,7 @@ class Tenant extends Model {
         }
     }
     //-------------------------------------------------
-    public static function migrate($inputs, $value, $key='uuid')
+    public static function migrate($inputs, $tenant_column_value, $tenant_column_name='id')
     {
         $rules = array(
             'command' => 'required',
@@ -590,14 +593,23 @@ class Tenant extends Model {
             return $response;
         }
 
-        $is_valid = static::artisanCommandValidation($value, $key='uuid');
+        $is_valid = static::databaseActionValidation($tenant_column_value, $tenant_column_name);
 
         if($is_valid['status'] == 'failed')
         {
             return $is_valid;
         }
 
-        $tenant = static::withTrashed()->where($key, $value)->first();
+        $tenant = static::withTrashed()->where($tenant_column_name, $tenant_column_value)->first();
+
+        //check database is created for the tenant
+        if(!$tenant->is_database_created_at)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant database is not created';
+            return $response;
+        }
+
         $server = Server::find($tenant->vh_saas_server_id);
         $db_manager = new DatabaseManager($server, $tenant);
 
@@ -617,13 +629,13 @@ class Tenant extends Model {
 
     }
     //-------------------------------------------------
-    public static function seed($inputs, $value, $key='uuid')
+    public static function seed($inputs, $tenant_column_value, $tenant_column_name='id')
     {
         $rules = array(
             'command' => 'required',
         );
 
-        if(isset($inputs['command']))
+        if(isset($inputs['command']) && $inputs['command']=='db:seed')
         {
             $rules['class'] = 'required';
         }
@@ -637,14 +649,23 @@ class Tenant extends Model {
             return $response;
         }
 
-        $is_valid = static::artisanCommandValidation($value, $key='uuid');
+        $is_valid = static::databaseActionValidation($tenant_column_value, $tenant_column_name);
 
         if($is_valid['status'] == 'failed')
         {
             return $is_valid;
         }
 
-        $tenant = static::withTrashed()->where($key, $value)->first();
+        $tenant = static::withTrashed()->where($tenant_column_name, $tenant_column_value)->first();
+
+        //check database is created for the tenant
+        if(!$tenant->is_database_created_at)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant database is not created';
+            return $response;
+        }
+
         $server = Server::find($tenant->vh_saas_server_id);
         $db_manager = new DatabaseManager($server, $tenant);
 
@@ -657,6 +678,11 @@ class Tenant extends Model {
         }
 
         $db_connection_name = $connection['data']['connection_name'];
+
+        if(!isset($inputs['class']))
+        {
+            $inputs['class'] = null;
+        }
 
         $response = \VaahArtisan::seed($inputs['command'], $db_connection_name, $inputs['class']);
 

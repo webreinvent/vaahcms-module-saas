@@ -6,12 +6,15 @@ use Illuminate\Support\Facades\DB;
 use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
 use Illuminate\Support\Facades\Config;
+use WebReinvent\CPanel\CPanel;
 
 class CpanelMySqlDatabaseManager
 {
     protected $tenant;
     protected $server;
     protected $server_connection;
+    protected $cpanel;
+    protected $cpanel_database_name;
 
     //--------------------------------------------------------
     public function __construct(Server $server, Tenant $tenant=null)
@@ -24,6 +27,9 @@ class CpanelMySqlDatabaseManager
         }
 
         $this->setServerConnection();
+        $this->setCPanelConfig();
+
+        $this->cpanel_database_name = $this->cpanel->username.'_'.$this->tenant->database_name;;
 
     }
 
@@ -45,6 +51,22 @@ class CpanelMySqlDatabaseManager
         }
 
        return $config;
+
+    }
+    //--------------------------------------------------------
+    protected function setCPanelConfig()
+    {
+
+
+        $cpanel = new CPanel(
+            $this->server->cpanel_domain,
+            $this->server->cpanel_api_token,
+            $this->server->cpanel_username,
+            $this->server->protocol,
+            $this->server->port
+        );
+
+        $this->cpanel = $cpanel;
 
     }
     //--------------------------------------------------------
@@ -78,14 +100,21 @@ class CpanelMySqlDatabaseManager
     //--------------------------------------------------------
     public function createDatabase()
     {
-        $database = $this->tenant->database_name;
-        $charset = $this->tenant->database_charset;
-        $collation = $this->tenant->database_collation;
 
         try{
-            $this->server_connection
-                ->statement("CREATE DATABASE `{$database}` CHARACTER SET `$charset` COLLATE `$collation`");
-            $response['status'] = 'success';
+
+            $response = $this->cpanel->createDatabase($this->cpanel_database_name);
+
+            if($response['status'] == 1)
+            {
+                $response['status'] = 'success';
+                $response['data'] = [];
+
+            } else{
+                $response['status'] = 'failed';
+            }
+
+
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -94,14 +123,26 @@ class CpanelMySqlDatabaseManager
         }
 
         return $response;
+
     }
     //--------------------------------------------------------
     public function deleteDatabase()
     {
         try{
-            $this->server_connection
-                ->statement("DROP DATABASE `{$this->tenant->database_name}`");
-            $response['status'] = 'success';
+
+
+            $response = $this->cpanel->deleteDatabase($this->cpanel_database_name);
+
+            if($response['status'] == 1)
+            {
+                $response['status'] = 'success';
+                $response['data'] = [];
+
+            } else{
+                $response['status'] = 'failed';
+            }
+
+
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -114,10 +155,35 @@ class CpanelMySqlDatabaseManager
     //--------------------------------------------------------
     public function databaseExists()
     {
+
+
         try{
-            $this->server_connection
-                ->select("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$this->tenant->database_name'");
-            $response['status'] = 'success';
+
+            $response = $this->cpanel->listDatabases();
+            if($response['status'] == 1)
+            {
+
+                if(isset($response['data']['data']))
+                {
+
+                    foreach ($response['data']['data'] as $database_obj)
+                    {
+                        if($database_obj->database == $this->cpanel_database_name)
+                        {
+                            $response['status'] = 'success';
+                            $response['data'] = [];
+                            return $response;
+                        }
+
+                    }
+
+                }
+
+            }
+
+
+            $response['status'] = 'failed';
+
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -127,6 +193,28 @@ class CpanelMySqlDatabaseManager
 
         return $response;
     }
+    //--------------------------------------------------------
+    public function createDatabaseUser()
+    {
+
+
+        try{
+
+            //$response = $this->cpanel->createDatabaseUser($this->tenant->, $password);
+
+        }catch(\Exception $e)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = $e->getMessage();
+
+        }
+
+        return $response;
+    }
+    //--------------------------------------------------------
+
+    //--------------------------------------------------------
+
 
     //--------------------------------------------------------
     public function setDefaultConnection(string $connection)

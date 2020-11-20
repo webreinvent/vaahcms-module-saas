@@ -84,13 +84,16 @@
             <div class="card-content">
                 <div class="block">
 
-                    <b-field label="Name" :label-position="labelPosition">
-                        <b-input name="tenantapps-name" dusk="tenantapps-name" v-model="item.name"></b-input>
+                    <b-field label="Notes" :label-position="labelPosition">
+                        <b-input name="tenantapps-name"
+                                 dusk="tenantapps-name"
+                                 type="textarea"
+                                 maxlength="200"
+                                 v-model="item.notes"></b-input>
                     </b-field>
 
-                    <b-field label="Slug" :label-position="labelPosition">
-                        <b-input name="tenantapps-slug" dusk="tenantapps-slug" v-model="item.slug"></b-input>
-                    </b-field>
+
+
 
 
                 </div>

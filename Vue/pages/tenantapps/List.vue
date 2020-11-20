@@ -20,17 +20,17 @@
                         <header class="card-header">
 
                             <div class="card-header-title">
-                                tenantapps
+                                Tenant's App
                             </div>
 
                             <div class="card-header-buttons">
                                 <div class="field has-addons is-pulled-right">
                                     <p   class="control">
-                                        <b-button tag="router-link"
-                                                  type="is-light"
-                                                  :to="{name: 'tenantapps.create'}"
-                                                  icon-left="plus">
-                                            Create
+                                        <b-button type="is-light"
+                                                  v-on:click="syncTenantApps()"
+                                                  :loading="is_btn_loading_sync"
+                                                  icon-left="sync">
+                                            Sync
                                         </b-button>
                                     </p>
 
@@ -111,7 +111,7 @@
 
                                             <b-field>
 
-                                                <b-input placeholder="Search"
+                                                <b-input placeholder="tenant:example or app:example"
                                                          type="text"
                                                          icon="search"
                                                          @input="delayedSearch"
@@ -219,13 +219,18 @@
 
                                     <div class="block" style="margin-bottom: 0px;" >
 
-                                        <div v-if="page.list_view">
-                                            <ListLargeView/>
+                                        {{page.list_view}}
+
+
+                                        <div v-if="page.list_view=='medium'">
+                                            <ListSmallView/>
                                         </div>
 
                                         <div v-else>
-                                            <ListSmallView/>
+                                            <ListLargeView/>
                                         </div>
+
+
 
                                     </div>
 

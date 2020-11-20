@@ -13,26 +13,45 @@
                     {{ props.row.id }}
                 </b-table-column>
 
-                <b-table-column field="name" label="Name">
-                    {{ props.row.name }}
+                <b-table-column field="tenant_name" label="Tenant">
+                    {{ props.row.tenant.name }}
                 </b-table-column>
 
-                <b-table-column field="slug" label="Slug">
-                    <vh-copy class="text-copyable"
-                             :data="props.row.slug"
-                             :label="props.row.slug"
-                             @copied="copiedData"
-                    >
-                    </vh-copy>
+                <b-table-column field="app_name" label="App">
+                    {{ props.row.app.name }}
                 </b-table-column>
 
+                <b-table-column field="version" label="Install/Current Version"
+                                >
+                    <b-tag v-if="props.row.app.version_number>props.row.version_number"
+                           type='is-danger'>
+                        {{ props.row.version }}/{{ props.row.app.version }}
+                    </b-tag>
+                    <b-tag v-else>
+                        {{ props.row.version }}/{{ props.row.app.version }}
+                    </b-tag>
+
+                </b-table-column>
+
+                <b-table-column field="is_active" label="Is Active">
+                    <b-tooltip label="Change Status" type="is-dark">
+                        <b-button v-if="props.row.is_active === 1" rounded size="is-small"
+                                  type="is-success" @click="changeStatus(props.row.id)">
+                            Yes
+                        </b-button>
+                        <b-button v-else rounded size="is-small" type="is-danger"
+                                  @click="changeStatus(props.row.id)">
+                            No
+                        </b-button>
+                    </b-tooltip>
+                </b-table-column>
 
                 <b-table-column field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>
 
 
-                <b-table-column field="actions" label=""
+                <b-table-column field="actions" label="Actions"
                                 width="40">
 
                     <b-tooltip label="View" type="is-dark">

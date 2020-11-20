@@ -28,6 +28,7 @@ class VhSaasServers extends Migration
             $table->string('port')->nullable();
             $table->string('username')->nullable();
             $table->string('password')->nullable();
+
             $table->integer('count_tenants')->nullable(); // count database in the server
             $table->integer('count_db_instances')->nullable(); // count database in the server
             $table->dateTime('activated_at')->nullable();

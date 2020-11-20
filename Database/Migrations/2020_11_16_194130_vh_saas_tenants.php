@@ -17,7 +17,11 @@ class VhSaasTenants extends Migration
         Schema::create('vh_saas_tenants', function (Blueprint $table) {
             $table->increments('id');
             $table->uuid('uuid')->nullable()->index();
+
             $table->integer('vh_saas_server_id')->nullable()->index();
+
+
+
 
             $table->string('name')->nullable();
             $table->string('slug')->nullable()->index();
@@ -29,8 +33,13 @@ class VhSaasTenants extends Migration
             $table->integer('count_apps')->nullable();
 
             $table->string('database_name')->nullable();
+            $table->string('database_username')->nullable();
+            $table->string('database_password')->nullable();
+
             $table->string('database_charset')->nullable()->default('utf8mb4');
             $table->string('database_collation')->nullable()->default('utf8mb4_unicode_ci');
+
+
             $table->dateTime('is_database_created_at')->nullable();
             $table->dateTime('activated_at')->nullable();
             $table->boolean('is_active')->nullable();

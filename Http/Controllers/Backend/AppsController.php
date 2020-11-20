@@ -40,7 +40,7 @@ class AppsController extends Controller
             $modules_list[$i]['relative_path'] = \VaahModule::getRelativePath($module);
             $modules_list[$i]['migration_path'] = \VaahModule::getTenantMigrationPath($module);
             $modules_list[$i]['seed_class'] = \VaahModule::getTenantSeedsClass($module);
-            $modules_list[$i]['sample_data_class'] = \VaahModule::getTenantSampleData($module);
+            $modules_list[$i]['sample_data_class'] = \VaahModule::getTenantSampleDataClass($module);
             $modules_list[$i]['version'] = \VaahModule::getVersion($module);
             $modules_list[$i]['version_number'] = \VaahModule::getVersionNumber($module);
 

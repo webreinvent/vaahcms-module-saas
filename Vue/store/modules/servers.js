@@ -46,7 +46,13 @@ export default {
             count_tenants: null,
             count_db_instances: null,
             is_active_at: null,
-            meta: null
+            meta: {
+                cpanel_domain: null,
+                cpanel_api_token: null,
+                cpanel_username: null,
+                protocol: 'https',
+                port: 2083,
+            }
         },
 
     },

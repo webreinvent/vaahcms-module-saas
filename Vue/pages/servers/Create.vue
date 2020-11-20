@@ -110,6 +110,8 @@
                         </b-select>
                     </b-field>
 
+
+
                     <b-field label="Host" :label-position="labelPosition">
                         <b-input name="servers-host" dusk="servers-host" v-model="new_item.host"></b-input>
                     </b-field>
@@ -131,6 +133,49 @@
                                  v-model="new_item.password"></b-input>
                     </b-field>
 
+
+
+                    <div v-if="new_item.host_type == 'CPanel-MySql'">
+
+                        <hr/><br/>
+
+                        <b-field label="CPanel Domain" :label-position="labelPosition">
+                            <b-input name="servers-host" dusk="servers-host"
+                                     v-model="new_item.meta.cpanel_domain"></b-input>
+                        </b-field>
+
+                        <b-field label="CPanel API Token" :label-position="labelPosition">
+                            <b-input name="servers-cpanel-api-token"
+                                     dusk="servers-cpanel-api-token"
+                                     v-model="new_item.meta.cpanel_api_token">
+                            </b-input>
+                        </b-field>
+
+                        <b-field label="CPanel Username" :label-position="labelPosition">
+                            <b-input name="servers-cpanel-username"
+                                     dusk="servers-cpanel-username"
+                                     v-model="new_item.meta.cpanel_username">
+                            </b-input>
+                        </b-field>
+
+                        <b-field label="CPanel Protocol" :label-position="labelPosition">
+                            <b-input name="servers-cpanel-protocol"
+                                     dusk="servers-cpanel-protocol"
+                                     v-model="new_item.meta.protocol">
+                            </b-input>
+                        </b-field>
+
+
+                        <b-field label="CPanel Port" :label-position="labelPosition">
+                            <b-input name="servers-cpanel-port"
+                                     dusk="servers-cpanel-port"
+                                     v-model="new_item.meta.port">
+                            </b-input>
+                        </b-field>
+
+                    </div>
+
+                    <hr/>
 
                     <b-field >
                         <b-button type="is-primary"

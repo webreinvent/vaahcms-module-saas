@@ -2,19 +2,27 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
 use WebReinvent\VaahCms\Entities\User;
+use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 
 
 class TenantApp extends Model {
+
+    use SoftDeletes;
+    use CrudWithUuidObservantTrait;
 
 
     //-------------------------------------------------
     protected $table = 'vh_saas_tenant_apps';
     //-------------------------------------------------
     protected $dates = [
+        'last_migrated_at',
+        'last_seeded_at',
         'created_at',
         'updated_at',
+        'deleted_at'
     ];
     //-------------------------------------------------
     protected $dateFormat = 'Y-m-d H:i:s';
@@ -27,14 +35,40 @@ class TenantApp extends Model {
         'is_active',
         'last_migrated_at',
         'last_seeded_at',
-        'created_at',
+        'notes',
+        'meta',
+        'created_by',
         'updated_by',
+        'deleted_by'
     ];
 
     //-------------------------------------------------
     protected $appends  = [
     ];
 
+    //-------------------------------------------------
+    public function createdByUser()
+    {
+        return $this->belongsTo(User::class,
+            'created_by', 'id'
+        )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
+
+    //-------------------------------------------------
+    public function updatedByUser()
+    {
+        return $this->belongsTo(User::class,
+            'updated_by', 'id'
+        )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
+
+    //-------------------------------------------------
+    public function deletedByUser()
+    {
+        return $this->belongsTo(User::class,
+            'deleted_by', 'id'
+        )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
     //-------------------------------------------------
     public function tenant()
     {
@@ -178,7 +212,7 @@ class TenantApp extends Model {
     {
 
         $item = static::where('id', $id)
-        ->with(['createdByUser', 'updatedByUser', 'deletedByUser'])
+        ->with(['tenant.server', 'app', 'createdByUser', 'updatedByUser', 'deletedByUser'])
         ->withTrashed()
         ->first();
 
@@ -201,31 +235,8 @@ class TenantApp extends Model {
             return $validation;
         }
 
-        // check if name exist
-        $user = static::where('id','!=',$input['id'])->where('name',$input['name'])->first();
-
-        if($user)
-        {
-            $response['status'] = 'failed';
-            $response['errors'][] = "This name is already exist.";
-            return $response;
-        }
-
-
-        // check if slug exist
-        $user = static::where('id','!=',$input['id'])->where('slug',$input['slug'])->first();
-
-        if($user)
-        {
-            $response['status'] = 'failed';
-            $response['errors'][] = "This slug is already exist.";
-            return $response;
-        }
-
         $update = static::where('id',$id)->withTrashed()->first();
-
-        $update->name = $input['name'];
-        $update->slug = Str::slug($input['slug']);
+        $update->fill($input);
         $update->save();
 
 
@@ -386,8 +397,8 @@ class TenantApp extends Model {
     {
 
         $rules = array(
-            'name' => 'required|max:150',
-            'slug' => 'required|max:150',
+            'vh_saas_tenant_id' => 'required|max:150',
+            'vh_saas_app_id' => 'required|max:150',
         );
 
         $validator = \Validator::make( $inputs, $rules);
@@ -407,6 +418,15 @@ class TenantApp extends Model {
         return $item;
     }
     //-------------------------------------------------
+    public static function syncTenantApps()
+    {
+        App::syncAppsWithTenants();
+        $response['status'] = 'success';
+        $response['data'] = [];
+        $response['messages'][] = 'Action was successful';
+
+        return $response;
+    }
     //-------------------------------------------------
     //-------------------------------------------------
 

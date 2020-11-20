@@ -8,7 +8,8 @@
         }
     ],
     "require": {
-        "php": "^7.0"
+        "php": "^7.0",
+        "webreinvent/laravel-cpanel": "^1.0"
     },
     "extra": {
         "laravel": {

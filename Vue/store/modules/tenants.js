@@ -37,6 +37,15 @@ export default {
         new_item:{
             name: null,
             slug: null,
+            path: null,
+            domain: null,
+            sub_domain: null,
+            database_name: null,
+            database_username: null,
+            database_password: null,
+            database_charset: null,
+            database_collation: null,
+            is_active: null,
         },
 
     },

@@ -37,12 +37,52 @@
                                 </button>
 
                                 <b-dropdown-item aria-role="listitem"
+                                                 v-if="!item.tenant.is_database_created_at"
+                                                 @click="confirmDatabaseCreate()">
+                                    <b-icon icon="database"></b-icon>
+                                    Create Database
+                                </b-dropdown-item>
+
+
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.tenant.is_database_created_at"
+                                                 @click="confirmUpdate()">
+                                    <b-icon icon="download"></b-icon>
+                                    Update
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.tenant.is_database_created_at"
+                                                 @click="confirmMigration()">
+                                    <b-icon icon="server"></b-icon>
+                                    Run Migration
+                                </b-dropdown-item>
+
+
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.last_migrated_at"
+                                                 @click="confirmSeed()">
+                                    <b-icon icon="bars"></b-icon>
+                                    Run Seed
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.last_migrated_at"
+                                                 @click="confirmInsertSampleData()">
+                                    <b-icon icon="file-download"></b-icon>
+                                    Insert Sample Data
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
                                                  v-if="!item.deleted_at"
                                                  @click="actions('bulk-trash')"
                                 >
                                     <b-icon icon="trash"></b-icon>
                                     Trash
                                 </b-dropdown-item>
+
 
                                 <b-dropdown-item aria-role="listitem"
                                                  v-if="item.deleted_at"
@@ -56,6 +96,30 @@
                                 >
                                     <b-icon icon="eraser"></b-icon>
                                     Delete
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 class="has-text-danger"
+                                                 v-if="item.last_migrated_at"
+                                                 @click="confirmRollback()">
+                                    <b-icon icon="undo"></b-icon>
+                                    Migration Rollback
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 class="has-text-danger"
+                                                 v-if="item.tenant.is_database_created_at"
+                                                 @click="confirmWipeData()">
+                                    <b-icon icon="eraser"></b-icon>
+                                    Wipe Data
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.tenant.is_database_created_at"
+                                                 class="has-text-danger"
+                                                 @click="confirmDatabaseDelete()">
+                                    <b-icon icon="database"></b-icon>
+                                    Delete Database
                                 </b-dropdown-item>
 
                             </b-dropdown>
@@ -99,24 +163,128 @@
 
                     <div class="b-table">
 
+
                         <div class="table-wrapper">
                             <table class="table is-hoverable">
 
                                 <tbody>
 
+
+                                <template>
+                                    <TableTrView label="Tenant Name"
+                                                 :value="item.tenant.name">
+                                    </TableTrView>
+                                </template>
+
+                                <template>
+                                    <TableTrView label="Tenant Slug"
+                                                 is_copiable="true"
+                                                 :value="item.tenant.slug">
+                                    </TableTrView>
+                                </template>
+
+                                <template>
+                                    <TableTrView label="Database"
+                                                 is_copiable="true"
+                                                 :value="item.tenant.database_name">
+                                    </TableTrView>
+                                </template>
+
+                                <template>
+                                    <tr>
+                                        <th align="right">Database Created</th>
+                                        <td colspan="2">
+                                            <b-button v-if="item.tenant.is_database_created_at"
+                                                      rounded size="is-small"
+                                                      type="is-success" >
+                                                Yes
+                                            </b-button>
+                                            <b-button v-else rounded size="is-small" type="is-danger"
+                                                      @click="changeStatus(item.id)">
+                                                No
+                                            </b-button>
+
+                                        </td>
+                                    </tr>
+                                </template>
+
+                                <template>
+                                    <TableTrActedBy :value="item.tenant.created_by_user"
+                                                    label="Created By">
+                                    </TableTrActedBy>
+                                </template>
+
+                                <template >
+
+                                    <TableTrView label="created_at"
+                                                 :value="item.tenant.created_at">
+                                    </TableTrView>
+                                </template>
+
+                                <template>
+                                    <TableTrView label="App Name"
+                                                 :value="item.app.name">
+                                    </TableTrView>
+                                </template>
+
+                                <template>
+                                    <TableTrView label="App Slug"
+                                                 is_copiable="true"
+                                                 :value="item.app.slug">
+                                    </TableTrView>
+                                </template>
+
                                 <tr>
-                                    <th align="right">Name</th>
+                                    <th align="right">Installed Vs Current</th>
                                     <td colspan="2">
-                                        {{item.name}}
+                                        <b-tag v-if="item.app.version_number>item.version_number"
+                                               type='is-danger'>
+                                            {{ item.version }}/{{ item.app.version }}
+                                        </b-tag>
+                                        <b-tag v-else>
+                                            {{ item.version }}/{{ item.app.version }}
+                                        </b-tag>
                                     </td>
                                 </tr>
 
+
                                 <tr>
-                                    <th align="right">Slug</th>
+                                    <th align="right">Is Active</th>
                                     <td colspan="2">
-                                        {{item.slug}}
+                                        <b-tooltip label="Change Status" type="is-dark">
+                                            <b-button v-if="item.is_active === 1" rounded size="is-small"
+                                                      type="is-success" @click="changeStatus(item.id)">
+                                                Yes
+                                            </b-button>
+                                            <b-button v-else rounded size="is-small" type="is-danger"
+                                                      @click="changeStatus(item.id)">
+                                                No
+                                            </b-button>
+                                        </b-tooltip>
                                     </td>
                                 </tr>
+
+
+                                <template>
+                                    <TableTrDateTime label="Last Migrated"
+                                                 :value="item.last_migrated_at">
+                                    </TableTrDateTime>
+                                </template>
+
+                                <template>
+                                    <TableTrDateTime label="Last Seeded"
+                                                     :value="item.last_seeded_at">
+                                    </TableTrDateTime>
+                                </template>
+
+                                <tr>
+                                    <th align="right">Notes</th>
+                                    <td colspan="2">
+                                        {{item.notes}}
+                                    </td>
+                                </tr>
+
+
 
                                 </tbody>
 

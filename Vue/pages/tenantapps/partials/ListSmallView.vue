@@ -13,22 +13,33 @@
                     {{ props.row.id }}
                 </b-table-column>
 
-                <b-table-column field="name" label="Name">
-                    {{ $vaah.limitString(props.row.name, 15) }}
+                <b-table-column field="tenant_name" label="Tenant">
+                    {{ props.row.tenant.name }}
                 </b-table-column>
 
-                <b-table-column field="slug" label="Slug">
-                    <vh-copy class="text-copyable"
-                             :data="props.row.slug"
-                             :label="$vaah.limitString(props.row.slug, 15)"
-                             @copied="copiedData"
-                    >
-                    </vh-copy>
+                <b-table-column field="app_name" label="App">
+                    {{ props.row.app.name }}
                 </b-table-column>
 
 
-                <b-table-column field="actions" label=""
+
+                <b-table-column field="is_active" label="Is Active">
+                    <b-tooltip label="Change Status" type="is-dark">
+                        <b-button v-if="props.row.is_active === 1" rounded size="is-small"
+                                  type="is-success" @click="changeStatus(props.row.id)">
+                            Yes
+                        </b-button>
+                        <b-button v-else rounded size="is-small" type="is-danger"
+                                  @click="changeStatus(props.row.id)">
+                            No
+                        </b-button>
+                    </b-tooltip>
+                </b-table-column>
+
+
+                <b-table-column field="actions" label="Actions"
                                 width="40">
+
                     <b-tooltip label="View" type="is-dark">
                         <b-button size="is-small"
                                   @click="setActiveItem(props.row)"
@@ -36,8 +47,8 @@
                         </b-button>
                     </b-tooltip>
 
-                </b-table-column>
 
+                </b-table-column>
 
 
             </template>
