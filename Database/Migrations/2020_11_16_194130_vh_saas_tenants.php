@@ -23,7 +23,7 @@ class VhSaasTenants extends Migration
 
 
 
-            $table->string('name')->nullable();
+            $table->string('name')->nullable()->index();
             $table->string('slug')->nullable()->index();
             $table->string('path')->nullable()->index();
             $table->string('domain')->nullable()->index();
@@ -34,13 +34,16 @@ class VhSaasTenants extends Migration
 
             $table->string('database_name')->nullable();
             $table->string('database_username')->nullable();
-            $table->string('database_password')->nullable();
+            $table->mediumText('database_password')->nullable();
 
             $table->string('database_charset')->nullable()->default('utf8mb4');
             $table->string('database_collation')->nullable()->default('utf8mb4_unicode_ci');
 
 
             $table->dateTime('is_database_created_at')->nullable();
+            $table->dateTime('is_database_user_created_at')->nullable();
+            $table->dateTime('is_database_user_assigned_at')->nullable();
+
             $table->dateTime('activated_at')->nullable();
             $table->boolean('is_active')->nullable();
             $table->dateTime('is_deactivated_at')->nullable();

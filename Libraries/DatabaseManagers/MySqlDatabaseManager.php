@@ -67,9 +67,9 @@ class MySqlDatabaseManager
             'password' => '',
         ];
 
-        if(isset($this->tenant->password) && !empty($this->tenant->password))
+        if(isset($this->tenant->database_password) && !empty($this->tenant->database_password))
         {
-            $config['password'] = Crypt::decrypt($this->tenant->password);
+            $config['password'] = Crypt::decrypt($this->tenant->database_password);
         }
 
         $this->tenant_config = $config;

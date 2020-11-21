@@ -25,6 +25,9 @@ function () {
      Route::post('/store/{id}', 'TenantsController@postStore')
     ->name('vh.backend.saas.tenants.store');
      //---------------------------------------------------------
+    Route::any('/server', 'TenantsController@getServers')
+        ->name('vh.backend.saas.tenants.server');
+     //---------------------------------------------------------
      Route::post('/actions/{action_name}', 'TenantsController@postActions')
     ->name('vh.backend.saas.tenants.actions');
      //---------------------------------------------------------

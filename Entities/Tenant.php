@@ -3,9 +3,11 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
+use WebReinvent\VaahCms\Entities\Migration;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Entities\User;
 
@@ -19,6 +21,8 @@ class Tenant extends Model {
     //-------------------------------------------------
     protected $dates = [
         'is_database_created_at',
+        'is_database_user_created_at',
+        'is_database_user_assigned_at',
         'activated_at',
         'is_deactivated_at',
         'created_at',
@@ -43,6 +47,8 @@ class Tenant extends Model {
         'database_charset',
         'database_collation',
         'is_database_created_at',
+        'is_database_user_created_at',
+        'is_database_user_assigned_at',
         'activated_at',
         'is_active',
         'is_deactivated_at',
@@ -59,8 +65,15 @@ class Tenant extends Model {
 
     ];
     //-------------------------------------------------
-
+    public function setDatabasePasswordAttribute($value)
+    {
+        if($value && $value != $this->database_password)
+        {
+            $this->attributes['database_password'] = Crypt::encrypt($value);
+        }
+    }
     //-------------------------------------------------
+
 
     public function createdByUser()
     {
@@ -89,7 +102,7 @@ class Tenant extends Model {
     {
         return $this->belongsTo(Server::class,
             'vh_saas_server_id', 'id'
-        )->select('id', 'name', 'slug');
+        );
     }
     //-------------------------------------------------
     public function apps()
@@ -172,6 +185,12 @@ class Tenant extends Model {
         $item = new static();
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);
+
+        if(isset($inputs['is_active']))
+        {
+            $item->activated_at = \Carbon::now();
+        }
+
         $item->save();
 
         App::syncAppsWithTenants();
@@ -190,6 +209,8 @@ class Tenant extends Model {
 
 
         $list = static::orderBy('id', 'desc');
+
+        //$list->with(['server']);
 
         if($request['trashed'] == 'true')
         {
@@ -235,7 +256,7 @@ class Tenant extends Model {
     {
 
         $item = static::where('id', $id)
-        ->with(['createdByUser', 'updatedByUser', 'deletedByUser'])
+        ->with(['server', 'createdByUser', 'updatedByUser', 'deletedByUser'])
         ->withTrashed()
         ->first();
 
@@ -281,7 +302,7 @@ class Tenant extends Model {
 
         $update = static::where('id',$id)->withTrashed()->first();
 
-        $update->name = $input['name'];
+        $update->fill($input);
         $update->slug = Str::slug($input['slug']);
         $update->save();
 
@@ -445,7 +466,9 @@ class Tenant extends Model {
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'vh_saas_server_id' => 'required|max:150',
             'database_name' => 'required|alpha_dash|max:20',
+            'database_username' => 'required|alpha_dash|max:20',
         );
 
         $validator = \Validator::make( $inputs, $rules);
@@ -457,8 +480,18 @@ class Tenant extends Model {
             return $response;
         }
 
-        $exist = static::withTrashed()->where('database_name', $inputs['database_name'])
-            ->first();
+        if(isset($inputs['id']))
+        {
+            $exist = static::withTrashed()->where('database_name', $inputs['database_name'])
+                ->where('vh_saas_server_id', $inputs['vh_saas_server_id'])
+                ->where('id', '!=', $inputs['id'])
+                ->first();
+        } else{
+            $exist = static::withTrashed()->where('database_name', $inputs['database_name'])
+                ->where('vh_saas_server_id', $inputs['vh_saas_server_id'])
+                ->first();
+        }
+
 
 
         if($exist)
@@ -508,6 +541,7 @@ class Tenant extends Model {
             $item->is_active = null;
             $item->activated_at = null;
             $item->is_database_created_at = null;
+            $item->is_database_user_assigned_at = null;
             $item->is_deactivated_at = \Carbon::now();
             $item->save();
 
@@ -518,6 +552,69 @@ class Tenant extends Model {
         return $response;
 
 
+    }
+    //-------------------------------------------------
+    public static function createDatabaseUser($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = Server::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->createDatabaseUser();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_database_user_created_at = \Carbon::now();
+            $item->save();
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+    //-------------------------------------------------
+    public static function assignUserToDatabase($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = Server::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->assignUserToDatabase();
+
+        if($response['status'] == 'success')
+        {
+
+            $item->is_database_user_assigned_at = \Carbon::now();
+            $item->save();
+
+            $response['data'] = [];
+
+        }
+
+        return $response;
+
+
+    }
+    //-------------------------------------------------
+    public static function deleteDatabaseUser($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = Server::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->deleteDatabaseUser();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_database_user_created_at = null;
+            $item->is_database_user_assigned_at = null;
+            $item->save();
+            $response['data'] = [];
+        }
+
+        return $response;
     }
     //-------------------------------------------------
     public static function databaseActionValidation($value, $key='id')
@@ -613,6 +710,7 @@ class Tenant extends Model {
 
         $server = Server::find($tenant->vh_saas_server_id);
         $db_manager = new DatabaseManager($server, $tenant);
+
 
         //connect to database
         $connection = $db_manager->connectToDatabase();

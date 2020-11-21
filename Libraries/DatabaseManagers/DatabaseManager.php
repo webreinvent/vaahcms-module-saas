@@ -33,11 +33,11 @@ class DatabaseManager
         $manager = null;
         switch ($this->server->host_type)
         {
-            case 'mysql':
+            case 'MySql':
                 $manager = new MySQLDatabaseManager($this->server, $this->tenant);
                 break;
 
-            case 'cpanel-mysql':
+            case 'CPanel-MySql':
                 $manager = new CpanelMySqlDatabaseManager($this->server, $this->tenant);
                 break;
 
@@ -81,6 +81,24 @@ class DatabaseManager
         return $response;
     }
 
+    //--------------------------------------------------------
+    public function createDatabaseUser()
+    {
+        $response = $this->db_manager->createDatabaseUser();
+        return $response;
+    }
+    //--------------------------------------------------------
+    public function deleteDatabaseUser()
+    {
+        $response = $this->db_manager->deleteDatabaseUser();
+        return $response;
+    }
+    //--------------------------------------------------------
+    public function assignUserToDatabase()
+    {
+        $response = $this->db_manager->assignUserToDatabase();
+        return $response;
+    }
     //--------------------------------------------------------
 
     public function reconnectToCentral()

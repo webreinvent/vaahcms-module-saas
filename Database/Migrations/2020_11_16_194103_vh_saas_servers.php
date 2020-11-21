@@ -18,7 +18,7 @@ class VhSaasServers extends Migration
             $table->increments('id');
             $table->uuid('uuid')->nullable()->index();
 
-            $table->string('name')->nullable(); // server label
+            $table->string('name')->nullable()->index(); // server label
             $table->string('slug')->nullable()->index(); // server label
 
             $table->string('host_type')->nullable(); //cPanel | mysql
@@ -27,7 +27,7 @@ class VhSaasServers extends Migration
             $table->string('host')->nullable()->index();
             $table->string('port')->nullable();
             $table->string('username')->nullable();
-            $table->string('password')->nullable();
+            $table->mediumText('password')->nullable();
 
             $table->integer('count_tenants')->nullable(); // count database in the server
             $table->integer('count_db_instances')->nullable(); // count database in the server

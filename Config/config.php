@@ -12,7 +12,7 @@ return [
     "author_website"=> "https://vaah.dev",
     "version"=> "v0.0.1",
     "is_migratable"=> true,
-    "is_sample_data_available"=> false,
+    "is_sample_data_available"=> true,
     "db_table_prefix"=> "vh_saas_",
     "providers"=> [
         "\\VaahCms\\Modules\\Saas\\Providers\\SaasServiceProvider"

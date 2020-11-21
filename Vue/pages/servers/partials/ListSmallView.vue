@@ -26,6 +26,18 @@
                     </vh-copy>
                 </b-table-column>
 
+                <b-table-column field="is_active" label="Is Active">
+                    <b-tooltip label="Change Status" type="is-dark">
+                        <b-button v-if="props.row.is_active === 1" rounded size="is-small"
+                                  type="is-success" @click="changeStatus(props.row.id)">
+                            Yes
+                        </b-button>
+                        <b-button v-else rounded size="is-small" type="is-danger"
+                                  @click="changeStatus(props.row.id)">
+                            No
+                        </b-button>
+                    </b-tooltip>
+                </b-table-column>
 
                 <b-table-column field="actions" label=""
                                 width="40">

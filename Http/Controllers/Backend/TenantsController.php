@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Validator;
+use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
 
 
@@ -139,6 +140,37 @@ class TenantsController extends Controller
         return response()->json($response);
 
     }
+    //----------------------------------------------------------
+    public function getServers(Request $request)
+    {
+        $rules = array(
+            'q' => 'required',
+        );
+
+        $validator = \Validator::make( $request->all(), $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return response()->json($response);
+        }
+
+        $data = [];
+
+        $list = Server::where(function ($q) use($request){
+            $q->where('name', 'LIKE', '%'.$request->q.'%')
+            ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
+        });
+
+        $list = $list->take(10)->get();
+
+        return response()->json($list);
+
+    }
+    //----------------------------------------------------------
+    //----------------------------------------------------------
+    //----------------------------------------------------------
     //----------------------------------------------------------
 
 

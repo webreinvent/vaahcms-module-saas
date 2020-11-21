@@ -179,6 +179,24 @@ class TenantAppsController extends Controller
 
                 break;
             //------------------------------------
+            case 'create-user':
+
+                $response = Tenant::createDatabaseUser($tenant_app->vh_saas_tenant_id);
+
+                break;
+            //------------------------------------
+            case 'assign-user':
+
+                $response = Tenant::assignUserToDatabase($tenant_app->vh_saas_tenant_id);
+
+                break;
+            //------------------------------------
+            case 'delete-user':
+
+                $response = Tenant::deleteDatabaseUser($tenant_app->vh_saas_tenant_id);
+
+                break;
+            //------------------------------------
             case 'migrate':
                 $request->request->set('command', 'migrate');
                 $response = Tenant::migrate($request->all(), $tenant_app->vh_saas_tenant_id);

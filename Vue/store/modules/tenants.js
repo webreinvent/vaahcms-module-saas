@@ -35,6 +35,7 @@ export default {
             action: null,
         },
         new_item:{
+            vh_saas_server_id: null,
             name: null,
             slug: null,
             path: null,
@@ -43,9 +44,10 @@ export default {
             database_name: null,
             database_username: null,
             database_password: null,
-            database_charset: null,
-            database_collation: null,
+            database_charset: 'utf8mb4',
+            database_collation: 'utf8mb4_unicode_ci',
             is_active: null,
+            notes: null,
         },
 
     },

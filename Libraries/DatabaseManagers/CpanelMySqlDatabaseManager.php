@@ -37,6 +37,8 @@ class CpanelMySqlDatabaseManager
     //--------------------------------------------------------
     protected function setServerConfig()
     {
+
+
         $config = [
             'cpanel_domain' => $this->server->meta->cpanel_domain,
             'cpanel_username' => $this->server->meta->cpanel_username,
@@ -67,13 +69,18 @@ class CpanelMySqlDatabaseManager
             'password' => '',
         ];
 
-        if(isset($this->tenant->password) && !empty($this->tenant->password))
+        if(isset($this->tenant->database_password) && !empty($this->tenant->database_password))
         {
-            $config['password'] = Crypt::decrypt($this->tenant->password);
+            $config['password'] = Crypt::decrypt($this->tenant->database_password);
         }
 
         $this->tenant_config = $config;
-        $this->tenant_connection_name = $this->server->slug.'-'.$this->tenant->slug;
+
+        $connection_name = $this->server->slug.'-'.$this->tenant->slug;
+
+        $connection_name = str_replace("-", "", $connection_name);
+
+        $this->tenant_connection_name =  $connection_name;
 
     }
     //--------------------------------------------------------
@@ -108,13 +115,18 @@ class CpanelMySqlDatabaseManager
     //--------------------------------------------------------
     public function connectToCpanel()
     {
-        $this->cpanel = new CPanel(
-            $this->cpanel_config->cpanel_domain,
-            $this->cpanel_config->cpanel_api_token,
-            $this->cpanel_config->cpanel_username,
-            $this->cpanel_config->protocol,
-            $this->cpanel_config->port
+
+
+        $cpanel = new CPanel(
+            $this->cpanel_config['cpanel_domain'],
+            $this->cpanel_config['cpanel_api_token'],
+            $this->cpanel_config['cpanel_username'],
+            $this->cpanel_config['protocol'],
+            $this->cpanel_config['port']
         );
+
+        $this->cpanel = $cpanel;
+
     }
 
     //--------------------------------------------------------
@@ -127,7 +139,7 @@ class CpanelMySqlDatabaseManager
             $this->connectToCpanel();
 
             $response['status'] = 'success';
-            //$response['data']['connection_name'] = $this->server_connection_name;
+            $response['data']['connection_name'] = $this->server_connection_name;
             $response['data']['config'] = $this->cpanel;
 
         }catch(\Exception $e)
@@ -195,8 +207,8 @@ class CpanelMySqlDatabaseManager
 
             $this->connectToCpanel();
             $response = $this->cpanel->createDatabaseUser(
-                $this->tenant_config->username,
-                $this->tenant_config->password
+                $this->tenant_config['username'],
+                $this->tenant_config['password']
             );
 
             if($response['status'] == 'failed')
@@ -223,8 +235,8 @@ class CpanelMySqlDatabaseManager
 
             $this->connectToCpanel();
             $response = $this->cpanel->setAllPrivilegesOnDatabase(
-                $this->tenant_config->username,
-                $this->tenant_config->database
+                $this->tenant_config['username'],
+                $this->tenant_config['database']
             );
 
             if($response['status'] == 'failed')
@@ -251,7 +263,7 @@ class CpanelMySqlDatabaseManager
 
             $this->connectToCpanel();
             $response = $this->cpanel->deleteDatabaseUser(
-                $this->tenant_config->username
+                $this->tenant_config['username']
             );
 
             if($response['status'] == 'failed')
@@ -277,7 +289,7 @@ class CpanelMySqlDatabaseManager
         try{
             $this->connectToCpanel();
             $response = $this->cpanel->deleteDatabase(
-                $this->tenant_config->username
+                $this->tenant_config['username']
             );
 
             if($response['status'] == 'failed')
@@ -309,11 +321,11 @@ class CpanelMySqlDatabaseManager
 
             if($response['status'] == 'success')
             {
-                if(isset($response['data']['data']))
+                if(isset($response['data']->data))
                 {
                     foreach($response['data']->data as $db_obj)
                     {
-                        if($db_obj->database == $this->tenant_config->database)
+                        if($db_obj->database == $this->tenant_config['database'])
                         {
                             $response['status'] = 'success';
                             $response['messages'][] = 'Database Already Exist';

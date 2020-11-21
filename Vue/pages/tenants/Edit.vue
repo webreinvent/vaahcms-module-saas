@@ -84,12 +84,105 @@
             <div class="card-content">
                 <div class="block">
 
+                    <b-field label="Search & Select Server"
+                             :label-position="labelPosition">
+                        <AutoCompleteAjax v-if="item.server"
+                                          label="Search Server"
+                                          :selected_value="item.server.name"
+                                          :ajax_url="ajax_url_server_search"
+                                          @onSelect="updateServerId"
+                                          dusk="tenants-server">
+                        </AutoCompleteAjax>
+
+                        <AutoCompleteAjax v-else
+                                          label="Search Server"
+                                          :ajax_url="ajax_url_server_search"
+                                          @onSelect="updateServerId"
+                                          dusk="tenants-server">
+                        </AutoCompleteAjax>
+
+                    </b-field>
+
+
+
                     <b-field label="Name" :label-position="labelPosition">
-                        <b-input name="tenants-name" dusk="tenants-name" v-model="item.name"></b-input>
+                        <b-input name="tenants-name" dusk="tenants-name"
+                                 v-model="item.name"></b-input>
                     </b-field>
 
                     <b-field label="Slug" :label-position="labelPosition">
-                        <b-input name="tenants-slug" dusk="tenants-slug" v-model="item.slug"></b-input>
+                        <b-input name="tenants-slug" dusk="tenants-slug"
+                                 v-model="item.slug"></b-input>
+                    </b-field>
+
+                    <b-field label="Path" :label-position="labelPosition">
+                        <b-input name="tenants-path" dusk="tenants-path"
+                                 v-model="item.path"></b-input>
+                    </b-field>
+
+                    <b-field label="Domain" :label-position="labelPosition">
+                        <b-input name="tenants-domain" dusk="tenants-domain"
+                                 v-model="item.domain"></b-input>
+                    </b-field>
+
+
+                    <b-field label="Sub Domain" :label-position="labelPosition">
+                        <b-input name="tenants-sub_domain" dusk="tenants-sub_domain"
+                                 v-model="item.sub_domain"></b-input>
+                    </b-field>
+
+                    <b-field label="Database Name" :label-position="labelPosition">
+                        <b-input name="tenants-database_name" dusk="tenants-database_name"
+                                 v-model="item.database_name"></b-input>
+                    </b-field>
+
+                    <b-field label="Database Username" :label-position="labelPosition">
+                        <b-input name="tenants-database_username" dusk="tenants-database_username"
+                                 v-model="item.database_username"></b-input>
+                    </b-field>
+
+                    <b-field label="New Database User Password" :label-position="labelPosition">
+                        <b-input name="tenants-database_password"
+                                 dusk="tenants-database_password"
+                                 password-reveal
+                                 type="password"
+                                 v-model="new_password"></b-input>
+                    </b-field>
+
+
+                    <b-field label="Database Charset" :label-position="labelPosition">
+                        <b-input name="tenants-database_charset" dusk="tenants-database_charset"
+                                 v-model="item.database_charset"></b-input>
+                    </b-field>
+
+
+                    <b-field label="Database Collation" :label-position="labelPosition">
+                        <b-input name="tenants-database_collation" dusk="tenants-database_collation"
+                                 v-model="item.database_collation"></b-input>
+                    </b-field>
+
+                    <b-field label="Is Active" :label-position="labelPosition">
+                        <b-radio-button name="tenants-is_active"
+                                        dusk="tenants-is_active"
+                                        type="is-success"
+                                        v-model="item.is_active"
+                                        :native-value=1>
+                            <span>Yes</span>
+                        </b-radio-button>
+
+                        <b-radio-button type="is-danger"  name="tenants-is_active"
+                                        dusk="tenants-is_active"
+                                        v-model="item.is_active"
+                                        :native-value=0>
+                            <span>No</span>
+                        </b-radio-button>
+                    </b-field>
+
+                    <b-field label="Notes" :label-position="labelPosition">
+                        <b-input name="tenants-slug"
+                                 type="textarea"
+                                 dusk="tenants-slug"
+                                 v-model="item.slug"></b-input>
                     </b-field>
 
 

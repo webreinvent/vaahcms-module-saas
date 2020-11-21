@@ -167,7 +167,8 @@ export default {
             let self = this;
             this.$buefy.dialog.confirm({
                 title: 'Deleting record',
-                message: 'Are you sure you want to <b>delete</b> the record? This action cannot be undone.',
+                message: 'Are you sure you want to <b>delete</b> ' +
+                    'the record? This action cannot be undone.',
                 confirmText: 'Delete',
                 type: 'is-danger',
                 hasIcon: true,
@@ -217,7 +218,8 @@ export default {
             let self = this;
             this.$buefy.dialog.confirm({
                 title: 'Create Database',
-                message: 'Are you sure? Database name <b>'+this.item.tenant.database_name+'</b> will be <b>created</b> on <b>'+this.item.tenant.server.name+'</b> server?',
+                message: 'Are you sure you to create <b>'+this.item.tenant.database_name
+                    +'</b> database user to on <b>'+this.item.tenant.server.name+'</b> server?',
                 confirmText: 'Create',
                 type: 'is-info',
                 hasIcon: true,
@@ -230,11 +232,67 @@ export default {
             })
         },
         //---------------------------------------------------------------------
+        confirmDatabaseUserCreate() {
+            let self = this;
+            this.$buefy.dialog.confirm({
+                title: 'Create Database User',
+                message: 'Are you sure you want give access of <b>'+this.item.tenant.database_name
+                    +'</b> database to user <b>'+this.item.tenant.database_username
+                    +'</b> on <b>'+this.item.tenant.server.name+'</b> server?',
+                confirmText: 'Create User',
+                type: 'is-info',
+                hasIcon: true,
+                onConfirm:function () {
+
+                    self.database_action = 'create-user';
+                    self.databaseActions();
+
+                }
+            })
+        },
+        //---------------------------------------------------------------------
+        confirmAssignDatabaseUser() {
+            let self = this;
+            this.$buefy.dialog.confirm({
+                title: 'Assign User to Database',
+                message: 'Are you sure? Database name <b>'+this.item.tenant.database_name
+                    +'</b> will be <b>created</b> on <b>'+this.item.tenant.server.name+'</b> server?',
+                confirmText: 'Create',
+                type: 'is-info',
+                hasIcon: true,
+                onConfirm:function () {
+
+                    self.database_action = 'assign-user';
+                    self.databaseActions();
+
+                }
+            })
+        },
+        //---------------------------------------------------------------------
+        confirmDatabaseUserDelete() {
+            let self = this;
+            this.$buefy.dialog.confirm({
+                title: 'Delete Database User',
+                message: 'Are you sure? Database username <b>'+this.item.tenant.database_username
+                    +'</b> will be <b>deleted</b> on <b>'+this.item.tenant.server.name+'</b> server?',
+                confirmText: 'Delete',
+                type: 'is-danger',
+                hasIcon: true,
+                onConfirm:function () {
+
+                    self.database_action = 'delete-user';
+                    self.databaseActions();
+
+                }
+            })
+        },
+        //---------------------------------------------------------------------
         confirmDatabaseDelete() {
             let self = this;
             this.$buefy.dialog.confirm({
                 title: 'Delete Database',
-                message: 'Are you sure? Database name <b>'+this.item.tenant.database_name+'</b> will be <b>delete</b> on <b>'+this.item.tenant.server.name+'</b> server?',
+                message: 'Are you sure? Database name <b>'+this.item.tenant.database_name
+                    +'</b> will be <b>delete</b> on <b>'+this.item.tenant.server.name+'</b> server?',
                 confirmText: 'Create',
                 type: 'is-danger',
                 hasIcon: true,

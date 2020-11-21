@@ -1,5 +1,9 @@
 let namespace = 'tenants';
 
+import GlobalComponents from '../../vaahvue/helpers/GlobalComponents'
+
+import AutoCompleteAjax from '../../vaahvue/reusable/AutoCompleteAjax'
+
 export default {
     props: ['id'],
     computed:{
@@ -9,6 +13,7 @@ export default {
         item() {return this.$store.getters[namespace+'/state'].active_item},
     },
     components:{
+        AutoCompleteAjax,
     },
     data()
     {
@@ -19,18 +24,43 @@ export default {
             params: {},
             local_action: null,
             title: null,
+            ajax_url_server_search: null,
+            new_password: null,
         }
     },
     watch: {
         $route(to, from) {
             this.updateView()
-        }
+        },
+        'item.name': {
+            deep: true,
+            handler(new_val, old_val) {
+
+                if(new_val)
+                {
+                    this.item.slug = this.$vaah.strToSlug(new_val);
+
+                }
+
+            }
+        },
+        'new_password': {
+            deep: true,
+            handler(new_val, old_val) {
+
+                if(new_val)
+                {
+                    this.item.database_password = new_val;
+                }
+
+            }
+        },
     },
     mounted() {
         //----------------------------------------------------
         this.onLoad();
         //----------------------------------------------------
-
+        this.ajax_url_server_search = this.ajax_url+'/server';
         //----------------------------------------------------
     },
     methods: {
@@ -58,6 +88,20 @@ export default {
             this.updateView();
             this.getAssets();
             this.getItem();
+        },
+        //---------------------------------------------------------------------
+        updateServerId: function(option)
+        {
+            console.log('--->', option);
+            this.new_item.vh_saas_server_id = option.id;
+
+            if(option.host_type == 'CPanel-MySql')
+            {
+                this.new_item.database_name = option.meta.cpanel_username+'_';
+                this.new_item.database_username = option.meta.cpanel_username+'_';
+            }
+
+
         },
         //---------------------------------------------------------------------
         async getAssets() {

@@ -1,5 +1,11 @@
 let namespace = 'tenants';
 
+
+import GlobalComponents from '../../vaahvue/helpers/GlobalComponents'
+
+import AutoCompleteAjax from '../../vaahvue/reusable/AutoCompleteAjax'
+
+
 export default {
     computed:{
         root() {return this.$store.getters['root/state']},
@@ -10,6 +16,8 @@ export default {
         new_item_errors() {return this.$store.getters[namespace+'/state'].new_item_errors},
     },
     components:{
+        ...GlobalComponents,
+        AutoCompleteAjax,
     },
     data()
     {
@@ -19,15 +27,30 @@ export default {
             labelPosition: 'on-border',
             params: {},
             local_action: null,
+            ajax_url_server_search: null,
         }
     },
     watch: {
         $route(to, from) {
             this.updateView()
-        }
+        },
+        'new_item.name': {
+            deep: true,
+            handler(new_val, old_val) {
+
+                if(new_val)
+                {
+                    this.new_item.slug = this.$vaah.strToSlug(new_val);
+                    this.updateNewItem();
+                }
+
+            }
+        },
     },
     mounted() {
 
+        //----------------------------------------------------
+        this.ajax_url_server_search = this.ajax_url+'/server';
         //----------------------------------------------------
         this.onLoad();
         //----------------------------------------------------
@@ -55,10 +78,8 @@ export default {
         //---------------------------------------------------------------------
         onLoad: function()
         {
-
             this.updateView();
             this.getAssets();
-
         },
         //---------------------------------------------------------------------
         async getAssets() {
@@ -70,10 +91,24 @@ export default {
             this.update('active_item', null);
         },
         //---------------------------------------------------------------------
+        updateServerId: function(option)
+        {
+            console.log('--->', option);
+            this.new_item.vh_saas_server_id = option.id;
+
+            if(option.host_type == 'CPanel-MySql')
+            {
+                this.new_item.database_name = option.meta.cpanel_username+'_';
+                this.new_item.database_username = option.meta.cpanel_username+'_';
+            }
+
+            this.updateNewItem();
+        },
+        //---------------------------------------------------------------------
         create: function (action) {
             this.is_btn_loading = true;
 
-            //  this.$Progress.start();
+            this.$Progress.start();
 
             this.params = {
                 new_item: this.new_item,

@@ -15,16 +15,41 @@ export default {
         return {
             is_content_loading: false,
             is_btn_loading: null,
+            is_btn_loading_connect: null,
             labelPosition: 'on-border',
             params: {},
             local_action: null,
             title: null,
+            new_password: null,
         }
     },
     watch: {
         $route(to, from) {
             this.updateView()
-        }
+        },
+        'item.name': {
+            deep: true,
+            handler(new_val, old_val) {
+
+                if(new_val)
+                {
+                    this.item.slug = this.$vaah.strToSlug(new_val);
+
+                }
+
+            }
+        },
+        'new_password': {
+            deep: true,
+            handler(new_val, old_val) {
+
+                if(new_val)
+                {
+                    this.item.password = new_val;
+                }
+
+            }
+        },
     },
     mounted() {
         //----------------------------------------------------

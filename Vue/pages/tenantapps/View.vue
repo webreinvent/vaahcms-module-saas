@@ -44,6 +44,19 @@
                                 </b-dropdown-item>
 
 
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="!item.tenant.is_database_user_created_at"
+                                                 @click="confirmDatabaseUserCreate()">
+                                    <b-icon icon="user"></b-icon>
+                                    Create Database User
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
+                                                 v-if="!item.tenant.is_database_user_assigned_at"
+                                                 @click="confirmAssignDatabaseUser()">
+                                    <b-icon icon="key"></b-icon>
+                                    Assign User To Database
+                                </b-dropdown-item>
 
                                 <b-dropdown-item aria-role="listitem"
                                                  v-if="item.tenant.is_database_created_at"
@@ -115,6 +128,14 @@
                                 </b-dropdown-item>
 
                                 <b-dropdown-item aria-role="listitem"
+                                                 v-if="item.tenant.is_database_user_created_at"
+                                                 class="has-text-danger"
+                                                 @click="confirmDatabaseUserDelete()">
+                                    <b-icon icon="user"></b-icon>
+                                    Delete Database User
+                                </b-dropdown-item>
+
+                                <b-dropdown-item aria-role="listitem"
                                                  v-if="item.tenant.is_database_created_at"
                                                  class="has-text-danger"
                                                  @click="confirmDatabaseDelete()">
@@ -154,7 +175,7 @@
             </b-notification>
 
             <!--content-->
-            <div class="card-content is-paddingless ">
+            <div class="card-content is-paddingless " v-if="item">
 
 
 
@@ -176,37 +197,119 @@
                                     </TableTrView>
                                 </template>
 
-                                <template>
-                                    <TableTrView label="Tenant Slug"
-                                                 is_copiable="true"
-                                                 :value="item.tenant.slug">
-                                    </TableTrView>
+                                <template v-if="item.tenant">
+                                    <tr>
+                                        <th align="right">Is Tenant Active</th>
+                                        <td colspan="2">
+                                            <b-tag v-if="item.tenant.is_active"
+                                                      rounded size="is-small"
+                                                      type="is-success" >
+                                                Yes
+                                            </b-tag>
+                                            <b-tag v-else rounded size="is-small"
+                                                      type="is-danger">
+                                                No
+                                            </b-tag>
+
+                                        </td>
+                                    </tr>
                                 </template>
 
                                 <template>
-                                    <TableTrView label="Database"
+                                    <TableTrTag label="Server"
+                                                 is_copiable="true"
+                                                 :value="item.tenant.server.name">
+                                    </TableTrTag>
+                                </template>
+
+                                <template >
+                                    <tr>
+                                        <th align="right">Is Server Active</th>
+                                        <td colspan="2">
+                                            <b-tag v-if="item.tenant.server.is_active"
+                                                      rounded size="is-small"
+                                                      type="is-success" >
+                                                Yes
+                                            </b-tag>
+                                            <b-tag v-else rounded size="is-small"
+                                                      type="is-danger">
+                                                No
+                                            </b-tag>
+
+                                        </td>
+                                    </tr>
+                                </template>
+
+
+                                <template>
+                                    <TableTrTag label="Database"
                                                  is_copiable="true"
                                                  :value="item.tenant.database_name">
-                                    </TableTrView>
+                                    </TableTrTag>
                                 </template>
+
+                                <template>
+                                    <TableTrTag label="Database Username"
+                                                is_copiable="true"
+                                                :value="item.tenant.database_username">
+                                    </TableTrTag>
+                                </template>
+
 
                                 <template>
                                     <tr>
                                         <th align="right">Database Created</th>
                                         <td colspan="2">
-                                            <b-button v-if="item.tenant.is_database_created_at"
+                                            <b-tag v-if="item.tenant.is_database_created_at"
                                                       rounded size="is-small"
                                                       type="is-success" >
                                                 Yes
-                                            </b-button>
-                                            <b-button v-else rounded size="is-small" type="is-danger"
+                                            </b-tag>
+                                            <b-tag v-else rounded size="is-small" type="is-danger"
                                                       @click="changeStatus(item.id)">
                                                 No
-                                            </b-button>
+                                            </b-tag>
 
                                         </td>
                                     </tr>
                                 </template>
+
+                                <template>
+                                    <tr>
+                                        <th align="right">Database User Created</th>
+                                        <td colspan="2">
+                                            <b-tag v-if="item.tenant.is_database_user_created_at"
+                                                      rounded size="is-small"
+                                                      type="is-success" >
+                                                Yes
+                                            </b-tag>
+                                            <b-tag v-else rounded size="is-small"
+                                                      type="is-danger">
+                                                No
+                                            </b-tag>
+
+                                        </td>
+                                    </tr>
+                                </template>
+
+                                <template>
+                                    <tr>
+                                        <th align="right">User Assigned To Database</th>
+                                        <td colspan="2">
+                                            <b-tag v-if="item.tenant.is_database_user_assigned_at"
+                                                      rounded size="is-small"
+                                                      type="is-success" >
+                                                Yes
+                                            </b-tag>
+                                            <b-tag v-else rounded size="is-small"
+                                                      type="is-danger">
+                                                No
+                                            </b-tag>
+
+                                        </td>
+                                    </tr>
+                                </template>
+
 
                                 <template>
                                     <TableTrActedBy :value="item.tenant.created_by_user"
