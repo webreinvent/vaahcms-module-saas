@@ -301,10 +301,6 @@ class DoMySqlDatabaseManager
 
             $this->connectToServer();
 
-            //$this->deleteDatabaseUser();
-            //$this->flushPrivileges();
-
-
             $sql = "CREATE USER '".$this->tenant_config['username'];
             $sql .= "'@'%' IDENTIFIED WITH mysql_native_password BY '";
             $sql .= $this->tenant_config['password']."'";
@@ -357,7 +353,7 @@ class DoMySqlDatabaseManager
 
             $this->connectToServer();
 
-            $sql = "DROP USER '".$this->tenant_config['username'];
+            $sql = "DROP USER '".$this->tenant->database_username;
             $sql .= "'@'%'";
 
             $this->server_connection->statement($sql);
@@ -386,7 +382,7 @@ class DoMySqlDatabaseManager
             $this->connectToServer();
 
             $sql = "GRANT ALL PRIVILEGES ON ";
-            $sql .= "*.* TO '".$username."'@'".$this->server->host."'";
+            $sql .= "*.* TO '".$username."'@'%'";
 
             $this->server_connection->statement($sql);
 

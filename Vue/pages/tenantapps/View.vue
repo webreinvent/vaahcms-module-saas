@@ -52,7 +52,8 @@
                                 </b-dropdown-item>
 
                                 <b-dropdown-item aria-role="listitem"
-                                                 v-if="!item.tenant.is_database_user_assigned_at"
+                                                 v-if="item.tenant.is_database_created_at
+                                                 && !item.tenant.is_database_user_assigned_at"
                                                  @click="confirmAssignDatabaseUser()">
                                     <b-icon icon="key"></b-icon>
                                     Assign User To Database
@@ -66,7 +67,9 @@
                                 </b-dropdown-item>
 
                                 <b-dropdown-item aria-role="listitem"
-                                                 v-if="item.tenant.is_database_created_at"
+                                                 v-if="item.tenant.is_database_created_at
+                                                 && item.tenant.is_database_user_assigned_at
+                                                 && item.tenant.is_database_created_at"
                                                  @click="confirmMigration()">
                                     <b-icon icon="server"></b-icon>
                                     Run Migration
@@ -75,14 +78,18 @@
 
 
                                 <b-dropdown-item aria-role="listitem"
-                                                 v-if="item.last_migrated_at"
+                                                 v-if="item.tenant.is_database_created_at
+                                                 && item.tenant.is_database_user_assigned_at
+                                                 && item.last_migrated_at"
                                                  @click="confirmSeed()">
                                     <b-icon icon="bars"></b-icon>
                                     Run Seed
                                 </b-dropdown-item>
 
                                 <b-dropdown-item aria-role="listitem"
-                                                 v-if="item.last_migrated_at"
+                                                 v-if="item.tenant.is_database_created_at
+                                                 && item.tenant.is_database_user_assigned_at
+                                                 && item.last_migrated_at"
                                                  @click="confirmInsertSampleData()">
                                     <b-icon icon="file-download"></b-icon>
                                     Insert Sample Data
@@ -113,7 +120,9 @@
 
                                 <b-dropdown-item aria-role="listitem"
                                                  class="has-text-danger"
-                                                 v-if="item.last_migrated_at"
+                                                 v-if="item.tenant.is_database_created_at
+                                                 && item.tenant.is_database_user_assigned_at
+                                                 && item.last_migrated_at"
                                                  @click="confirmRollback()">
                                     <b-icon icon="undo"></b-icon>
                                     Migration Rollback
@@ -121,7 +130,9 @@
 
                                 <b-dropdown-item aria-role="listitem"
                                                  class="has-text-danger"
-                                                 v-if="item.tenant.is_database_created_at"
+                                                 v-if="item.tenant.is_database_created_at
+                                                 && item.tenant.is_database_user_assigned_at
+                                                 && item.tenant.is_database_created_at"
                                                  @click="confirmWipeData()">
                                     <b-icon icon="eraser"></b-icon>
                                     Wipe Data
