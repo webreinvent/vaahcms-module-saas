@@ -35,6 +35,7 @@ class Server extends Model {
         'port',
         'username',
         'password',
+        'sslmode',
         'count_tenants',
         'count_db_instances',
         'is_active_at',
@@ -290,8 +291,7 @@ class Server extends Model {
         }
 
         $update = static::where('id',$id)->withTrashed()->first();
-
-        $update->name = $input['name'];
+        $update->fill($input);
         $update->slug = Str::slug($input['slug']);
         $update->save();
 

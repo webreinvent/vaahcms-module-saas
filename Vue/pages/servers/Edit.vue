@@ -144,7 +144,8 @@
                         </b-radio-button>
                     </b-field>
 
-                    <div v-if="item.host_type == 'MySql'">
+                    <div class="block" v-if="item.host_type == 'MySql'
+                        || item.host_type == 'DigitalOcean-MySql'">
 
                         <b-field label="Username" :label-position="labelPosition">
                             <b-input name="servers-username"
@@ -165,7 +166,7 @@
                     </div>
 
 
-                    <div v-if="item.host_type == 'CPanel-MySql'">
+                    <div class="block" v-if="item.host_type == 'CPanel-MySql'">
 
 
 
@@ -206,6 +207,38 @@
                     </div>
 
 
+                    <b-field label="Database SSL Mode"
+                             :label-position="labelPosition">
+                        <b-select v-model="item.sslmode" placeholder="Select a name">
+                            <option
+                                v-for="(option, index) in page.assets.database_sslmodes"
+                                :value="option"
+                                :key="index">
+                                {{ option }}
+                            </option>
+                        </b-select>
+                    </b-field>
+
+
+
+                    <div class="block" v-if="item.sslmode && item.sslmode != 'disable'">
+
+                        <b-field label="SSL Key Path" :label-position="labelPosition">
+                            <b-input name="tenant-ssl_key_path"
+                                     v-model="item.meta.ssl_key_path"></b-input>
+                        </b-field>
+
+                        <b-field label="CERT Path" :label-position="labelPosition">
+                            <b-input name="tenant-cert_path"
+                                     v-model="item.meta.cert_path"></b-input>
+                        </b-field>
+
+                        <b-field label="SSL CA Path" :label-position="labelPosition">
+                            <b-input name="tenant-ssl_ca_path"
+                                     v-model="item.meta.ssl_ca_path"></b-input>
+                        </b-field>
+
+                    </div>
 
 
                     <hr/>

@@ -6,6 +6,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Database\DatabaseManager as BaseDatabaseManager;
 use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\CpanelMySqlDatabaseManager;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\MySqlDatabaseManager;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DoMySqlDatabaseManager;
+
 
 class DatabaseManager
 {
@@ -39,6 +43,10 @@ class DatabaseManager
 
             case 'CPanel-MySql':
                 $manager = new CpanelMySqlDatabaseManager($this->server, $this->tenant);
+                break;
+
+            case 'DigitalOcean-MySql':
+                $manager = new DoMySqlDatabaseManager($this->server, $this->tenant);
                 break;
 
             default:

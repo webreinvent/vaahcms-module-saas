@@ -1,5 +1,10 @@
 <?php namespace VaahCms\Modules\Saas\Libraries\DatabaseManagers;
 
+
+/*
+ * DigitalOcean MySql Database Manage
+ */
+
 use Illuminate\Database\Connection;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\DB;
@@ -7,7 +12,7 @@ use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
 use Illuminate\Support\Facades\Config;
 
-class MySqlDatabaseManager
+class DoMySqlDatabaseManager
 {
 
     protected $tenant;
@@ -301,16 +306,10 @@ class MySqlDatabaseManager
 
 
             $sql = "CREATE USER '".$this->tenant_config['username'];
-            $sql .= "'@'".$this->server->host."' IDENTIFIED BY '";
+            $sql .= "'@'%' IDENTIFIED WITH mysql_native_password BY '";
             $sql .= $this->tenant_config['password']."'";
 
-            echo "<pre>";
-            print_r($sql);
-            echo "</pre>";
-
             $this->server_connection->statement($sql);
-
-            die("<hr/>line number=123");
 
             $response['status'] = 'success';
             $response['messages'][] = 'Database User Created';
@@ -333,7 +332,7 @@ class MySqlDatabaseManager
             $this->connectToServer();
 
             $sql = "GRANT ALL PRIVILEGES ON ".$this->tenant->database_name;
-            $sql .= ".* TO '".$this->tenant->database_username."'@'".$this->server->host."'";
+            $sql .= ".* TO '".$this->tenant->database_username."'@'%'";
 
             $this->server_connection->statement($sql);
 
@@ -356,27 +355,15 @@ class MySqlDatabaseManager
 
         try{
 
-
-            $this->grantAllPrivileges($this->server_config['username']);
-
             $this->connectToServer();
 
-            echo "<pre>";
-            print_r($this->server_config);
-            echo "</pre>";
-
-            $sql = "DROP USER '".$this->tenant->database_username;
-            $sql .= "'@'".$this->server->host."'";
-
-            echo "<pre>";
-            print_r($sql);
-            echo "</pre>";
+            $sql = "DROP USER '".$this->tenant_config['username'];
+            $sql .= "'@'%'";
 
             $this->server_connection->statement($sql);
 
-            die("<hr/>line number=123");
-
             $this->flushPrivileges();
+
 
             $response['status'] = 'success';
             $response['messages'][] = 'Database User Deleted';

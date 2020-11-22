@@ -5,8 +5,8 @@
 ## Features
 
 ### Completed
-:white_check_mark: Sample Completed Feature
-
+:white_check_mark: Support for DigitalOcean Database (Requires PHP version => 7.4 & `ssl_ca_path` 
+is path of ssl certificate which is also required)
 
 ### Planned
 :black_square_button: CRUD for Database servers | Type: MySql & Cpanel MySql

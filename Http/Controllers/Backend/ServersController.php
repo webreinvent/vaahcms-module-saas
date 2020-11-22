@@ -25,14 +25,13 @@ class ServersController extends Controller
     {
 
 
-        $data['host_types'] = [
-            'MySql',
-            'CPanel-MySql',
-        ];
+        $data['host_types'] = saas_host_types();
 
         $data['drivers'] = [
             'mysql',
         ];
+
+        $data['database_sslmodes'] = saas_db_ssl_modes();
 
         $response['status'] = 'success';
         $response['data'] = $data;

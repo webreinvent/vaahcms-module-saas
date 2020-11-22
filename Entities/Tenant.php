@@ -44,6 +44,7 @@ class Tenant extends Model {
         'database_name',
         'database_username',
         'database_password',
+        'database_sslmode',
         'database_charset',
         'database_collation',
         'is_database_created_at',
@@ -71,6 +72,23 @@ class Tenant extends Model {
         {
             $this->attributes['database_password'] = Crypt::encrypt($value);
         }
+    }
+
+    //-------------------------------------------------
+    public function setMetaAttribute($value)
+    {
+
+        if(isset($value['password']))
+        {
+            $value['password'] = \Crypt::encrypt($value['password']);
+        }
+
+        $this->attributes['meta'] = json_encode($value);
+    }
+    //-------------------------------------------------
+    public function getMetaAttribute($value)
+    {
+        return json_decode($value);
     }
     //-------------------------------------------------
 
@@ -693,7 +711,7 @@ class Tenant extends Model {
 
         $is_valid = static::databaseActionValidation($tenant_column_value, $tenant_column_name);
 
-        if($is_valid['status'] == 'failed')
+        if(isset($is_valid['status']) && $is_valid['status'] == 'failed')
         {
             return $is_valid;
         }
@@ -750,7 +768,7 @@ class Tenant extends Model {
 
         $is_valid = static::databaseActionValidation($tenant_column_value, $tenant_column_name);
 
-        if($is_valid['status'] == 'failed')
+        if(isset($is_valid['status']) && $is_valid['status'] == 'failed')
         {
             return $is_valid;
         }

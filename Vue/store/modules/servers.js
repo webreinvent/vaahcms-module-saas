@@ -43,6 +43,7 @@ export default {
             port: null,
             username: null,
             password: null,
+            sslmode: null,
             count_tenants: null,
             count_db_instances: null,
             is_active: null,
@@ -52,6 +53,9 @@ export default {
                 cpanel_username: null,
                 protocol: 'https',
                 port: 2083,
+                ssl_key_path: null,
+                ssl_cert_path: null,
+                ssl_ca_path: null,
             }
         },
 

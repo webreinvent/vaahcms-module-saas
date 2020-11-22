@@ -35,6 +35,7 @@ class VhSaasTenants extends Migration
             $table->string('database_name')->nullable();
             $table->string('database_username')->nullable();
             $table->mediumText('database_password')->nullable();
+            $table->string('database_sslmode')->nullable();
 
             $table->string('database_charset')->nullable()->default('utf8mb4');
             $table->string('database_collation')->nullable()->default('utf8mb4_unicode_ci');

@@ -44,10 +44,18 @@ export default {
             database_name: null,
             database_username: null,
             database_password: null,
+            database_sslmode: null,
             database_charset: 'utf8mb4',
             database_collation: 'utf8mb4_unicode_ci',
             is_active: null,
             notes: null,
+            meta: {
+
+                ssl_key_path: null,
+                ssl_cert_path: null,
+                ssl_ca_path: null,
+
+            },
         },
 
     },
