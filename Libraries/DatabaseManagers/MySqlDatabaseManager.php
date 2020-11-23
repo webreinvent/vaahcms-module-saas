@@ -46,23 +46,11 @@ class MySqlDatabaseManager
 
         ];
 
-        $config['modes'] = [
-            'ONLY_FULL_GROUP_BY',
-            'STRICT_TRANS_TABLES',
-            'NO_ZERO_IN_DATE',
-            'NO_ZERO_DATE',
-            'ERROR_FOR_DIVISION_BY_ZERO',
-            'NO_ENGINE_SUBSTITUTION',
-        ];
-
 
         if(isset($this->server->password) && !empty($this->server->password))
         {
             $config['password'] = Crypt::decrypt($this->server->password);
         }
-
-
-
 
 
         if(!empty($this->server->sslmode))
@@ -105,14 +93,6 @@ class MySqlDatabaseManager
             'password' => '',
         ];
 
-        /*$config['modes'] = [
-            'ONLY_FULL_GROUP_BY',
-            'STRICT_TRANS_TABLES',
-            'NO_ZERO_IN_DATE',
-            'NO_ZERO_DATE',
-            'ERROR_FOR_DIVISION_BY_ZERO',
-            'NO_ENGINE_SUBSTITUTION',
-        ];*/
 
         if(isset($this->tenant->database_password) && !empty($this->tenant->database_password))
         {
@@ -296,21 +276,11 @@ class MySqlDatabaseManager
 
             $this->connectToServer();
 
-            //$this->deleteDatabaseUser();
-            //$this->flushPrivileges();
-
-
             $sql = "CREATE USER '".$this->tenant_config['username'];
             $sql .= "'@'".$this->server->host."' IDENTIFIED BY '";
             $sql .= $this->tenant_config['password']."'";
 
-            echo "<pre>";
-            print_r($sql);
-            echo "</pre>";
-
             $this->server_connection->statement($sql);
-
-            die("<hr/>line number=123");
 
             $response['status'] = 'success';
             $response['messages'][] = 'Database User Created';
@@ -361,20 +331,10 @@ class MySqlDatabaseManager
 
             $this->connectToServer();
 
-            echo "<pre>";
-            print_r($this->server_config);
-            echo "</pre>";
-
             $sql = "DROP USER '".$this->tenant->database_username;
             $sql .= "'@'".$this->server->host."'";
 
-            echo "<pre>";
-            print_r($sql);
-            echo "</pre>";
-
             $this->server_connection->statement($sql);
-
-            die("<hr/>line number=123");
 
             $this->flushPrivileges();
 
