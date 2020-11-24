@@ -39,6 +39,7 @@ class Server extends Model {
         'count_tenants',
         'count_db_instances',
         'is_active_at',
+        'is_active',
         'meta',
         'created_by',
         'updated_by',
@@ -173,7 +174,7 @@ class Server extends Model {
             $response['errors'][] = "This slug is already exist.";
             return $response;
         }
-
+        
         $item = new static();
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);

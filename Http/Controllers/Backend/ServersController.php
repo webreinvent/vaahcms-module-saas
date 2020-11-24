@@ -150,7 +150,7 @@ class ServersController extends Controller
 
 
         $db_manager = new DatabaseManager($item);
-        $response = $db_manager->testConnection();
+        $response = $db_manager->testServerConnection();
 
 
         return response()->json($response);
