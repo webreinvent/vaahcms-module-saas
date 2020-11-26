@@ -31,6 +31,8 @@ class ServersController extends Controller
             'mysql',
         ];
 
+        $data['bulk_actions'] = vh_general_bulk_actions();
+
         $data['database_sslmodes'] = saas_db_ssl_modes();
 
         $response['status'] = 'success';
@@ -150,7 +152,7 @@ class ServersController extends Controller
 
 
         $db_manager = new DatabaseManager($item);
-        $response = $db_manager->testConnection();
+        $response = $db_manager->testServerConnection();
 
 
         return response()->json($response);

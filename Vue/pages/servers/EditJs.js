@@ -200,7 +200,10 @@ export default {
             let new_item = {
                 name: null,
                 slug: null,
-                is_active: null,
+                host_type: null,
+                driver: null,
+                host: null,
+                port: null,
                 details: null,
             };
 

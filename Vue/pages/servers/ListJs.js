@@ -158,7 +158,10 @@ export default {
                 if(key == 'page')
                 {
                     this.query_string[key] = 1;
-                } else
+                } else if(key == 'sort_order')
+                {
+                    this.query_string[key] = 'desc';
+                }else
                 {
                     this.query_string[key] = null;
                 }
@@ -318,6 +321,14 @@ export default {
 
         },
         //---------------------------------------------------------------------
+        setFilter: function () {
+
+            this.query_string.page = 1;
+            this.update('query_string', this.query_string);
+
+            this.getList();
+
+        },
         //---------------------------------------------------------------------
     }
 }

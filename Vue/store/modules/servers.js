@@ -117,7 +117,7 @@ export default {
             || payload.name == 'servers.view'
             || payload.name == 'servers.edit')
             {
-                list_view = 'medium';
+                list_view = 'small';
             };
 
             let view = {
