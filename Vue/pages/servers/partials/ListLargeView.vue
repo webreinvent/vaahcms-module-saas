@@ -2,11 +2,11 @@
 <template>
     <div>
         <b-table :data="page.list_is_empty ? [] : page.list.data"
+                 :checkable="true"
                  :checked-rows.sync="page.bulk_action.selected_items"
                  checkbox-position="left"
                  :hoverable="true"
-                 :row-class="setRowClass"
-        >
+                 :row-class="setRowClass">
 
             <template slot-scope="props">
                 <b-table-column field="id" label="ID" width="40" numeric>
@@ -26,20 +26,20 @@
                     </vh-copy>
                 </b-table-column>
 
-                <b-table-column field="is_active" label="Is Active">
+                <b-table-column width="10%" field="is_active" label="Is Active">
                     <b-tooltip label="Change Status" type="is-dark">
                         <b-button v-if="props.row.is_active === 1" rounded size="is-small"
-                                  type="is-success" @click="changeStatus(props.row.id)">
+                                  type="is-success" :disabled="props.row.deleted_at ? true : false" @click="changeStatus(props.row.id)">
                             Yes
                         </b-button>
                         <b-button v-else rounded size="is-small" type="is-danger"
-                                  @click="changeStatus(props.row.id)">
+                                  :disabled="props.row.deleted_at ? true : false" @click="changeStatus(props.row.id)">
                             No
                         </b-button>
                     </b-tooltip>
                 </b-table-column>
 
-                <b-table-column field="updated_at" label="Updated At">
+                <b-table-column width="15%" field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>
 

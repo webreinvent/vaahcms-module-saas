@@ -34,7 +34,6 @@ class Server extends Model {
         'host',
         'port',
         'username',
-        'password',
         'sslmode',
         'count_tenants',
         'count_db_instances',
@@ -44,6 +43,10 @@ class Server extends Model {
         'created_by',
         'updated_by',
         'deleted_by'
+    ];
+    //-------------------------------------------------
+    protected $hidden = [
+        'password',
     ];
 
     //-------------------------------------------------
@@ -178,6 +181,7 @@ class Server extends Model {
         $item = new static();
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);
+        $item->password = $inputs['password'];
         $item->save();
 
         static::updateCounts($item);
@@ -200,8 +204,12 @@ class Server extends Model {
     public static function getList($request)
     {
 
-
-        $list = static::orderBy('id', 'desc');
+        if($request['sort_by'])
+        {
+            $list = static::orderBy($request['sort_by'], $request['sort_order']);
+        }else{
+            $list = static::orderBy('id', $request['sort_order']);
+        }
 
         if($request['trashed'] == 'true')
         {
@@ -294,6 +302,9 @@ class Server extends Model {
         $update = static::where('id',$id)->withTrashed()->first();
         $update->fill($input);
         $update->slug = Str::slug($input['slug']);
+        if(isset($input['password'])){
+            $update->password = $input['password'];
+        }
         $update->save();
 
 

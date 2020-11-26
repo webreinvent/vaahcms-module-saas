@@ -133,13 +133,13 @@
                                         dusk="servers-is_active"
                                         type="is-success"
                                         v-model="item.is_active"
-                                        :native-value=1>
+                                        :native-value='1'>
                             <span>Yes</span>
                         </b-radio-button>
 
                         <b-radio-button type="is-danger"  name="servers-is_active" dusk="servers-is_active"
                                         v-model="item.is_active"
-                                        :native-value=0>
+                                        :native-value='0'>
                             <span>No</span>
                         </b-radio-button>
                     </b-field>

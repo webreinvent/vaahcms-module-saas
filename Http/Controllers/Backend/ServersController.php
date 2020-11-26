@@ -31,6 +31,8 @@ class ServersController extends Controller
             'mysql',
         ];
 
+        $data['bulk_actions'] = vh_general_bulk_actions();
+
         $data['database_sslmodes'] = saas_db_ssl_modes();
 
         $response['status'] = 'success';
