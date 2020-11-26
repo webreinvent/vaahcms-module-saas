@@ -24,6 +24,9 @@ is path of ssl certificate which is also required)
 
 ---
 
+#### For hot reload
+APP_MODULE_SAAS_ENV=develop
+
 ```php
 
 $tenant = Tenant::find(2);
