@@ -20,7 +20,7 @@
                         <header class="card-header">
 
                             <div class="card-header-title">
-                                servers
+                                Servers
                             </div>
 
                             <div class="card-header-buttons">

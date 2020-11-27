@@ -226,7 +226,12 @@ class Tenant extends Model {
     {
 
 
-        $list = static::orderBy('id', 'desc');
+        if($request['sort_by'])
+        {
+            $list = static::orderBy($request['sort_by'], $request['sort_order']);
+        }else{
+            $list = static::orderBy('id', $request['sort_order']);
+        }
 
         //$list->with(['server']);
 
@@ -239,15 +244,6 @@ class Tenant extends Model {
         if(isset($request->from) && isset($request->to))
         {
             $list->betweenDates($request['from'],$request['to']);
-        }
-
-        if($request['filter'] && $request['filter'] == '1')
-        {
-
-            $list->where('is_active',$request['filter']);
-        }elseif($request['filter'] == '10'){
-
-            $list->whereNull('is_active')->orWhere('is_active',0);
         }
 
         if(isset($request->q))

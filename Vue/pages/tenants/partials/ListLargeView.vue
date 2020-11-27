@@ -2,11 +2,11 @@
 <template>
     <div>
         <b-table :data="page.list_is_empty ? [] : page.list.data"
+                 :checkable="true"
                  :checked-rows.sync="page.bulk_action.selected_items"
                  checkbox-position="left"
                  :hoverable="true"
-                 :row-class="setRowClass"
-        >
+                 :row-class="setRowClass">
 
             <template slot-scope="props">
                 <b-table-column field="id" label="ID" width="40" numeric>

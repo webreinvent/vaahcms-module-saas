@@ -29,6 +29,8 @@ class TenantsController extends Controller
         $data['permission'] = [];
         $data['database_sslmodes'] = saas_db_ssl_modes();
 
+        $data['bulk_actions'] = vh_general_bulk_actions();
+
         $response['status'] = 'success';
         $response['data'] = $data;
 
