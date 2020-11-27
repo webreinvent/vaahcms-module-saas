@@ -26,6 +26,7 @@ class TenantAppsController extends Controller
 
         $data = [];
         $data['permission'] = [];
+        $data['bulk_actions'] = vh_general_bulk_actions();
 
         $response['status'] = 'success';
         $response['data'] = $data;

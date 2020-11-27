@@ -163,16 +163,22 @@ class TenantApp extends Model {
     public static function getList($request)
     {
 
+        if($request['sort_by'])
+        {
+            $list = static::orderBy($request['sort_by'], $request['sort_order']);
+        }else{
+            $list = static::orderBy('id', $request['sort_order']);
+        }
 
-
-        $list = static::with(['tenant', 'app'])
-            ->orderBy('created_at', 'desc');
+        $list->with(['tenant', 'app']);
 
         if($request['trashed'] == 'true')
         {
 
             $list->withTrashed();
         }
+
+
 
         if(isset($request->from) && isset($request->to))
         {
@@ -190,11 +196,27 @@ class TenantApp extends Model {
 
         if(isset($request->q))
         {
+            if(isset($request['search_by']) && $request['search_by'])
+            {
+                if($request['search_by'] == 'tenent'){
+                    $list->whereHas('tenant', function ($tenant) use ($request) {
+                        $tenant->where('name', 'like',  '%'.$request->q.'%');
+                    });
+                }elseif($request['search_by'] == 'app'){
+                    $list->whereHas('app', function ($app) use ($request) {
+                        $app->where('name', 'like',  '%'.$request->q.'%');
+                    });
+                }
 
-            $list->where(function ($q) use ($request){
-                $q->where('name', 'LIKE', '%'.$request->q.'%')
-                    ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
-            });
+            }else{
+                $list->whereHas('tenant', function ($tenant) use ($request) {
+                    $tenant->where('name', 'like',  '%'.$request->q.'%');
+                });
+
+                $list->orWhereHas('app', function ($app) use ($request) {
+                    $app->where('name', 'like',  '%'.$request->q.'%');
+                });
+            }
         }
 
 

@@ -47,9 +47,9 @@ class AppsController extends Controller
             $i++;
         }
 
-
-
         $data['modules'] = $modules_list;
+
+        $data['bulk_actions'] = vh_general_bulk_actions();
 
 
         $response['status'] = 'success';

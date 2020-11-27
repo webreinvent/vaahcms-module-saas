@@ -24,7 +24,6 @@ class ServersController extends Controller
     public function getAssets(Request $request)
     {
 
-
         $data['host_types'] = saas_host_types();
 
         $data['drivers'] = [

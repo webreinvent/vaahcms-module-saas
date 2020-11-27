@@ -20,7 +20,7 @@
                         <header class="card-header">
 
                             <div class="card-header-title">
-                                apps
+                                Apps
                             </div>
 
                             <div class="card-header-buttons">
@@ -149,30 +149,54 @@
                                 <!--/actions-->
 
                                 <!--filters-->
-                                <div class="level" v-if="page.show_filters">
+                                <div class="level" v-if="page.show_filters && page.list_view == 'large'" >
 
-
-                                    <div class="level-left" >
-
+                                    <div class="level-left">
 
 
                                         <div class="level-item">
 
                                             <b-field label="">
-                                                <b-select placeholder="- Select a status -"
-                                                          v-model="query_string.filter"
-                                                          @input="getList()"
-                                                >
+                                                <b-select placeholder="- Sort by -"
+                                                          v-model="query_string.sort_by"
+                                                          @input="setFilter()">
                                                     <option value="">
-                                                        - Select a status -
+                                                        -  Sort by -
                                                     </option>
-                                                    <option value=01>
-                                                        Active
+                                                    <option value=id>
+                                                        Id
                                                     </option>
-                                                    <option value=10>
-                                                        Inactive
+                                                    <option value=name>
+                                                        Name
                                                     </option>
+                                                    <option value=slug>
+                                                        Slug
+                                                    </option>
+                                                    <option value=updated_at>
+                                                        Updated at
+                                                    </option>
+
                                                 </b-select>
+                                            </b-field>
+
+
+                                        </div>
+                                        <div class="level-item">
+
+                                            <b-field label="">
+                                                <b-dropdown aria-role="list" @input="setFilter()" v-model="query_string.sort_order">
+                                                    <button class="button is-primary" type="button" slot="trigger">
+                                                        <span v-if="query_string.sort_order === 'desc'">Descending</span>
+                                                        <span v-else>Ascending</span>
+                                                    </button>
+
+                                                    <b-dropdown-item  value="desc">
+                                                        <span>Descending</span>
+                                                    </b-dropdown-item>
+                                                    <b-dropdown-item  value="asc">
+                                                        <span>Ascending</span>
+                                                    </b-dropdown-item>
+                                                </b-dropdown>
                                             </b-field>
 
 
@@ -189,19 +213,17 @@
                                         </div>
 
                                     </div>
-
-
                                     <div class="level-right">
 
                                         <div class="level-item">
 
                                             <b-field>
-                                                <b-datepicker
-                                                        position="is-bottom-left"
-                                                        placeholder="- Select a dates -"
-                                                        v-model="selected_date"
-                                                        @input="setDateRange"
-                                                        range>
+                                                <b-datepicker style="width: 200px"
+                                                              position="is-bottom-left"
+                                                              placeholder="- Select a dates -"
+                                                              v-model="selected_date"
+                                                              @input="setDateRange"
+                                                              range>
                                                 </b-datepicker>
                                             </b-field>
 

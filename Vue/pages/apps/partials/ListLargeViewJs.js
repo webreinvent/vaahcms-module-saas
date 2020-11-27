@@ -93,8 +93,7 @@ export default {
         },
         //---------------------------------------------------------------------
         getItemTenants: function (item) {
-            this.update('active_item', item);
-            this.$router.push({name: 'apps.tenants', params:{id:item.id}})
+            this.$router.push({name: 'tenantapps.list', query:{search_by:'app',q:item.name}})
         },
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------

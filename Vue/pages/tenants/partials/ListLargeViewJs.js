@@ -91,6 +91,9 @@ export default {
         {
             return this.$vaah.hasPermission(this.permissions, slug);
         },
+        getItemTenants: function (item) {
+            this.$router.push({name: 'tenantapps.list', query:{search_by:'tenent',q:item.name}})
+        },
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
         //---------------------------------------------------------------------
