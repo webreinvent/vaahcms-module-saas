@@ -119,10 +119,7 @@
                                     </template>
 
                                     <template v-else-if="label == 'is_active'">
-                                        <TableTrStatus v-if="value == 1" :value="'Yes'"
-                                                       :label="label">
-                                        </TableTrStatus>
-                                        <TableTrStatus v-else :value="'No'"
+                                        <TableTrStatus :value="value"
                                                        :label="label">
                                         </TableTrStatus>
                                     </template>

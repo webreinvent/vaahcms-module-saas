@@ -211,16 +211,12 @@
                                 <template v-if="item.tenant">
                                     <tr>
                                         <th align="right">Is Tenant Active</th>
-                                        <td colspan="2">
-                                            <b-tag v-if="item.tenant.is_active"
-                                                      rounded size="is-small"
-                                                      type="is-success" >
-                                                Yes
-                                            </b-tag>
-                                            <b-tag v-else rounded size="is-small"
-                                                      type="is-danger">
-                                                No
-                                            </b-tag>
+                                        <td colspan="2" >
+
+                                            <TableTrStatus v-if="item.tenant.is_active"
+                                                           :value="item.tenant.server.is_active"
+                                                           :label="item.tenant.server.is_active">
+                                            </TableTrStatus>
 
                                         </td>
                                     </tr>
@@ -236,16 +232,13 @@
                                 <template >
                                     <tr>
                                         <th align="right">Is Server Active</th>
-                                        <td colspan="2">
-                                            <b-tag v-if="item.tenant.server.is_active"
-                                                      rounded size="is-small"
-                                                      type="is-success" >
-                                                Yes
-                                            </b-tag>
-                                            <b-tag v-else rounded size="is-small"
-                                                      type="is-danger">
-                                                No
-                                            </b-tag>
+                                        <td colspan="2" >
+
+                                            <TableTrStatus v-if="item.tenant.server.is_active"
+                                                           :value="item.tenant.server.is_active"
+                                                           :label="item.tenant.server.is_active">
+                                            </TableTrStatus>
+                                            
 
                                         </td>
                                     </tr>
