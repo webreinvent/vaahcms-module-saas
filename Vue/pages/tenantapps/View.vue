@@ -204,44 +204,37 @@
 
                                 <template>
                                     <TableTrView label="Tenant Name"
+                                                 v-if="item.tenant
+                                            && item.tenant.name"
                                                  :value="item.tenant.name">
                                     </TableTrView>
                                 </template>
 
                                 <template v-if="item.tenant">
-                                    <tr>
-                                        <th align="right">Is Tenant Active</th>
-                                        <td colspan="2" >
+                                    <TableTrStatus v-if="item.tenant
+                                            && item.tenant.is_active"
+                                                   :value="item.tenant.is_active"
+                                                   label="Is Tenant Active">
+                                    </TableTrStatus>
 
-                                            <TableTrStatus v-if="item.tenant.is_active"
-                                                           :value="item.tenant.server.is_active"
-                                                           :label="item.tenant.server.is_active">
-                                            </TableTrStatus>
-
-                                        </td>
-                                    </tr>
                                 </template>
 
                                 <template>
                                     <TableTrTag label="Server"
+                                                v-if="item.tenant && item.tenant.server
+                                            && item.tenant.server.name"
                                                  is_copiable="true"
                                                  :value="item.tenant.server.name">
                                     </TableTrTag>
                                 </template>
 
                                 <template >
-                                    <tr>
-                                        <th align="right">Is Server Active</th>
-                                        <td colspan="2" >
+                                    <TableTrStatus v-if="item.tenant && item.tenant.server
+                                            && item.tenant.server.is_active"
+                                                   :value="item.tenant.server.is_active"
+                                                   label="Is Server Active">
+                                    </TableTrStatus>
 
-                                            <TableTrStatus v-if="item.tenant.server.is_active"
-                                                           :value="item.tenant.server.is_active"
-                                                           :label="item.tenant.server.is_active">
-                                            </TableTrStatus>
-                                            
-
-                                        </td>
-                                    </tr>
                                 </template>
 
 

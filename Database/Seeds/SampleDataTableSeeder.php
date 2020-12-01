@@ -17,6 +17,7 @@ class SampleDataTableSeeder extends Seeder
     {
         $this->seedServers();
         $this->seedTenants();
+        $this->seedApps();
     }
 
 
@@ -69,6 +70,12 @@ class SampleDataTableSeeder extends Seeder
     {
         $list = $this->getListFromJson("tenants.json");
         $this->storeSeedsWithUuid('vh_saas_tenants', $list);
+    }
+    //------------------------------------------------------------
+    public function seedApps()
+    {
+        $list = $this->getListFromJson("apps.json");
+        $this->storeSeedsWithUuid('vh_saas_apps', $list);
     }
     //------------------------------------------------------------
     //------------------------------------------------------------
