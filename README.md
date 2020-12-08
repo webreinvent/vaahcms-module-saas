@@ -24,11 +24,80 @@ is path of ssl certificate which is also required)
 
 ---
 
-#### For hot reload
-APP_MODULE_SAAS_ENV=develop
+## Usages
+
+### Identify Tenant via `URL` and `middleware`
+
+**- By Path**
+
+Add `tenant_by_path` middleware and `path` parameter is required to identify the `tenant`
+```php
+Route::group(
+[
+    'prefix'     => '/<URI>/{path}',
+    'middleware' => ['web', 'tenant_by_path'],
+    'namespace' => 'Frontend',
+],
+function () {
+    //------------------------------------------------
+    Route::get( '/', 'TenantController@index' )
+        ->name( 'vh.frontend.tenant' );
+    //------------------------------------------------
+});
+```
+
+**- By Sub-domain**
+
+Add `tenant_by_sub_domain` middleware to identify the `tenant`
+```php
+Route::group(
+[
+    'middleware' => ['web', 'tenant_by_sub_domain'],
+    'namespace' => 'Frontend',
+],
+function () {
+    //------------------------------------------------
+    Route::get( '/', 'TenantController@index' )
+        ->name( 'vh.frontend.tenant' );
+    //------------------------------------------------
+});
+```
+
+**- By domain**
+
+Add `tenant_by_domain` middleware to identify the `tenant`
+```php
+Route::group(
+[
+    'middleware' => ['web', 'tenant_by_domain'],
+    'namespace' => 'Frontend',
+],
+function () {
+    //------------------------------------------------
+    Route::get( '/', 'TenantController@index' )
+        ->name( 'vh.frontend.tenant' );
+    //------------------------------------------------
+});
+```
+
+### Identify Tenant via `Tenant` model instance
 
 ```php
+$tenant = Tenant::find($id);
 
+$tenancy = new Tenancy($tenant);
+
+//to connect tenant database
+$tenancy->start();
+
+//disconnect to tenant database and reconnect to central database
+$tenancy->end();
+
+```
+
+### Tenant `Database` operations
+
+```php
 $tenant = Tenant::find(2);
 
 $db_manager = new DatabaseManager();
@@ -38,6 +107,93 @@ $db_manager = new DatabaseManager();
 
 ```
 
+### Tenant `migrations` & `seeds` operations
+```php
+$inputs = [
+   'command' => '',
+   'path' => '',
+];
+
+
+Tenant::migrate($inputs, $tenant_id);
+
+
+
+$inputs = [
+   'command' => '',
+   'class' => '',
+];
+
+
+Tenant::seed($inputs, $tenant_id);
+
+```
+
+---
+
+#### For hot reload
+APP_MODULE_SAAS_ENV=develop
+
+---
+
+## Setup wildcard sub domains on CPanel for Laravel
+
+- Login `CPanel >> Subdomains`, enter `*` in subdomain, in `domain` choose `top level domain`, 
+remove `_wildcard_` from `Document Root`.
+
+After this if you visit any subdomain it will show SSL error, to resolve it we need to install
+`wildcard ssl`. 
+- Visit `https://www.sslforfree.com/` and enter `*.yourdomain.com` and click `Create Free Certificate`
+- Add `A` record to domain as per the instruction. On next page it will show all there SSL Certificate strings.
+- Login `CPanel >> SSL/TLS >> Manage SSL sites >> Install an SSL Website` and choose `*.yourdomain.com` and enter SSL Certificate string to respective section and save.
+- Now try to visit any sub domain all of them should be working.
+- Before deploying VaahSaas, create a folder `vaahsaas` and move all files and folder in that except `public`
+- Rename `public` folder to `public_html` and change the content to following:
+```php
+require __DIR__.'/../vaahsaas/vendor/autoload.php';
+$app = require_once __DIR__.'/../vaahsaas/bootstrap/app.php';
+```
+- So in root folder you will have two folder `vaahsaas` and `public_html` which can been deployed to the `root` of cpanel
+
+
+---
+### Xampp - Custom domain 
+
+- Open `<xampp>\apache\conf\extra\httpd-vhosts.conf` add following code:
+```shell
+<VirtualHost yourdomain.com>
+  DocumentRoot "<xampp-path>/htdocs/vaahsaas_director/public"
+  ServerName yourdomain.com
+
+  <Directory "<xampp-path>/htdocs/vaahsaas_director/public">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>
+
+<VirtualHost test.yourdomain.com>
+  DocumentRoot "<xampp-path>/htdocs/vaahsaas_director/public"
+  ServerName test.yourdomain.com
+
+  <Directory "<xampp-path>/htdocs/vaahsaas_director/public">
+    Options Indexes FollowSymLinks
+    AllowOverride All
+    Order allow,deny
+    Allow from all
+  </Directory>
+</VirtualHost>
+```
+
+- Then open `notepad` as administrator `C:\Windows\System32\drivers\etc\host`
+- Add following lines:
+```shell
+127.0.0.1 yourdomain.com
+127.0.0.1 test.yourdomain.com
+```
+- You may see some error`test.yourdomain.com` like `Tenancy Not Identified` if you have already 
+not created any tenancy for the domain.
 
 ---
 ## Resource

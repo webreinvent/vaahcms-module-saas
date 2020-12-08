@@ -147,7 +147,7 @@ class DoMySqlDatabaseManager
         }
 
         $this->tenant_config = $config;
-        $this->tenant_connection_name = $this->server->slug.'-'.$this->tenant->slug;
+        $this->tenant_connection_name = $this->tenant->db_connection_name;
 
     }
     //--------------------------------------------------------
@@ -200,12 +200,12 @@ class DoMySqlDatabaseManager
         return $response;
     }
     //--------------------------------------------------------
-    public function connectToDatabase()
+    public function configDbConnection()
     {
 
         try{
             $this->setDatabaseConnectionName($this->tenant_connection_name, $this->tenant_config);
-            $this->tenant_connection = DB::connection($this->tenant_connection_name);
+            //$this->tenant_connection = DB::connection($this->tenant_connection_name);
             $response['status'] = 'success';
             $response['data']['connection_name'] = $this->tenant_connection_name;
             $response['data']['config'] = $this->tenant_config;

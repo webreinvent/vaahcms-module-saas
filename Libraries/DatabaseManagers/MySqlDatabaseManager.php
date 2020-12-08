@@ -122,7 +122,7 @@ class MySqlDatabaseManager
         }
 
         $this->tenant_config = $config;
-        $this->tenant_connection_name = $this->server->slug.'-'.$this->tenant->slug;
+        $this->tenant_connection_name = $this->tenant->db_connection_name;
 
     }
     //--------------------------------------------------------
@@ -175,12 +175,12 @@ class MySqlDatabaseManager
         return $response;
     }
     //--------------------------------------------------------
-    public function connectToDatabase()
+    public function configDbConnection()
     {
 
         try{
             $this->setDatabaseConnectionName($this->tenant_connection_name, $this->tenant_config);
-            $this->tenant_connection = DB::connection($this->tenant_connection_name);
+            //$this->tenant_connection = DB::connection($this->tenant_connection_name);
             $response['status'] = 'success';
             $response['data']['connection_name'] = $this->tenant_connection_name;
             $response['data']['config'] = $this->tenant_config;
@@ -202,8 +202,6 @@ class MySqlDatabaseManager
         $database = $this->tenant->database_name;
         $charset = $this->tenant->database_charset;
         $collation = $this->tenant->database_collation;
-
-
 
         try{
 

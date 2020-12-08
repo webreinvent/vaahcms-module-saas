@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Factory;
 use VaahCms\Modules\Saas\Entities\App;
 use VaahCms\Modules\Saas\Entities\Tenant;
+use VaahCms\Modules\Saas\Http\Middleware\TenantByPath;
 use VaahCms\Modules\Saas\Observers\AppObserver;
 use VaahCms\Modules\Saas\Observers\TenantObserver;
 use VaahCms\Modules\Saas\Providers\RouteServiceProvider;
@@ -70,7 +71,7 @@ class SaasServiceProvider extends ServiceProvider
     private function registerMiddleware($router) {
 
         //register middleware
-        //$router->aliasMiddleware('sample.middleware', \Saas\Http\Middleware\SampleMiddleware::class);
+        $router->aliasMiddleware('tenant_by_path', TenantByPath::class);
 
     }
 

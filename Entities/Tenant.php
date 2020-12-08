@@ -64,6 +64,8 @@ class Tenant extends Model {
     //-------------------------------------------------
     protected $appends  = [
 
+        'db_connection_name'
+
     ];
     //-------------------------------------------------
     public function setDatabasePasswordAttribute($value)
@@ -89,6 +91,20 @@ class Tenant extends Model {
     public function getMetaAttribute($value)
     {
         return json_decode($value);
+    }
+    //-------------------------------------------------
+    public function getDbConnectionNameAttribute()
+    {
+        $name = '';
+
+        if($this->server->slug)
+        {
+            $name .= $this->server->slug.'-';
+        }
+
+        $name .= $this->slug;
+
+        return $name;
     }
     //-------------------------------------------------
 
@@ -132,6 +148,26 @@ class Tenant extends Model {
             'version_number', 'is_active',
             'last_migrated_at', 'last_seeded_at',
             'created_at', 'updated_at');
+    }
+    //-------------------------------------------------
+    public function scopeHasSlug($query, $value)
+    {
+        return $query->where('slug', $value);
+    }
+    //-------------------------------------------------
+    public function scopeHasPath($query, $value)
+    {
+        return $query->where('path', $value);
+    }
+    //-------------------------------------------------
+    public function scopeHasDomain($query, $value)
+    {
+        return $query->where('domain', $value);
+    }
+    //-------------------------------------------------
+    public function scopeHasSubDomain($query, $value)
+    {
+        return $query->where('sub_domain', $value);
     }
     //-------------------------------------------------
     public function getTableColumns() {
@@ -727,14 +763,14 @@ class Tenant extends Model {
 
 
         //connect to database
-        $connection = $db_manager->connectToDatabase();
+        $connection = $db_manager->configDbConnection();
 
         if(isset($connection['status']) && $connection['status'] == 'failed')
         {
             return $connection;
         }
 
-        $db_connection_name = $connection['data']['connection_name'];
+        $db_connection_name = $tenant->db_connection_name;
 
         $response = \VaahArtisan::migrate($inputs['command'], $db_connection_name, $inputs['path']);
 
@@ -783,14 +819,14 @@ class Tenant extends Model {
         $db_manager = new DatabaseManager($server, $tenant);
 
         //connect to database
-        $connection = $db_manager->connectToDatabase();
+        $connection = $db_manager->configDbConnection();
 
         if(isset($connection['status']) && $connection['status'] == 'failed')
         {
             return $connection;
         }
 
-        $db_connection_name = $connection['data']['connection_name'];
+        $db_connection_name = $tenant->db_connection_name;
 
         if(!isset($inputs['class']))
         {

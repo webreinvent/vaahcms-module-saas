@@ -9,6 +9,7 @@ use VaahCms\Modules\Saas\Entities\Tenant;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\CpanelMySqlDatabaseManager;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\MySqlDatabaseManager;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DoMySqlDatabaseManager;
+use App;
 
 
 class DatabaseManager
@@ -83,9 +84,9 @@ class DatabaseManager
     }
     //--------------------------------------------------------
 
-    public function connectToDatabase()
+    public function configDbConnection()
     {
-        $response = $this->db_manager->connectToDatabase();
+        $response = $this->db_manager->configDbConnection();
         return $response;
     }
 
@@ -108,32 +109,31 @@ class DatabaseManager
         return $response;
     }
     //--------------------------------------------------------
-
-    public function reconnectToCentral()
+    public function connectToTenant()
     {
-        if (tenancy()->initialized) {
-            $this->database->purge('tenant');
+
+        $db_config = $this->configDbConnection();
+
+        if($db_config['status'] == 'failed')
+        {
+            return $db_config;
         }
 
-        $this->setDefaultConnection($this->config->get('tenancy.database.central_connection'));
+        $this->setDefaultConnection($this->tenant->db_connection_name);
+    }
+    //--------------------------------------------------------
 
+    public function connectToCentral(string $db_connection_name='mysql')
+    {
+        $this->setDefaultConnection($db_connection_name);
     }
 
     //--------------------------------------------------------
 
-    public function setDefaultConnection(string $connection)
+    public function setDefaultConnection(string $connection_name)
     {
-        $this->app['config']['database.default'] = $connection;
-        $this->database->setDefaultConnection($connection);
+        App::make('config')->set('database.default', $connection_name);
     }
-
-    //--------------------------------------------------------
-
-    public function createTenantConnection(TenantWithDatabase $tenant)
-    {
-        $this->app['config']['database.connections.tenant'] = $tenant->database()->connection();
-    }
-
     //--------------------------------------------------------
     //--------------------------------------------------------
     //--------------------------------------------------------
