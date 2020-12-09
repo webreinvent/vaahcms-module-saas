@@ -27,7 +27,7 @@
                 </b-table-column>
 
 
-                <b-table-column field="count_Apps" label="Apps" >
+                <b-table-column width="10%" field="count_Apps" label="Apps" >
                     <b-tooltip label="View Apps" type="is-dark">
                         <b-button rounded size="is-small"
                                   type="is-primary"
@@ -37,7 +37,7 @@
                     </b-tooltip>
                 </b-table-column>
 
-                <b-table-column field="updated_at" label="Updated At">
+                <b-table-column width="15%" field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>
 

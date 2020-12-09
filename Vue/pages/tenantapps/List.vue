@@ -145,7 +145,7 @@
                                                         Reset
                                                     </button>
                                                 </p>
-                                                <p class="control">
+                                                <p class="control" v-if="page.list_view == 'large'">
                                                     <button class="button is-primary"
                                                             @click="toggleFilters()"
                                                             slot="trigger">
@@ -166,8 +166,6 @@
                                 <div class="level" v-if="page.show_filters && page.list_view == 'large'" >
 
                                     <div class="level-left">
-
-
 
                                         <div class="level-item">
 

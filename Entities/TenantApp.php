@@ -170,7 +170,7 @@ class TenantApp extends Model {
             $list = static::orderBy('id', $request['sort_order']);
         }
 
-        $list->with(['tenant', 'app']);
+        $list->with(['tenant', 'app'])->has('tenant')->has('app');
 
         if($request['trashed'] == 'true')
         {

@@ -28,6 +28,7 @@ export default {
             filter: null,
             sort_by: null,
             sort_order: 'desc',
+            search_by: null,
         },
         bulk_action:{
             selected_items: [],

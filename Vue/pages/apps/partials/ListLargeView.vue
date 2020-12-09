@@ -2,6 +2,7 @@
 <template>
     <div>
         <b-table :data="page.list_is_empty ? [] : page.list.data"
+                 :checkable="true"
                  :checked-rows.sync="page.bulk_action.selected_items"
                  checkbox-position="left"
                  :hoverable="true"
@@ -26,7 +27,7 @@
                     </vh-copy>
                 </b-table-column>
 
-                <b-table-column field="count_tenants" label="Tenants" >
+                <b-table-column width="10%" field="count_tenants" label="Tenants" >
                     <b-tooltip label="View Tenants" type="is-dark">
                         <b-button rounded size="is-small"
                                   type="is-primary"
@@ -39,7 +40,7 @@
 
 
 
-                <b-table-column field="updated_at" label="Updated At">
+                <b-table-column width="15%" field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>
 

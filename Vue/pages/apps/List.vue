@@ -60,7 +60,7 @@
 
                                     <!--left-->
                                     <div class="level-left" v-if="page.list_view">
-                                        <div  class="level-item">
+                                        <div  class="level-item" v-if="page.list_view == 'large'">
                                             <b-field >
 
                                                 <b-select placeholder="- Bulk Actions -"
@@ -111,6 +111,21 @@
 
                                             <b-field>
 
+                                                <p class="control">
+                                                    <b-dropdown v-model="query_string.search_by" @input="getList">
+                                                        <button slot-scope="{ active }" class="button" slot="trigger">
+                                                            <span v-if="query_string.search_by">{{query_string.search_by.charAt(0).toUpperCase() + query_string.search_by.slice(1)}}</span>
+                                                            <span v-else > All</span>
+                                                            <b-icon :icon="active? 'chevron-up' : 'chevron-down'"></b-icon>
+                                                        </button>
+
+                                                        <b-dropdown-item value=''>All</b-dropdown-item>
+                                                        <b-dropdown-item value="name">Name</b-dropdown-item>
+                                                        <b-dropdown-item value="slug">Slug</b-dropdown-item>
+
+                                                    </b-dropdown>
+                                                </p>
+
                                                 <b-input placeholder="Search"
                                                          type="text"
                                                          icon="search"
@@ -131,7 +146,7 @@
                                                         Reset
                                                     </button>
                                                 </p>
-                                                <p class="control">
+                                                <p class="control" v-if="page.list_view == 'large'">
                                                     <button class="button is-primary"
                                                             @click="toggleFilters()"
                                                             slot="trigger">
@@ -242,7 +257,7 @@
 
                                     <div class="block" style="margin-bottom: 0px;" >
 
-                                        <div v-if="page.list_view">
+                                        <div v-if="page.list_view == 'large'">
                                             <ListLargeView/>
                                         </div>
 

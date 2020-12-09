@@ -26,7 +26,7 @@
                     </vh-copy>
                 </b-table-column>
 
-                <b-table-column field="count_tenants" label="Tenants" >
+                <b-table-column width="10%" field="count_tenants" label="Tenants" >
                     <b-tooltip label="View Tenants" type="is-dark">
                         <b-button rounded size="is-small"
                                   type="is-primary"
