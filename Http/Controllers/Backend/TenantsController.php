@@ -113,18 +113,7 @@ class TenantsController extends Controller
                 $response = Tenant::bulkDelete($request);
 
                 break;
-            //------------------------------------
-            case 'create-database':
 
-                $response = Tenant::createDatabase($request);
-
-                break;
-            //------------------------------------
-            case 'delete-database':
-
-                $response = Tenant::deleteDatabase($request);
-
-                break;
             //------------------------------------
 
         }

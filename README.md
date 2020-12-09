@@ -138,6 +138,10 @@ APP_MODULE_SAAS_ENV=develop
 
 ## Setup wildcard sub domains on CPanel for Laravel
 
+Wild Card SSL: https://certifytheweb.com/
+ 
+Other SSL Sources: https://letsencrypt.org/docs/client-options/ 
+
 - Login `CPanel >> Subdomains`, enter `*` in subdomain, in `domain` choose `top level domain`, 
 remove `_wildcard_` from `Document Root`.
 

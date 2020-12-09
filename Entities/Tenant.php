@@ -558,6 +558,7 @@ class Tenant extends Model {
     {
 
         $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+
         $server = Server::find($item->vh_saas_server_id);
 
         $db_manager = new DatabaseManager($server, $item);
