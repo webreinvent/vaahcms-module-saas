@@ -76,6 +76,23 @@ export default {
             return this.$vaah.hasPermission(this.permissions, slug);
         },
         //---------------------------------------------------------------------
+        changeStatus: function (id) {
+            this.$Progress.start();
+            let url = this.ajax_url+'/actions/bulk-change-status';
+            let params = {
+                inputs: [id],
+                data: null
+            };
+            this.$vaah.ajax(url, params, this.changeStatusAfter);
+        },
+        //---------------------------------------------------------------------
+        changeStatusAfter: function (data,res) {
+
+            this.$Progress.start();
+            this.$emit('eReloadList');
+            this.update('is_list_loading', false);
+        },
+        //---------------------------------------------------------------------
         //---------------------------------------------------------------------
     }
 }

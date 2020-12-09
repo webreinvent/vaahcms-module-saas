@@ -2,6 +2,7 @@
 <template>
     <div>
         <b-table :data="page.list_is_empty ? [] : page.list.data"
+                 :checkable="true"
                  :checked-rows.sync="page.bulk_action.selected_items"
                  checkbox-position="left"
                  :hoverable="true"
@@ -21,7 +22,7 @@
                     {{ props.row.app.name }}
                 </b-table-column>
 
-                <b-table-column field="version" label="Install/Current Version"
+                <b-table-column width="20%" field="version" label="Install/Current Version"
                                 >
                     <b-tag v-if="props.row.app.version_number>props.row.version_number"
                            type='is-danger'>
@@ -33,7 +34,7 @@
 
                 </b-table-column>
 
-                <b-table-column field="is_active" label="Is Active">
+                <b-table-column width="10%" field="is_active" label="Is Active">
                     <b-tooltip label="Change Status" type="is-dark">
                         <b-button v-if="props.row.is_active === 1" rounded size="is-small"
                                   type="is-success" @click="changeStatus(props.row.id)">
@@ -46,7 +47,7 @@
                     </b-tooltip>
                 </b-table-column>
 
-                <b-table-column field="updated_at" label="Updated At">
+                <b-table-column width="15%" field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>
 

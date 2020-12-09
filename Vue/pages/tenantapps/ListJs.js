@@ -159,7 +159,10 @@ export default {
                 if(key == 'page')
                 {
                     this.query_string[key] = 1;
-                } else
+                }else if(key == 'sort_order')
+                {
+                    this.query_string[key] = 'desc';
+                }else
                 {
                     this.query_string[key] = null;
                 }
@@ -284,17 +287,12 @@ export default {
         },
         //---------------------------------------------------------------------
         actionsAfter: function (data, res) {
-            if(data)
-            {
                 this.is_btn_loading_sync = false;
                 this.$root.$emit('eReloadItem');
                 this.resetBulkAction();
                 this.getList();
 
-            } else
-            {
                 this.$Progress.finish();
-            }
         },
         //---------------------------------------------------------------------
         sync: function () {

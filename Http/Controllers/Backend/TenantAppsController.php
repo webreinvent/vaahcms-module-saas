@@ -88,7 +88,7 @@ class TenantAppsController extends Controller
             //------------------------------------
             case 'sync-tenant-apps':
 
-                $response = TenantApp::syncTenantApps($request);
+                $response = TenantApp::syncTenantApps();
 
                 break;
             //------------------------------------

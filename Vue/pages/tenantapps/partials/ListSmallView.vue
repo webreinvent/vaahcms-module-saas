@@ -23,7 +23,7 @@
 
 
 
-                <b-table-column field="is_active" label="Is Active">
+                <b-table-column width="10%" field="is_active" label="Is Active">
                     <b-tooltip label="Change Status" type="is-dark">
                         <b-button v-if="props.row.is_active === 1" rounded size="is-small"
                                   type="is-success" @click="changeStatus(props.row.id)">
