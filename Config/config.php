@@ -17,5 +17,5 @@ return [
     "providers"=> [
         "\\VaahCms\\Modules\\Saas\\Providers\\SaasServiceProvider"
     ],
-    "aside-menu-order"=> null
+    "aside-menu-order"=> null,
 ];

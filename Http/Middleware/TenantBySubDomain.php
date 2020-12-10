@@ -17,32 +17,24 @@ class TenantBySubDomain
     public function handle(Request $request, Closure $next)
     {
 
-
-
         $sub_domain = $request->route('sub_domain');
 
-        echo "<pre>";
-        print_r($sub_domain);
-        echo "</pre>";
-        die("<hr/>line number=123");
-
-        if(!$sub_domain || empty($sub_domain))
+        if(!isset($sub_domain) || empty($sub_domain))
         {
             abort(403, 'Tenant path not defined');
         }
 
-        $tenant = Tenant::hasPath($sub_domain)->first();
+        $tenant = Tenant::scopeHasSubDomain($sub_domain)->first();
 
-        if(!$tenant)
+        if(!isset($tenant))
         {
             abort(403, 'Tenant path does not exist');
         }
 
-        if(!$tenant->is_active)
+        if($tenant->is_active == 1)
         {
             abort(403, 'Tenant is inactive');
         }
-
 
         //initialize tenancy
         $tenancy = new Tenancy($tenant);
