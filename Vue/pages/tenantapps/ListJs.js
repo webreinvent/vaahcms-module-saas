@@ -245,7 +245,6 @@ export default {
 
             let url = this.ajax_url+'/actions/'+action;
             this.$vaah.ajax(url, params, this.actionsAfter);
-
         },
         //---------------------------------------------------------------------
 

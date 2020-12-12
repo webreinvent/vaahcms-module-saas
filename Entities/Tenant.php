@@ -62,6 +62,10 @@ class Tenant extends Model {
     ];
 
     //-------------------------------------------------
+    protected $hidden = [
+        'database_password',
+    ];
+    //-------------------------------------------------
     protected $appends  = [
 
         'db_connection_name'
