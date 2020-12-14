@@ -48,7 +48,7 @@ class VhSaasTenants extends Migration
             $table->dateTime('activated_at')->nullable();
             $table->boolean('is_active')->nullable();
             $table->dateTime('is_deactivated_at')->nullable();
-            $table->string('notes',250)->nullable();
+            $table->string('notes',255)->nullable();
 
             $table->text('meta')->nullable();
 

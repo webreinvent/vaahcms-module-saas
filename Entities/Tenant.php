@@ -569,7 +569,7 @@ class Tenant extends Model {
             'database_username' => 'required|alpha_dash|max:20',
             'database_charset' => 'max:150',
             'database_collation' => 'max:150',
-            'notes' => 'max:250',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make( $inputs, $rules);

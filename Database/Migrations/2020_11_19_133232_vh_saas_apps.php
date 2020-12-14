@@ -20,7 +20,7 @@ class VhSaasApps extends Migration
             $table->string('app_type')->nullable();
             $table->string('name')->nullable();
             $table->string('slug')->nullable()->index();
-            $table->string('excerpt',250)->nullable();
+            $table->string('excerpt',255)->nullable();
 
             $table->string('version')->nullable();
             $table->integer('version_number')->nullable();
@@ -38,7 +38,7 @@ class VhSaasApps extends Migration
             $table->boolean('is_active')->nullable();
 
             $table->dateTime('is_deactivated_at')->nullable();
-            $table->string('notes',250)->nullable();
+            $table->string('notes',255)->nullable();
 
             // COMMON FIELDS
             $table->integer('created_by')->nullable();

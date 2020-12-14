@@ -472,11 +472,9 @@ class App extends Model {
 
         foreach($request->inputs as $id)
         {
-            $item = static::where('id', $id)->withTrashed()->first();
-            if($item)
-            {
-                $item->forceDelete();
-            }
+
+            $item = static::where('id', $id)->withTrashed()->forceDelete();
+
         }
 
         $response['status'] = 'success';
@@ -499,8 +497,8 @@ class App extends Model {
             'migration_path' => 'max:150',
             'seed_class' => 'max:150',
             'sample_data_class' => 'max:150',
-            'excerpt' => 'max:250',
-            'notes' => 'max:250',
+            'excerpt' => 'max:255',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make( $inputs, $rules);

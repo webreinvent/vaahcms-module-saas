@@ -271,7 +271,6 @@ export default {
             {
                 this.resetBulkAction();
                 this.getList();
-                this.$store.dispatch('root/reloadPermissions');
             } else
             {
                 this.$Progress.finish();
