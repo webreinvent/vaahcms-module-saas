@@ -8,18 +8,19 @@
 :white_check_mark: Support for DigitalOcean Database (Requires PHP version => 7.4 & `ssl_ca_path` 
 is path of ssl certificate which is also required)
 
-### Planned
-:black_square_button: CRUD for Database servers | Type: MySql & Cpanel MySql
+:white_check_mark: CRUD for Database servers | Type: MySql & Cpanel MySql
 
-:black_square_button: CRUD for Tenant
+:white_check_mark: CRUD for Tenant
+
+:white_check_mark: Identify Tenant via Sub-Domain  | `tenant1.example.com` or `tenant2.example.com`
+
+:white_check_mark: Identify Tenant via Path  | `example.com/tenant1` or `example.com/tenant2`
+
+
+
+### Planned
 
 :black_square_button: Identify Tenant via Domain  | `example.com`
-
-:black_square_button: Identify Tenant via Sub-Domain  | `tenant.example.com`
-
-:black_square_button: Identify Tenant via Path  | `example.com/tenant`
-
-:black_square_button: Identify Tenant via Domain  | `example.com/?tenant_slug=tenant`
 
 
 ---
@@ -51,19 +52,21 @@ function () {
 Add `tenant_by_sub_domain` middleware to identify the `tenant`
 ```php
 Route::group(
-[
-    'middleware' => ['web', 'tenant_by_sub_domain'],
-    'namespace' => 'Frontend',
-],
-function () {
-    //------------------------------------------------
-    Route::get( '/', 'TenantController@index' )
-        ->name( 'vh.frontend.tenant' );
-    //------------------------------------------------
-});
+    [
+        'domain' => '{sub_domain}.domain.com',
+        'prefix'     => '/<root-uri-sub-domain>', //this should not conflict with root domain
+        'middleware' => ['web', 'tenant_by_sub_domain'],
+        'namespace' => 'Frontend',
+    ],
+    function () {
+        //------------------------------------------------
+        Route::get( '/', 'TenantController@index' )
+            ->name( 'vh.tenant' );
+        //------------------------------------------------
+    });
 ```
 
-**- By domain**
+**- By domain - Pending for Future Release**
 
 Add `tenant_by_domain` middleware to identify the `tenant`
 ```php
@@ -129,6 +132,13 @@ Tenant::seed($inputs, $tenant_id);
 
 ```
 
+### Share Cache with Sub Domains
+Add following to your `.env` file:
+```dotenv
+SESSION_DOMAIN=.domain.com
+```
+Replace `domain.com` with you actual domain. Clear cache `php artisan config:cache` so that new setting can be applied.
+
 ---
 
 #### For hot reload
@@ -137,6 +147,10 @@ APP_MODULE_SAAS_ENV=develop
 ---
 
 ## Setup wildcard sub domains on CPanel for Laravel
+
+Wild Card SSL: https://certifytheweb.com/
+ 
+Other SSL Sources: https://letsencrypt.org/docs/client-options/ 
 
 - Login `CPanel >> Subdomains`, enter `*` in subdomain, in `domain` choose `top level domain`, 
 remove `_wildcard_` from `Document Root`.

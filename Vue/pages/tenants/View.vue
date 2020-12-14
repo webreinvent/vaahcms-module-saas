@@ -36,19 +36,6 @@
                                     <b-icon icon="caret-down"></b-icon>
                                 </button>
 
-                                <b-dropdown-item aria-role="listitem"
-                                                 v-if="item.is_database_created_at"
-                                                 @click="actions('delete-database')">
-                                    <b-icon icon="database"></b-icon>
-                                    Delete Database
-                                </b-dropdown-item>
-
-                                <b-dropdown-item aria-role="listitem"
-                                                 v-else
-                                                 @click="actions('create-database')">
-                                    <b-icon icon="database"></b-icon>
-                                    Create Database
-                                </b-dropdown-item>
 
                                 <b-dropdown-item aria-role="listitem"
                                                  v-if="!item.deleted_at"

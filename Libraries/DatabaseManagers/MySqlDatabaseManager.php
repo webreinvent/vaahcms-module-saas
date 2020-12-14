@@ -272,7 +272,11 @@ class MySqlDatabaseManager
 
         try{
 
+
+
             $this->connectToServer();
+
+            $this->deleteDatabaseUser();
 
             $sql = "CREATE USER '".$this->tenant_config['username'];
             $sql .= "'@'".$this->server->host."' IDENTIFIED BY '";
