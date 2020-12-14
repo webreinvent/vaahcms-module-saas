@@ -191,10 +191,47 @@ class App extends Model {
         return $response;
 
     }
+
+
+    public static function recountRelations()
+    {
+        $list = static::withTrashed()->select('id')->get();
+
+        if($list)
+        {
+            foreach ($list as $item)
+            {
+                $item->count_tenants_active = static::countActiveTenants($item->id);
+                $item->count_tenants = Tenant::all()->count();
+                $item->save();
+            }
+        }
+
+    }
+
+
+    //-------------------------------------------------
+    public static function countActiveTenants($id)
+    {
+
+        $app = static::withTrashed()->where('id', $id)->first();
+
+        if(!$app)
+        {
+            return 0;
+        }
+
+        return $app->tenants()->wherePivot('is_active', 1)->count();
+    }
+    //-------------------------------------------------
     //-------------------------------------------------
     public static function getList($request)
     {
 
+        if(isset($request->recount) && $request->recount == true)
+        {
+            static::recountRelations();
+        }
 
         $list = static::orderBy('id', 'desc');
 

@@ -261,9 +261,45 @@ class Tenant extends Model {
         return $response;
 
     }
+
+    public static function recountRelations()
+    {
+        $list = static::withTrashed()->select('id')->get();
+
+        if($list)
+        {
+            foreach ($list as $item)
+            {
+                $item->count_apps_active = static::countActiveApps($item->id);
+                $item->count_apps = App::all()->count();
+                $item->save();
+            }
+        }
+
+    }
+
+
+    //-------------------------------------------------
+    public static function countActiveApps($id)
+    {
+
+        $tenant = static::withTrashed()->where('id', $id)->first();
+
+        if(!$tenant)
+        {
+            return 0;
+        }
+
+        return $tenant->apps()->wherePivot('is_active', 1)->count();
+    }
     //-------------------------------------------------
     public static function getList($request)
     {
+
+        if(isset($request->recount) && $request->recount == true)
+        {
+            static::recountRelations();
+        }
 
 
         if($request['sort_by'])
