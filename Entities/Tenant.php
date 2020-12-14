@@ -834,7 +834,9 @@ class Tenant extends Model {
             $inputs['class'] = null;
         }
 
+
         $response = \VaahArtisan::seed($inputs['command'], $db_connection_name, $inputs['class']);
+
 
         return $response;
 
