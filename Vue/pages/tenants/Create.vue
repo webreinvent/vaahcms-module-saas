@@ -193,10 +193,10 @@
                     </b-field>
 
                     <b-field label="Notes" :label-position="labelPosition">
-                        <b-input name="tenants-slug"
+                        <b-input name="tenants-notes"
                                  type="textarea"
-                                 dusk="tenants-slug"
-                                 v-model="new_item.slug"></b-input>
+                                 dusk="tenants-notes"
+                                 v-model="new_item.notes"></b-input>
                     </b-field>
 
 

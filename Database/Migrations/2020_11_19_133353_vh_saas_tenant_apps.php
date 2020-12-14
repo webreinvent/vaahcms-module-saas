@@ -28,7 +28,7 @@ class VhSaasTenantApps extends Migration
             $table->dateTime('last_migrated_at')->nullable();
             $table->dateTime('last_seeded_at')->nullable();
 
-            $table->string('notes')->nullable();
+            $table->string('notes',250)->nullable();
             $table->text('meta')->nullable();
 
             // COMMON FIELDS

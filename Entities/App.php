@@ -231,6 +231,7 @@ class App extends Model {
         if(isset($request->recount) && $request->recount == true)
         {
             static::recountRelations();
+            Tenant::recountRelations();
         }
 
         $list = static::orderBy('id', 'desc');
@@ -494,6 +495,12 @@ class App extends Model {
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'relative_path' => 'required|max:150',
+            'migration_path' => 'max:150',
+            'seed_class' => 'max:150',
+            'sample_data_class' => 'max:150',
+            'excerpt' => 'max:250',
+            'notes' => 'max:250',
         );
 
         $validator = \Validator::make( $inputs, $rules);

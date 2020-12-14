@@ -421,6 +421,7 @@ class TenantApp extends Model {
         $rules = array(
             'vh_saas_tenant_id' => 'required|max:150',
             'vh_saas_app_id' => 'required|max:150',
+            'notes' => 'max:250',
         );
 
         $validator = \Validator::make( $inputs, $rules);

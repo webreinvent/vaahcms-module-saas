@@ -287,7 +287,6 @@ export default {
         //---------------------------------------------------------------------
         actionsAfter: function (data, res) {
                 this.is_btn_loading_sync = false;
-                this.$root.$emit('eReloadItem');
                 this.resetBulkAction();
                 this.getList();
 
