@@ -68,7 +68,7 @@ class Tenant extends Model {
     //-------------------------------------------------
     protected $appends  = [
 
-        'db_connection_name'
+        'db_connection_name',
 
     ];
     //-------------------------------------------------
@@ -79,7 +79,7 @@ class Tenant extends Model {
             $this->attributes['database_password'] = Crypt::encrypt($value);
         }
     }
-
+    //-------------------------------------------------
     //-------------------------------------------------
     public function setMetaAttribute($value)
     {
