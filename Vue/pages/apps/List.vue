@@ -50,8 +50,6 @@
                         <!--content-->
                         <div class="card-content">
 
-
-
                             <div class="block" v-if="page.list">
 
 
@@ -280,6 +278,8 @@
 
 
                             </div>
+
+
                         </div>
                         <!--/content-->
 

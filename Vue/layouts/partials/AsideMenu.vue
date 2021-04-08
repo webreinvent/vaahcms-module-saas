@@ -1,11 +1,11 @@
 <template>
 
-    <b-menu>
+    <b-menu ref="saas-side-menu">
         <b-menu-list label="Menu">
-            <b-menu-item tag="router-link" to="/" label="Tenants"></b-menu-item>
-            <b-menu-item tag="router-link" to="/tenantapps" label="Tenant's Apps"></b-menu-item>
-            <b-menu-item tag="router-link" to="/apps" label="Apps"></b-menu-item>
-            <b-menu-item tag="router-link" to="/servers" label="Servers"></b-menu-item>
+            <b-menu-item ref="tenant" tag="router-link" to="/" label="Tenants"></b-menu-item>
+            <b-menu-item ref="tenant-app" tag="router-link" to="/tenantapps" label="Tenant's Apps"></b-menu-item>
+            <b-menu-item ref="apps" tag="router-link" to="/apps" label="Apps"></b-menu-item>
+            <b-menu-item ref="tenant" tag="router-link" to="/servers" label="Servers"></b-menu-item>
         </b-menu-list>
     </b-menu>
 
