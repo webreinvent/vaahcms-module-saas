@@ -824,7 +824,7 @@ class Tenant extends Model {
 
         $db_connection_name = $tenant->db_connection_name;
 
-        $response = \VaahArtisan::migrate($inputs['command'], $db_connection_name, $inputs['path']);
+        $response = \VaahArtisan::migrate($inputs['command'], $inputs['path'], $db_connection_name);
 
         return $response;
 

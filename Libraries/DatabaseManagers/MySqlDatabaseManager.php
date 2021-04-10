@@ -47,7 +47,11 @@ class MySqlDatabaseManager
         ];
 
 
-        if(isset($this->server->password) && !empty($this->server->password))
+        if(
+            isset($this->server->password)
+            && !empty($this->server->password)
+            && $this->server->password != ""
+        )
         {
             $config['password'] = Crypt::decrypt($this->server->password);
         }
