@@ -331,7 +331,7 @@ class App extends Model {
 
         $update = static::where('id',$id)->withTrashed()->first();
 
-        $update->name = $input['name'];
+        $update->fill($input);
         $update->slug = Str::slug($input['slug']);
         $update->save();
 
