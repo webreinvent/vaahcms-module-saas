@@ -24,7 +24,16 @@ export default {
     watch: {
         $route(to, from) {
             this.updateView()
-        }
+        },
+        'item.name': {
+            deep: true,
+            handler(new_val, old_val) {
+                if(new_val)
+                {
+                    this.item.slug = this.$vaah.strToSlug(new_val);
+                }
+            }
+        },
     },
     mounted() {
         //----------------------------------------------------
@@ -184,6 +193,25 @@ export default {
                 new_item[key] = this.item[key];
             }
             this.update('new_item', new_item);
+        },
+        //---------------------------------------------------------------------
+        setItemValues: function () {
+
+            let item = this.item;
+
+            console.log('--->', item);
+
+            let module = this.$vaah.findInArrayByKey(this.page.assets.modules, 'name', item.name);
+
+            for(let key in module)
+            {
+                item[key] = module[key];
+            }
+
+            console.log('--->item', item);
+
+            this.update('item', item);
+
         }
         //---------------------------------------------------------------------
     }
