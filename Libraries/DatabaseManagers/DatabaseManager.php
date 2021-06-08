@@ -133,6 +133,7 @@ class DatabaseManager
     public function setDefaultConnection(string $connection_name)
     {
         App::make('config')->set('database.default', $connection_name);
+        App::make('config')->set('queue.connections.database.connection', $connection_name);
     }
     //--------------------------------------------------------
     //--------------------------------------------------------
