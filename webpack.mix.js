@@ -36,7 +36,7 @@ if (mix.inProduction()) {
     output_folder = "./";
 
     mix.setPublicPath(publish_folder);
-    mix.js(source_vue_folder+"/app.js",  output_folder+'/build/app.js');
+    mix.js(source_vue_folder+"/app.js",  output_folder+'/build/app.js').vue();
 
 } else {
 
@@ -45,7 +45,7 @@ if (mix.inProduction()) {
 
     mix.setPublicPath(publish_folder);
 
-    mix.js(source_vue_folder+"/app.js",  output_folder+'/build/app.js');
+    mix.js(source_vue_folder+"/app.js",  output_folder+'/build/app.js').vue();
 
 }
 
