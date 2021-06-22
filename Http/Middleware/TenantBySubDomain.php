@@ -44,10 +44,14 @@ class TenantBySubDomain
         //for controller
         $request->tenant = $tenant;
         $request->tenancy = $tenancy;
+        $request->sub_domain = $sub_domain;
 
         //for view
         \View::share('tenant', $tenant);
         \View::share('tenancy', $tenancy);
+        \View::share('sub_domain', $sub_domain);
+
+        \Config::set('request.sub_domain', $sub_domain);
 
         return $next($request);
 
