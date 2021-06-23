@@ -20,9 +20,6 @@ class VhSaasTenants extends Migration
 
             $table->integer('vh_saas_server_id')->nullable()->index();
 
-
-
-
             $table->string('name')->nullable()->index();
             $table->string('slug')->nullable()->index();
             $table->string('path')->nullable()->index();

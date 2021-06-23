@@ -40,7 +40,6 @@ class Tenant extends Model {
         'path',
         'domain',
         'sub_domain',
-
         'database_name',
         'database_username',
         'database_password',
@@ -54,7 +53,6 @@ class Tenant extends Model {
         'is_active',
         'is_deactivated_at',
         'notes',
-
         'meta',
         'created_by',
         'updated_by',
