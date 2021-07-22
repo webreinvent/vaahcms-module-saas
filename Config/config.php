@@ -4,7 +4,7 @@ return [
     "name"=> "Saas",
     "title"=> "Multi-tenancy SaaS Module",
     "slug"=> "saas",
-    "thumbnail"=> "https://placehold.jp/300x160.png",
+    "thumbnail"=> "https://img.site/p/300/160",
     "excerpt"=> "Module for multi-tenancy SaaS product development",
     "description"=> "Module for multi-tenancy SaaS product development",
     "download_link"=> "https://github.com/webreinvent/vaahcms-module-saas/archive/master.zip",
