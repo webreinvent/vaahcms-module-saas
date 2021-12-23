@@ -37,6 +37,19 @@
                     </b-tooltip>
                 </b-table-column>
 
+                <b-table-column v-slot="props" width="10%" field="is_active" label="Is Active">
+                    <b-tooltip label="Change Status" type="is-dark">
+                        <b-button v-if="props.row.is_active === 1" rounded size="is-small"
+                                  type="is-success" :disabled="props.row.deleted_at ? true : false" @click="changeStatus(props.row.id)">
+                            Yes
+                        </b-button>
+                        <b-button v-else rounded size="is-small" type="is-danger"
+                                  :disabled="props.row.deleted_at ? true : false" @click="changeStatus(props.row.id)">
+                            No
+                        </b-button>
+                    </b-tooltip>
+                </b-table-column>
+
                 <b-table-column v-slot="props" width="15%" field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>

@@ -256,11 +256,11 @@
                                     <div class="block" style="margin-bottom: 0px;" >
 
                                         <div v-if="page.list_view == 'large'">
-                                            <ListLargeView/>
+                                            <ListLargeView @eReloadList="getList" />
                                         </div>
 
                                         <div v-else>
-                                            <ListSmallView/>
+                                            <ListSmallView @eReloadList="getList" />
                                         </div>
 
                                     </div>
