@@ -2,26 +2,27 @@
 <template>
     <div>
         <b-table :data="page.list_is_empty ? [] : page.list.data"
+                 :checkable="true"
                  :checked-rows.sync="page.bulk_action.selected_items"
                  checkbox-position="left"
                  :hoverable="true"
                  :row-class="setRowClass"
         >
 
-            <template slot-scope="props">
-                <b-table-column field="id" label="ID" width="40" numeric>
+            <template>
+                <b-table-column v-slot="props" field="id" label="ID" width="40" numeric>
                     {{ props.row.id }}
                 </b-table-column>
 
-                <b-table-column field="tenant_name" label="Tenant">
+                <b-table-column v-slot="props" field="tenant_name" label="Tenant">
                     {{ props.row.tenant.name }}
                 </b-table-column>
 
-                <b-table-column field="app_name" label="App">
+                <b-table-column v-slot="props" field="app_name" label="App">
                     {{ props.row.app.name }}
                 </b-table-column>
 
-                <b-table-column field="version" label="Install/Current Version"
+                <b-table-column v-slot="props" width="20%" field="version" label="Install/Current Version"
                                 >
                     <b-tag v-if="props.row.app.version_number>props.row.version_number"
                            type='is-danger'>
@@ -33,7 +34,7 @@
 
                 </b-table-column>
 
-                <b-table-column field="is_active" label="Is Active">
+                <b-table-column v-slot="props" width="10%" field="is_active" label="Is Active">
                     <b-tooltip label="Change Status" type="is-dark">
                         <b-button v-if="props.row.is_active === 1" rounded size="is-small"
                                   type="is-success" @click="changeStatus(props.row.id)">
@@ -46,12 +47,12 @@
                     </b-tooltip>
                 </b-table-column>
 
-                <b-table-column field="updated_at" label="Updated At">
+                <b-table-column v-slot="props" width="15%" field="updated_at" label="Updated At">
                     {{ $vaah.fromNow(props.row.updated_at) }}
                 </b-table-column>
 
 
-                <b-table-column field="actions" label="Actions"
+                <b-table-column v-slot="props" field="actions" label="Actions"
                                 width="40">
 
                     <b-tooltip label="View" type="is-dark">

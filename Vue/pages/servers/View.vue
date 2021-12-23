@@ -112,6 +112,22 @@
                                         </TableTrStatus>
                                     </template>
 
+                                    <template v-if="label == 'username'">
+                                        <tr>
+                                            <th align="right"><span v-if="label">{{$vaah.toLabel(label)}}</span></th>
+                                            <td colspan="2">
+                                                <p v-if="item.host_type !== 'CPanel-MySql'" >
+                                                    {{ value }}
+                                                </p>
+
+                                                <p class="has-text-danger" v-else>
+                                                    These detail are stored in <strong class="has-text-danger">meta</strong>
+                                                </p>
+
+                                            </td>
+                                        </tr>
+                                    </template>
+
                                     <template v-if="label == 'avatar'">
                                         <TableTrUrl :value="value"
                                                     :label="label">
@@ -150,7 +166,8 @@
 
 
                                     <template v-else-if="label == 'created_by_user'
-                                      || label == 'updated_by_user' || label == 'deleted_by_user' || label == 'name'  || label == 'thumbnail' ">
+                                      || label == 'updated_by_user' || label == 'deleted_by_user'
+                                      || label == 'name'  || label == 'thumbnail'  || label == 'username' ">
 
                                     </template>
 

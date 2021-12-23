@@ -40,6 +40,7 @@ export default {
 
     },
     mounted() {
+        document.title = "Servers";
         //----------------------------------------------------
         this.onLoad();
         //----------------------------------------------------
@@ -272,7 +273,6 @@ export default {
         actionsAfter: function (data, res) {
             if(data)
             {
-                this.$root.$emit('eReloadItem');
                 this.resetBulkAction();
                 this.getList();
                 this.$store.dispatch('root/reloadPermissions');

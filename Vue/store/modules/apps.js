@@ -29,6 +29,7 @@ export default {
             filter: null,
             sort_by: null,
             sort_order: 'desc',
+            search_by: null,
         },
         bulk_action:{
             selected_items: [],
@@ -108,7 +109,7 @@ export default {
             || payload.name == 'apps.view'
             || payload.name == 'apps.edit')
             {
-                list_view = 'medium';
+                list_view = 'small';
             };
 
             if(payload.name == 'apps.tenants.view')

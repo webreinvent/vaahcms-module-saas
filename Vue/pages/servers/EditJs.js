@@ -149,7 +149,6 @@ export default {
                 if(this.local_action === 'save')
                 {
                     this.$router.push({name: 'servers.view', params:{id:this.id}});
-                    this.$root.$emit('eReloadItem');
                 }
 
             }
@@ -195,24 +194,24 @@ export default {
             this.update('new_item', new_item);
         },
         //---------------------------------------------------------------------
-        fillNewItem: function () {
+        //---------------------------------------------------------------------
+        connect: function () {
+            this.is_btn_loading_connect = true;
 
-            let new_item = {
-                name: null,
-                slug: null,
-                host_type: null,
-                driver: null,
-                host: null,
-                port: null,
-                details: null,
+            this.$Progress.start();
+
+            this.params = {
+                new_item: this.item
             };
 
-            for(let key in new_item)
-            {
-                new_item[key] = this.item[key];
-            }
-            this.update('new_item', new_item);
-        }
+            let url = this.ajax_url+'/connect';
+            this.$vaah.ajax(url, this.params, this.connectAfter);
+        },
+        //---------------------------------------------------------------------
+        connectAfter: function (data, res) {
+            this.is_btn_loading_connect = false;
+            this.$Progress.finish();
+        },
         //---------------------------------------------------------------------
     }
 }

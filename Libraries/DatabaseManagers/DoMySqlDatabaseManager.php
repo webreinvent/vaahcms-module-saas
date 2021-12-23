@@ -301,6 +301,8 @@ class DoMySqlDatabaseManager
 
             $this->connectToServer();
 
+            $this->deleteDatabaseUser();
+
             $sql = "CREATE USER '".$this->tenant_config['username'];
             $sql .= "'@'%' IDENTIFIED WITH mysql_native_password BY '";
             $sql .= $this->tenant_config['password']."'";

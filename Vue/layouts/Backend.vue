@@ -3,25 +3,23 @@
 <template>
 
     <!--sections-->
-    <section class="section">
-        <div class="container">
+    <div class="container">
 
-            <!--columns-->
-            <div class="columns">
-                <div class="column is-2">
-                    <AsideMenu/>
-                </div>
-
-                <div class="column is-10">
-
-                    <router-view></router-view>
-
-                </div>
+        <!--columns-->
+        <div class="columns">
+            <div class="column is-2">
+                <AsideMenu/>
             </div>
-            <!--/columns-->
 
+            <div class="column is-10">
+
+                <router-view></router-view>
+
+            </div>
         </div>
-    </section>
+        <!--/columns-->
+
+    </div>
     <!--sections-->
 
 

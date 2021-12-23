@@ -98,7 +98,7 @@ export default {
             || payload.name == 'tenantapps.view'
             || payload.name == 'tenantapps.edit')
             {
-                list_view = 'medium';
+                list_view = 'small';
             };
 
             let view = {

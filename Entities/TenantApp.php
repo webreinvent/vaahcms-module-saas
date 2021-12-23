@@ -170,7 +170,7 @@ class TenantApp extends Model {
             $list = static::orderBy('id', $request['sort_order']);
         }
 
-        $list->with(['tenant', 'app']);
+        $list->with(['tenant', 'app'])->has('tenant')->has('app');
 
         if($request['trashed'] == 'true')
         {
@@ -421,6 +421,7 @@ class TenantApp extends Model {
         $rules = array(
             'vh_saas_tenant_id' => 'required|max:150',
             'vh_saas_app_id' => 'required|max:150',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make( $inputs, $rules);

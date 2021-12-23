@@ -20,9 +20,6 @@ class VhSaasTenants extends Migration
 
             $table->integer('vh_saas_server_id')->nullable()->index();
 
-
-
-
             $table->string('name')->nullable()->index();
             $table->string('slug')->nullable()->index();
             $table->string('path')->nullable()->index();
@@ -48,7 +45,7 @@ class VhSaasTenants extends Migration
             $table->dateTime('activated_at')->nullable();
             $table->boolean('is_active')->nullable();
             $table->dateTime('is_deactivated_at')->nullable();
-            $table->string('notes')->nullable();
+            $table->string('notes',255)->nullable();
 
             $table->text('meta')->nullable();
 

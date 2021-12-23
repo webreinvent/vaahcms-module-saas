@@ -60,7 +60,7 @@
 
                                     <!--left-->
                                     <div class="level-left" >
-                                        <div  class="level-item">
+                                        <div  class="level-item" v-if="page.list_view != 'small'">
                                             <b-field >
 
                                                 <b-select placeholder="- Bulk Actions -"
@@ -145,7 +145,7 @@
                                                         Reset
                                                     </button>
                                                 </p>
-                                                <p class="control">
+                                                <p class="control" v-if="page.list_view == 'large'">
                                                     <button class="button is-primary"
                                                             @click="toggleFilters()"
                                                             slot="trigger">
@@ -166,8 +166,6 @@
                                 <div class="level" v-if="page.show_filters && page.list_view == 'large'" >
 
                                     <div class="level-left">
-
-
 
                                         <div class="level-item">
 
@@ -281,12 +279,12 @@
 
                                     <div class="block" style="margin-bottom: 0px;" >
 
-                                        <div v-if="page.list_view=='medium'">
-                                            <ListSmallView/>
+                                        <div v-if="page.list_view=='small'">
+                                            <ListSmallView @eReloadList="getList" />
                                         </div>
 
                                         <div v-else>
-                                            <ListLargeView/>
+                                            <ListLargeView @eReloadList="getList" />
                                         </div>
 
 

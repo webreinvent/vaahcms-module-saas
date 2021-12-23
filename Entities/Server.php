@@ -233,13 +233,17 @@ class Server extends Model {
 
         if(isset($request->q))
         {
+            if(isset($request['search_by']) && $request['search_by'])
+            {
+                $list->where($request['search_by'], 'LIKE', '%'.$request->q.'%');
 
-            $list->where(function ($q) use ($request){
-                $q->where('name', 'LIKE', '%'.$request->q.'%')
-                    ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
-            });
+            }else{
+                $list->where(function ($q) use ($request){
+                    $q->where('name', 'LIKE', '%'.$request->q.'%')
+                        ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
+                });
+            }
         }
-
 
         $data['list'] = $list->paginate(config('vaahcms.per_page'));
 

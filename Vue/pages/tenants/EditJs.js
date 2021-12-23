@@ -11,6 +11,7 @@ export default {
         page() {return this.$store.getters[namespace+'/state']},
         ajax_url() {return this.$store.getters[namespace+'/state'].ajax_url},
         item() {return this.$store.getters[namespace+'/state'].active_item},
+        new_item() {return this.$store.getters[namespace+'/state'].new_item},
     },
     components:{
         AutoCompleteAjax,
@@ -92,7 +93,8 @@ export default {
         //---------------------------------------------------------------------
         updateServerId: function(option)
         {
-            console.log('--->', option);
+            console.log('--->option', option);
+            console.log('--->new_item', this.new_item);
             this.new_item.vh_saas_server_id = option.id;
 
             if(option.host_type == 'CPanel-MySql')
@@ -168,7 +170,6 @@ export default {
                 if(this.local_action === 'save')
                 {
                     this.$router.push({name: 'tenants.view', params:{id:this.id}});
-                    this.$root.$emit('eReloadItem');
                 }
 
             }

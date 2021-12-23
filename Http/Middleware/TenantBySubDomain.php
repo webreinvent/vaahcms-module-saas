@@ -21,20 +21,21 @@ class TenantBySubDomain
 
         if(!isset($sub_domain) || empty($sub_domain))
         {
-            abort(403, 'Tenant path not defined');
+            abort(403, 'Tenant sub domain not defined');
         }
 
-        $tenant = Tenant::scopeHasSubDomain($sub_domain)->first();
+        $tenant = Tenant::hasSubDomain($sub_domain)->first();
 
         if(!isset($tenant))
         {
-            abort(403, 'Tenant path does not exist');
+            abort(403, 'Tenant sub domain does not exist');
         }
 
-        if($tenant->is_active == 1)
+        if($tenant->is_active != 1)
         {
             abort(403, 'Tenant is inactive');
         }
+
 
         //initialize tenancy
         $tenancy = new Tenancy($tenant);
@@ -43,10 +44,14 @@ class TenantBySubDomain
         //for controller
         $request->tenant = $tenant;
         $request->tenancy = $tenancy;
+        $request->sub_domain = $sub_domain;
 
         //for view
         \View::share('tenant', $tenant);
         \View::share('tenancy', $tenancy);
+        \View::share('sub_domain', $sub_domain);
+
+        \Config::set('request.sub_domain', $sub_domain);
 
         return $next($request);
 

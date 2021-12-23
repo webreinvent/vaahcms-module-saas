@@ -40,7 +40,6 @@ class Tenant extends Model {
         'path',
         'domain',
         'sub_domain',
-
         'database_name',
         'database_username',
         'database_password',
@@ -54,7 +53,6 @@ class Tenant extends Model {
         'is_active',
         'is_deactivated_at',
         'notes',
-
         'meta',
         'created_by',
         'updated_by',
@@ -62,9 +60,13 @@ class Tenant extends Model {
     ];
 
     //-------------------------------------------------
+    protected $hidden = [
+        'database_password',
+    ];
+    //-------------------------------------------------
     protected $appends  = [
 
-        'db_connection_name'
+        'db_connection_name',
 
     ];
     //-------------------------------------------------
@@ -75,7 +77,7 @@ class Tenant extends Model {
             $this->attributes['database_password'] = Crypt::encrypt($value);
         }
     }
-
+    //-------------------------------------------------
     //-------------------------------------------------
     public function setMetaAttribute($value)
     {
@@ -257,9 +259,46 @@ class Tenant extends Model {
         return $response;
 
     }
+
+    public static function recountRelations()
+    {
+        $list = static::withTrashed()->select('id')->get();
+
+        if($list)
+        {
+            foreach ($list as $item)
+            {
+                $item->count_apps_active = static::countActiveApps($item->id);
+                $item->count_apps = App::all()->count();
+                $item->save();
+            }
+        }
+
+    }
+
+
+    //-------------------------------------------------
+    public static function countActiveApps($id)
+    {
+
+        $tenant = static::withTrashed()->where('id', $id)->first();
+
+        if(!$tenant)
+        {
+            return 0;
+        }
+
+        return $tenant->apps()->wherePivot('is_active', 1)->count();
+    }
     //-------------------------------------------------
     public static function getList($request)
     {
+
+        if(isset($request->recount) && $request->recount == true)
+        {
+            static::recountRelations();
+            App::recountRelations();
+        }
 
 
         if($request['sort_by'])
@@ -284,13 +323,17 @@ class Tenant extends Model {
 
         if(isset($request->q))
         {
+            if(isset($request['search_by']) && $request['search_by'])
+            {
+                $list->where($request['search_by'], 'LIKE', '%'.$request->q.'%');
 
-            $list->where(function ($q) use ($request){
-                $q->where('name', 'LIKE', '%'.$request->q.'%')
-                    ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
-            });
+            }else{
+                $list->where(function ($q) use ($request){
+                    $q->where('name', 'LIKE', '%'.$request->q.'%')
+                        ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
+                });
+            }
         }
-
 
         $data['list'] = $list->paginate(config('vaahcms.per_page'));
 
@@ -514,11 +557,17 @@ class Tenant extends Model {
     {
 
         $rules = array(
+            'vh_saas_server_id' => 'required|max:150',
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
-            'vh_saas_server_id' => 'required|max:150',
+            'path' => 'max:150',
+            'domain' => 'max:150',
+            'sub_domain' => 'max:150',
             'database_name' => 'required|alpha_dash|max:20',
             'database_username' => 'required|alpha_dash|max:20',
+            'database_charset' => 'max:150',
+            'database_collation' => 'max:150',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make( $inputs, $rules);
@@ -773,7 +822,7 @@ class Tenant extends Model {
 
         $db_connection_name = $tenant->db_connection_name;
 
-        $response = \VaahArtisan::migrate($inputs['command'], $db_connection_name, $inputs['path']);
+        $response = \VaahArtisan::migrate($inputs['command'], $inputs['path'], $db_connection_name);
 
         return $response;
 
@@ -834,7 +883,9 @@ class Tenant extends Model {
             $inputs['class'] = null;
         }
 
-        $response = \VaahArtisan::seed($inputs['command'], $db_connection_name, $inputs['class']);
+
+        $response = \VaahArtisan::seed($inputs['command'], $inputs['class'], $db_connection_name );
+
 
         return $response;
 

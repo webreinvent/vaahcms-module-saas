@@ -45,18 +45,6 @@
                                     Save & Close
                                 </b-dropdown-item>
 
-                                <b-dropdown-item aria-role="listitem"
-                                                 @click="setLocalAction('save-and-new')">
-                                    <b-icon icon="plus"></b-icon>
-                                    Save & New
-                                </b-dropdown-item>
-
-                                <b-dropdown-item aria-role="listitem"
-                                                 @click="setLocalAction('save-and-clone')">
-                                    <b-icon icon="copy"></b-icon>
-                                    Save & Clone
-                                </b-dropdown-item>
-
                             </b-dropdown>
 
 

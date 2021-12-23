@@ -1,6 +1,7 @@
 {
     "name": "vaahcms/saas",
     "description": "Module for multi-tenancy SaaS product development",
+    "version": "0.0.2",
     "authors": [
         {
             "name": "vaah",
@@ -8,7 +9,7 @@
         }
     ],
     "require": {
-        "php": "^7.0",
+        "php": "^7.3|^8.0",
         "webreinvent/laravel-cpanel": "^1.0"
     },
     "extra": {

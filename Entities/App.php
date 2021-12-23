@@ -191,10 +191,48 @@ class App extends Model {
         return $response;
 
     }
+
+
+    public static function recountRelations()
+    {
+        $list = static::withTrashed()->select('id')->get();
+
+        if($list)
+        {
+            foreach ($list as $item)
+            {
+                $item->count_tenants_active = static::countActiveTenants($item->id);
+                $item->count_tenants = Tenant::all()->count();
+                $item->save();
+            }
+        }
+
+    }
+
+
+    //-------------------------------------------------
+    public static function countActiveTenants($id)
+    {
+
+        $app = static::withTrashed()->where('id', $id)->first();
+
+        if(!$app)
+        {
+            return 0;
+        }
+
+        return $app->tenants()->wherePivot('is_active', 1)->count();
+    }
+    //-------------------------------------------------
     //-------------------------------------------------
     public static function getList($request)
     {
 
+        if(isset($request->recount) && $request->recount == true)
+        {
+            static::recountRelations();
+            Tenant::recountRelations();
+        }
 
         $list = static::orderBy('id', 'desc');
 
@@ -220,11 +258,16 @@ class App extends Model {
 
         if(isset($request->q))
         {
+            if(isset($request['search_by']) && $request['search_by'])
+            {
+                $list->where($request['search_by'], 'LIKE', '%'.$request->q.'%');
 
-            $list->where(function ($q) use ($request){
-                $q->where('name', 'LIKE', '%'.$request->q.'%')
-                    ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
-            });
+            }else{
+                $list->where(function ($q) use ($request){
+                    $q->where('name', 'LIKE', '%'.$request->q.'%')
+                        ->orWhere('slug', 'LIKE', '%'.$request->q.'%');
+                });
+            }
         }
 
 
@@ -288,7 +331,7 @@ class App extends Model {
 
         $update = static::where('id',$id)->withTrashed()->first();
 
-        $update->name = $input['name'];
+        $update->fill($input);
         $update->slug = Str::slug($input['slug']);
         $update->save();
 
@@ -429,11 +472,9 @@ class App extends Model {
 
         foreach($request->inputs as $id)
         {
-            $item = static::where('id', $id)->withTrashed()->first();
-            if($item)
-            {
-                $item->forceDelete();
-            }
+
+            $item = static::where('id', $id)->withTrashed()->forceDelete();
+
         }
 
         $response['status'] = 'success';
@@ -452,6 +493,12 @@ class App extends Model {
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'relative_path' => 'required|max:150',
+            'migration_path' => 'max:150',
+            'seed_class' => 'max:150',
+            'sample_data_class' => 'max:150',
+            'excerpt' => 'max:255',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make( $inputs, $rules);

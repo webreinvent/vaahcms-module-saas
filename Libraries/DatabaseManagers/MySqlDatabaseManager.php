@@ -47,7 +47,11 @@ class MySqlDatabaseManager
         ];
 
 
-        if(isset($this->server->password) && !empty($this->server->password))
+        if(
+            isset($this->server->password)
+            && !empty($this->server->password)
+            && $this->server->password != ""
+        )
         {
             $config['password'] = Crypt::decrypt($this->server->password);
         }
@@ -272,7 +276,11 @@ class MySqlDatabaseManager
 
         try{
 
+
+
             $this->connectToServer();
+
+            $this->deleteDatabaseUser();
 
             $sql = "CREATE USER '".$this->tenant_config['username'];
             $sql .= "'@'".$this->server->host."' IDENTIFIED BY '";
