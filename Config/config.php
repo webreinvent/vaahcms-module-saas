@@ -2,7 +2,7 @@
 
 return [
     "name"=> "Saas",
-    "title"=> "Multi-tenancy SaaS Module",
+    "title"=> "SaaS - A multi-tenancy SaaS Module",
     "slug"=> "saas",
     "thumbnail"=> "https://img.site/p/300/160",
     "excerpt"=> "Module for multi-tenancy SaaS product development",
