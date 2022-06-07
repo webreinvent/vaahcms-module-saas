@@ -306,6 +306,7 @@ class CpanelMySqlDatabaseManager
     //--------------------------------------------------------
     public function databaseExists()
     {
+        $response = [];
         try{
             $this->connectToCpanel();
             $response = $this->cpanel->listDatabases();
@@ -333,7 +334,7 @@ class CpanelMySqlDatabaseManager
             }
 
             $response['status'] = 'failed';
-            $response['errors'][] = 'Database does not exist';
+            $response['errors'] = ['Database does not exist'];
 
 
         }catch(\Exception $e)
