@@ -66,7 +66,7 @@ class Tenant extends Model {
     //-------------------------------------------------
     protected $appends  = [
 
-        'db_connection_name',
+        'db_connection_name', 'url'
 
     ];
     //-------------------------------------------------
@@ -93,6 +93,21 @@ class Tenant extends Model {
     public function getMetaAttribute($value)
     {
         return json_decode($value);
+    }
+    //-------------------------------------------------
+    public function getUrlAttribute()
+    {
+
+        $url = "http://";
+        if (request()->secure())
+        {
+            $url = "https://";
+        }
+
+        $url .= $this->sub_domain;
+        $url .= ".".env('CENTRAL_DOMAIN');
+
+        return $url;
     }
     //-------------------------------------------------
     public function getDbConnectionNameAttribute()
