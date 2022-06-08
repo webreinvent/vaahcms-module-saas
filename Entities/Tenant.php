@@ -442,22 +442,26 @@ class Tenant extends Model {
 
         foreach($request->inputs as $id)
         {
-            $item = static::where('id',$id)->withTrashed()->first();
+            if(is_int($id))
+            {
+                $item = static::where('id',$id)->withTrashed()->first();
 
-            if($item->deleted_at){
-                continue ;
-            }
-
-            if($request['data']){
-                $item->is_active = $request['data']['status'];
-            }else{
-                if($item->is_active == 1){
-                    $item->is_active = 0;
-                }else{
-                    $item->is_active = 1;
+                if($item->deleted_at){
+                    continue ;
                 }
+
+                if($request['data']){
+                    $item->is_active = $request['data']['status'];
+                }else{
+                    if($item->is_active == 1){
+                        $item->is_active = 0;
+                    }else{
+                        $item->is_active = 1;
+                    }
+                }
+                $item->save();
             }
-            $item->save();
+
         }
 
         $response['status'] = 'success';
