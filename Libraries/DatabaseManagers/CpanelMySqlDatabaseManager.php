@@ -293,7 +293,7 @@ class CpanelMySqlDatabaseManager
                 return $response;
             }
 
-            $response['messages'][] = 'Database User Deleted';
+            $response['messages'][] = 'Database Deleted';
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';

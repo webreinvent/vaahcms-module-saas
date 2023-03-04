@@ -49,6 +49,14 @@ if (mix.inProduction()) {
 
 }
 
+mix.options({
+    hmrOptions: {
+        host: 'localhost',
+        port: 9090,
+    },
+});
+
+
 
 mix.webpackConfig({
     watchOptions: {

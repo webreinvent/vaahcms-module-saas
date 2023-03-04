@@ -126,7 +126,7 @@
                         <b-input name="tenants-database_password" dusk="tenants-database_password"
                                  password-reveal
                                  type="password"
-                                 v-model="new_item.database_password"></b-input>
+                                 v-model="new_item.new_database_password"></b-input>
                     </b-field>
 
 
