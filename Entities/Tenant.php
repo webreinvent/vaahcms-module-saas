@@ -61,7 +61,7 @@ class Tenant extends Model {
 
     //-------------------------------------------------
     protected $hidden = [
-        'database_password',
+        //'database_password',
     ];
     //-------------------------------------------------
     protected $appends  = [
@@ -76,13 +76,6 @@ class Tenant extends Model {
         }
     }*/
     //-------------------------------------------------
-    public function getDatabasePasswordAttribute($value)
-    {
-        if($value)
-        {
-            return Crypt::decrypt($value);
-        }
-    }
     //-------------------------------------------------
     public function getNewDatabasePasswordAttribute()
     {
@@ -720,8 +713,13 @@ class Tenant extends Model {
         $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
         $server = Server::find($item->vh_saas_server_id);
 
+
+
         $db_manager = new DatabaseManager($server, $item);
+
         $response = $db_manager->deleteDatabase();
+
+
 
         if($response['status'] == 'success')
         {
@@ -895,6 +893,7 @@ class Tenant extends Model {
             $response['errors'][] = 'Tenant database is not created';
             return $response;
         }
+
 
         $server = Server::find($tenant->vh_saas_server_id);
         $db_manager = new DatabaseManager($server, $tenant);
