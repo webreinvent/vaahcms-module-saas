@@ -168,6 +168,18 @@ class Tenant extends Model {
         )->withPivot('version',
             'version_number', 'is_active',
             'last_migrated_at', 'last_seeded_at',
+            'created_at', 'updated_at')
+            ->wherePivot('is_active', 1);
+    }
+    //-------------------------------------------------
+    public function appsAll()
+    {
+        return $this->belongsToMany( App::class,
+            'vh_saas_tenant_apps',
+            'vh_saas_tenant_id', 'vh_saas_app_id'
+        )->withPivot('version',
+            'version_number', 'is_active',
+            'last_migrated_at', 'last_seeded_at',
             'created_at', 'updated_at');
     }
     //-------------------------------------------------
