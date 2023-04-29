@@ -92,8 +92,8 @@ class CpanelMySqlDatabaseManager
 
         try{
 
-            $module = "Styles";
-            $function = "list";
+            $module = "Mysql";
+            $function = "list_databases";
             $parameters = [];
 
             $response = $this->cpanel->callUAPI($module, $function, $parameters);
