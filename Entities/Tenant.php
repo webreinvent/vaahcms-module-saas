@@ -109,7 +109,7 @@ class Tenant extends Model {
         }
 
         $url .= $this->sub_domain;
-        $url .= ".".env('CENTRAL_DOMAIN');
+        $url .= ".".config('saas.central_domain');
 
         return $url;
     }
