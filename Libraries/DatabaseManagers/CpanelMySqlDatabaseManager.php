@@ -92,8 +92,8 @@ class CpanelMySqlDatabaseManager
 
         try{
 
-            $module = "Styles";
-            $function = "list";
+            $module = "Mysql";
+            $function = "list_databases";
             $parameters = [];
 
             $response = $this->cpanel->callUAPI($module, $function, $parameters);
@@ -293,7 +293,7 @@ class CpanelMySqlDatabaseManager
                 return $response;
             }
 
-            $response['messages'][] = 'Database User Deleted';
+            $response['messages'][] = 'Database Deleted';
         }catch(\Exception $e)
         {
             $response['status'] = 'failed';
@@ -306,6 +306,7 @@ class CpanelMySqlDatabaseManager
     //--------------------------------------------------------
     public function databaseExists()
     {
+        $response = [];
         try{
             $this->connectToCpanel();
             $response = $this->cpanel->listDatabases();
@@ -333,7 +334,7 @@ class CpanelMySqlDatabaseManager
             }
 
             $response['status'] = 'failed';
-            $response['errors'][] = 'Database does not exist';
+            $response['errors'] = ['Database does not exist'];
 
 
         }catch(\Exception $e)

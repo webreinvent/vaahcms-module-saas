@@ -146,7 +146,7 @@
                                  dusk="tenants-database_password"
                                  password-reveal
                                  type="password"
-                                 v-model="new_password"></b-input>
+                                 v-model="item.new_database_password"></b-input>
                     </b-field>
 
 

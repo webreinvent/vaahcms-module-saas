@@ -13,40 +13,42 @@ class VhSaasServers extends Migration
      */
     public function up()
     {
+        if (!Schema::hasTable('vh_saas_servers')) {
+            Schema::create('vh_saas_servers', function (Blueprint $table) {
+                $table->increments('id');
+                $table->uuid('uuid')->nullable()->index();
 
-        Schema::create('vh_saas_servers', function (Blueprint $table) {
-            $table->increments('id');
-            $table->uuid('uuid')->nullable()->index();
+                $table->string('name')->nullable()->index(); // server label
+                $table->string('slug')->nullable()->index(); // server label
 
-            $table->string('name')->nullable()->index(); // server label
-            $table->string('slug')->nullable()->index(); // server label
+                $table->string('host_type')->nullable(); //cPanel | mysql
 
-            $table->string('host_type')->nullable(); //cPanel | mysql
+                $table->string('driver')->nullable(); // mysql | redis
+                $table->string('host')->nullable()->index();
+                $table->string('port')->nullable();
+                $table->string('username')->nullable();
+                $table->string('password',255)->nullable();
+                $table->string('sslmode')->nullable();
 
-            $table->string('driver')->nullable(); // mysql | redis
-            $table->string('host')->nullable()->index();
-            $table->string('port')->nullable();
-            $table->string('username')->nullable();
-            $table->string('password',255)->nullable();
-            $table->string('sslmode')->nullable();
+                $table->integer('count_tenants')->nullable(); // count database in the server
+                $table->integer('count_db_instances')->nullable(); // count database in the server
+                $table->dateTime('activated_at')->nullable();
+                $table->boolean('is_active')->nullable();
+                $table->text('meta')->nullable();
 
-            $table->integer('count_tenants')->nullable(); // count database in the server
-            $table->integer('count_db_instances')->nullable(); // count database in the server
-            $table->dateTime('activated_at')->nullable();
-            $table->boolean('is_active')->nullable();
-            $table->text('meta')->nullable();
+                // COMMON FIELDS
+                $table->integer('created_by')->nullable();
 
-            // COMMON FIELDS
-            $table->integer('created_by')->nullable();
+                $table->integer('updated_by')->nullable();
 
-            $table->integer('updated_by')->nullable();
+                $table->integer('deleted_by')->nullable();
 
-            $table->integer('deleted_by')->nullable();
+                $table->timestamps();
+                $table->softDeletes();
 
-            $table->timestamps();
-            $table->softDeletes();
+            });
+        }
 
-        });
     }
 
     /**

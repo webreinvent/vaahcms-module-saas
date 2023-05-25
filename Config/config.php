@@ -2,7 +2,7 @@
 
 return [
     "name"=> "Saas",
-    "title"=> "Multi-tenancy SaaS Module",
+    "title"=> "SaaS - A multi-tenancy SaaS Module",
     "slug"=> "saas",
     "thumbnail"=> "https://img.site/p/300/160",
     "excerpt"=> "Module for multi-tenancy SaaS product development",
@@ -12,6 +12,7 @@ return [
     "author_website"=> "https://vaah.dev",
     "version"=> "0.0.2",
     "is_migratable"=> true,
+    "central_domain"=> env('CENTRAL_DOMAIN'),
     "is_sample_data_available"=> true,
     "db_table_prefix"=> "vh_saas_",
     "providers"=> [

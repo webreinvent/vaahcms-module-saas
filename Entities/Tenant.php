@@ -61,23 +61,26 @@ class Tenant extends Model {
 
     //-------------------------------------------------
     protected $hidden = [
-        'database_password',
+        //'database_password',
     ];
     //-------------------------------------------------
     protected $appends  = [
-
-        'db_connection_name',
-
+        'db_connection_name', 'url', 'new_database_password'
     ];
     //-------------------------------------------------
-    public function setDatabasePasswordAttribute($value)
+    /*public function setDatabasePasswordAttribute($value)
     {
-        if($value && $value != $this->database_password)
+        if(isset($value))
         {
             $this->attributes['database_password'] = Crypt::encrypt($value);
         }
-    }
+    }*/
     //-------------------------------------------------
+    //-------------------------------------------------
+    public function getNewDatabasePasswordAttribute()
+    {
+        return null;
+    }
     //-------------------------------------------------
     public function setMetaAttribute($value)
     {
@@ -88,11 +91,27 @@ class Tenant extends Model {
         }
 
         $this->attributes['meta'] = json_encode($value);
+
     }
     //-------------------------------------------------
     public function getMetaAttribute($value)
     {
         return json_decode($value);
+    }
+    //-------------------------------------------------
+    public function getUrlAttribute()
+    {
+
+        $url = "http://";
+        if (request()->secure())
+        {
+            $url = "https://";
+        }
+
+        $url .= $this->sub_domain;
+        $url .= ".".config('saas.central_domain');
+
+        return $url;
     }
     //-------------------------------------------------
     public function getDbConnectionNameAttribute()
@@ -142,6 +161,18 @@ class Tenant extends Model {
     }
     //-------------------------------------------------
     public function apps()
+    {
+        return $this->belongsToMany( App::class,
+            'vh_saas_tenant_apps',
+            'vh_saas_tenant_id', 'vh_saas_app_id'
+        )->withPivot('version',
+            'version_number', 'is_active',
+            'last_migrated_at', 'last_seeded_at',
+            'created_at', 'updated_at')
+            ->wherePivot('is_active', 1);
+    }
+    //-------------------------------------------------
+    public function appsAll()
     {
         return $this->belongsToMany( App::class,
             'vh_saas_tenant_apps',
@@ -238,9 +269,17 @@ class Tenant extends Model {
             return $response;
         }
 
+        unset($inputs['database_password']);
+        if(isset($inputs['new_database_password']) && !empty($inputs['new_database_password']) )
+        {
+            $inputs['database_password'] = Crypt::encrypt($inputs['new_database_password']);
+        }
+
         $item = new static();
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);
+
+
 
         if(isset($inputs['is_active']))
         {
@@ -393,6 +432,13 @@ class Tenant extends Model {
             return $response;
         }
 
+
+        unset($input['database_password']);
+        if(isset($input['new_database_password']) && !empty($input['new_database_password']) )
+        {
+            $input['database_password'] = Crypt::encrypt($input['new_database_password']);
+        }
+
         $update = static::where('id',$id)->withTrashed()->first();
 
         $update->fill($input);
@@ -427,22 +473,26 @@ class Tenant extends Model {
 
         foreach($request->inputs as $id)
         {
-            $item = static::where('id',$id)->withTrashed()->first();
+            if(is_int($id))
+            {
+                $item = static::where('id',$id)->withTrashed()->first();
 
-            if($item->deleted_at){
-                continue ;
-            }
-
-            if($request['data']){
-                $item->is_active = $request['data']['status'];
-            }else{
-                if($item->is_active == 1){
-                    $item->is_active = 0;
-                }else{
-                    $item->is_active = 1;
+                if($item->deleted_at){
+                    continue ;
                 }
+
+                if($request['data']){
+                    $item->is_active = $request['data']['status'];
+                }else{
+                    if($item->is_active == 1){
+                        $item->is_active = 0;
+                    }else{
+                        $item->is_active = 1;
+                    }
+                }
+                $item->save();
             }
-            $item->save();
+
         }
 
         $response['status'] = 'success';
@@ -537,9 +587,15 @@ class Tenant extends Model {
         foreach($request->inputs as $id)
         {
             $item = static::where('id', $id)->withTrashed()->first();
+
             if($item)
             {
-                $item->forceDelete();
+                $res = self::deleteTenantOperation($item);
+
+                if(isset($res['status']) && $res['status'] === 'failed' )
+                {
+                    return $res;
+                }
             }
         }
 
@@ -549,6 +605,43 @@ class Tenant extends Model {
 
         return $response;
 
+
+    }
+    //-------------------------------------------------
+    public static function deleteTenantOperation(Tenant $tenant)
+    {
+        // delete tenant database
+        if(isset($tenant->is_database_created_at))
+        {
+            $res = self::deleteDatabase($tenant->id);
+            if(isset($res['status']) && $res['status'] === 'failed' )
+            {
+                return $res;
+            }
+
+        }
+
+        // delete tenant database user
+        if(isset($tenant->is_database_user_created_at))
+        {
+            $res = self::deleteDatabaseUser($tenant->id);
+            if(isset($res['status']) && $res['status'] === 'failed' )
+            {
+                return $res;
+            }
+        }
+
+        // delete tenant's apps
+        if($tenant->apps()->count()){
+            $tenant->apps()->forceDelete();
+        }
+
+        // delete tenant
+        $tenant->forceDelete();
+
+        $res['status'] = 'success';
+
+        return $res;
 
     }
     //-------------------------------------------------
@@ -632,8 +725,13 @@ class Tenant extends Model {
         $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
         $server = Server::find($item->vh_saas_server_id);
 
+
+
         $db_manager = new DatabaseManager($server, $item);
+
         $response = $db_manager->deleteDatabase();
+
+
 
         if($response['status'] == 'success')
         {
@@ -807,6 +905,7 @@ class Tenant extends Model {
             $response['errors'][] = 'Tenant database is not created';
             return $response;
         }
+
 
         $server = Server::find($tenant->vh_saas_server_id);
         $db_manager = new DatabaseManager($server, $tenant);

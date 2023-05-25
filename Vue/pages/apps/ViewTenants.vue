@@ -23,7 +23,7 @@
 
                         </p>
 
-                        <p v-if="hasPermission('can-update-roles') || hasPermission('can-manage-roles')" class="control">
+                        <p v-if="hasPermission('oho-can-update-roles') || hasPermission('oho-can-manage-roles')" class="control">
 
 
                             <b-dropdown aria-role="list" position="is-bottom-left">
