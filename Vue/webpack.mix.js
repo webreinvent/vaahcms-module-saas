@@ -19,7 +19,7 @@ let publish_folder;
 let output_folder;
 let source_vue_folder;
 
-source_vue_folder = __dirname+'/Vue';
+source_vue_folder = './';
 
 
 if (mix.inProduction()) {
@@ -32,7 +32,7 @@ if (mix.inProduction()) {
     console.log('IN PRODUCTION MODE');
     console.log('---------------------');
 
-    publish_folder = './Resources/assets/';
+    publish_folder = './../Resources/assets/';
     output_folder = "./";
 
     mix.setPublicPath(publish_folder);
@@ -40,7 +40,7 @@ if (mix.inProduction()) {
 
 } else {
 
-    publish_folder = './../../../public/vaahcms/modules/';
+    publish_folder = './../../../../public/vaahcms/modules/';
     output_folder = "./saas/assets/";
 
     mix.setPublicPath(publish_folder);
@@ -63,17 +63,7 @@ mix.webpackConfig({
         aggregateTimeout: 2000,
         poll: 20,
         ignored: [
-            '/Config/',
-            '/Database/',
-            '/Entities/',
-            '/Helpers/',
-            '/Http/',
-            '/Providers/',
-            '/Resources/',
-            '/Routes/',
             '/node_modules/',
-            '/vendor/',
-
         ]
     }
 });
