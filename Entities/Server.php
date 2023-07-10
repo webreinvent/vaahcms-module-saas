@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
-use WebReinvent\VaahCms\Entities\User;
+use WebReinvent\VaahCms\Models\User;
 
 class Server extends Model {
 
@@ -177,7 +177,7 @@ class Server extends Model {
             $response['errors'][] = "This slug is already exist.";
             return $response;
         }
-        
+
         $item = new static();
         $item->fill($inputs);
         $item->slug = Str::slug($inputs['slug']);
