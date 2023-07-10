@@ -5,7 +5,7 @@ let base_url = document.getElementsByTagName('base')[0].getAttribute("href");
 let debug = document.getElementById('debug').getAttribute('content');
 //---------/Variables
 
-let ajax_url = base_url+"/backend/saas/tenantapps";
+let ajax_url = base_url+"/saas/tenantapps";
 
 export default {
     namespaced: true,
