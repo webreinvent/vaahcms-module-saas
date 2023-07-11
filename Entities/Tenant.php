@@ -9,7 +9,7 @@ use Illuminate\Support\Str;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use WebReinvent\VaahCms\Entities\Migration;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
-use WebReinvent\VaahCms\Entities\User;
+use WebReinvent\VaahCms\Models\User;
 
 class Tenant extends Model {
 

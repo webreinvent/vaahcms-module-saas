@@ -6,7 +6,7 @@ let current_url = document.getElementById('current_url').getAttribute('content')
 let debug = document.getElementById('debug').getAttribute('content');
 //---------/Variables
 
-let ajax_url = base_url+'/backend/saas';
+let ajax_url = base_url+'/saas';
 
 export default {
     namespaced: true,

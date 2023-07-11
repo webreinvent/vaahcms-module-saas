@@ -166,6 +166,7 @@ export default {
         {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Deleting record',
                 message: 'Are you sure you want to <b>delete</b> ' +
                     'the record? This action cannot be undone.',
@@ -217,6 +218,7 @@ export default {
         confirmDatabaseCreate() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Create Database',
                 message: 'Are you sure you to create <b>'+this.item.tenant.database_name
                     +'</b> database user to on <b>'+this.item.tenant.server.name+'</b> server?',
@@ -235,6 +237,7 @@ export default {
         confirmDatabaseUserCreate() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Create Database User',
                 message: 'Are you sure you want give access of <b>'+this.item.tenant.database_name
                     +'</b> database to user <b>'+this.item.tenant.database_username
@@ -254,6 +257,7 @@ export default {
         confirmAssignDatabaseUser() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Assign User to Database',
                 message: 'Are you sure? Database name <b>'+this.item.tenant.database_name
                     +'</b> will be <b>created</b> on <b>'+this.item.tenant.server.name+'</b> server?',
@@ -272,6 +276,7 @@ export default {
         confirmDatabaseUserDelete() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Delete Database User',
                 message: 'Are you sure? Database username <b>'+this.item.tenant.database_username
                     +'</b> will be <b>deleted</b> on <b>'+this.item.tenant.server.name+'</b> server?',
@@ -290,6 +295,7 @@ export default {
         confirmDatabaseDelete() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Delete Database',
                 message: 'Are you sure? Database name <b>'+this.item.tenant.database_name
                     +'</b> will be <b>delete</b> on <b>'+this.item.tenant.server.name+'</b> server?',
@@ -308,6 +314,7 @@ export default {
         confirmUpdate() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Update App',
                 message: 'Are you sure? Update will run <b>migration & seed</b> on ' +
                     '<b>'+this.item.tenant.name+'</b> database?',
@@ -326,6 +333,7 @@ export default {
         confirmMigration() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Migrating database',
                 message: 'Are you sure you want to run <b>migration</b> on ' +
                     '<b>'+this.item.tenant.name+'</b> database?',
@@ -345,6 +353,7 @@ export default {
         confirmRollback() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Delete Database',
                 message: 'Are you sure? The Database <b>'+this.item.tenant.database_name+'</b> will be' +
                     ' <b>altered</b> on <b>'+this.item.tenant.server.name+'</b> server?',
@@ -363,6 +372,7 @@ export default {
         confirmSeed() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Migrating database',
                 message: 'Are you sure you want to run <b>seeds</b> on <b>'+this.item.tenant.name+'</b> database?',
                 confirmText: 'Run Migration',
@@ -381,6 +391,7 @@ export default {
         confirmInsertSampleData() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Insert Sample Data',
                 message: 'Are you sure? This will insert <b>dummy data</b> on <b>'+this.item.tenant.name+'</b> database?',
                 confirmText: 'Insert Dummy Data',
@@ -398,6 +409,7 @@ export default {
         confirmWipeData() {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Wipe Data',
                 message: 'Are you sure? This will drop all the tables on <b>'+this.item.tenant.name+'</b> database?',
                 confirmText: 'Delete All Data',
