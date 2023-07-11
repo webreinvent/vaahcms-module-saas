@@ -196,6 +196,7 @@ export default {
 
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Changing Status',
                 message: 'Are you sure you want to <b>change</b> the status? This action will impact all roles that assign to this permission.',
                 confirmText: 'Change',

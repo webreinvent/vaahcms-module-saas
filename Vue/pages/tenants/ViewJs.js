@@ -160,6 +160,7 @@ export default {
         {
             let self = this;
             this.$buefy.dialog.confirm({
+                container: '#vaahone',
                 title: 'Deleting record',
                 message: 'Are you sure you want to <b>delete</b> the record? This action cannot be undone.',
                 confirmText: 'Delete',
