@@ -15,6 +15,8 @@ class TenantApp extends Model {
 
 
     //-------------------------------------------------
+    protected $connection= 'mysql';
+    //-------------------------------------------------
     protected $table = 'vh_saas_tenant_apps';
     //-------------------------------------------------
     protected $dates = [

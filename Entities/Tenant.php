@@ -17,6 +17,8 @@ class Tenant extends Model {
     use CrudWithUuidObservantTrait;
 
     //-------------------------------------------------
+    protected $connection= 'mysql';
+    //-------------------------------------------------
     protected $table = 'vh_saas_tenants';
     //-------------------------------------------------
     protected $dates = [
