@@ -14,6 +14,8 @@ class Server extends Model {
     use CrudWithUuidObservantTrait;
 
     //-------------------------------------------------
+    protected $connection= 'mysql';
+    //-------------------------------------------------
     protected $table = 'vh_saas_servers';
     //-------------------------------------------------
     protected $dates = [

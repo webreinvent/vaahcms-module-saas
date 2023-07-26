@@ -13,6 +13,8 @@ class App extends Model {
     use CrudWithUuidObservantTrait;
 
     //-------------------------------------------------
+    protected $connection= 'mysql';
+    //-------------------------------------------------
     protected $table = 'vh_saas_apps';
     //-------------------------------------------------
     protected $dates = [
