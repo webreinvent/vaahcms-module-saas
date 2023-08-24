@@ -11,6 +11,7 @@ return [
     "author_name"=> "saas",
     "author_website"=> "https://vaah.dev",
     "version"=> "0.0.2",
+    "is_dev" => env('APP_MODULE_SAAS_ENV')?true:false,
     "is_migratable"=> true,
     "central_domain"=> env('CENTRAL_DOMAIN'),
     "is_sample_data_available"=> true,
