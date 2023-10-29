@@ -78,6 +78,25 @@ class Tenant extends Model {
         }
     }*/
     //-------------------------------------------------
+    public function setDatabaseNameAttribute($value)
+    {
+        $prefix = env('SAAS_DB_PREFIX');
+
+        if(!empty($prefix))
+        {
+            $this->attributes['database_name'] = $prefix."_".$value;
+        }
+    }
+    //-------------------------------------------------
+    public function setDatabaseUsernameAttribute($value)
+    {
+        $prefix = env('SAAS_DB_PREFIX');
+
+        if(!empty($prefix))
+        {
+            $this->attributes['database_username'] = $prefix."_".$value;
+        }
+    }
     //-------------------------------------------------
     public function getNewDatabasePasswordAttribute()
     {

@@ -139,6 +139,16 @@ SESSION_DOMAIN=.domain.com
 ```
 Replace `domain.com` with you actual domain. Clear cache `php artisan config:cache` so that new setting can be applied.
 
+### Add Prefix to Tenant's Database and Username
+```dotenv
+SAAS_DB_PREFIX=example
+```
+This will result in database name like:
+```dotenv
+example_tenant_database
+example_tenant_database_user
+```
+
 ---
 
 #### For hot reload
