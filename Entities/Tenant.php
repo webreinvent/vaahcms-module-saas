@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use WebReinvent\VaahCms\Entities\Migration;
+use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
 
-class Tenant extends Model {
+class Tenant extends VaahModel {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;
