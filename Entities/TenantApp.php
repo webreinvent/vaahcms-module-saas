@@ -1,6 +1,7 @@
 <?php namespace VaahCms\Modules\Saas\Entities;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
@@ -71,6 +72,24 @@ class TenantApp extends VaahModel {
         return $this->belongsTo(User::class,
             'deleted_by', 'id'
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
+    }
+    //-------------------------------------------------
+    protected function lastMigratedAt(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value = null) {
+                return self::getUserTimezoneDate($value);
+            },
+        );
+    }
+    //-------------------------------------------------
+    protected function lastSeededAt(): Attribute
+    {
+        return Attribute::make(
+            get: function (string $value = null) {
+                return self::getUserTimezoneDate($value);
+            },
+        );
     }
     //-------------------------------------------------
     public function tenant()
