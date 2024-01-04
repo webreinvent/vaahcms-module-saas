@@ -182,7 +182,7 @@
                             class="is-light is-small"
                             v-if="item.deleted_at"
             >
-                Deleted {{$vaah.fromNow(item.deleted_at)}}
+                Deleted {{item.deleted_at}}
             </b-notification>
 
             <!--content-->
@@ -315,8 +315,7 @@
                                 </template>
 
                                 <template >
-
-                                    <TableTrView label="created_at"
+                                    <TableTrView label="Created At"
                                                  :value="item.tenant.created_at">
                                     </TableTrView>
                                 </template>
@@ -366,15 +365,15 @@
 
 
                                 <template>
-                                    <TableTrDateTime label="Last Migrated"
+                                    <TableTrView label="Last Migrated"
                                                  :value="item.last_migrated_at">
-                                    </TableTrDateTime>
+                                    </TableTrView>
                                 </template>
 
                                 <template>
-                                    <TableTrDateTime label="Last Seeded"
+                                    <TableTrView label="Last Seeded"
                                                      :value="item.last_seeded_at">
-                                    </TableTrDateTime>
+                                    </TableTrView>
                                 </template>
 
                                 <tr>
