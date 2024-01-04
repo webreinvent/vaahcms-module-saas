@@ -67,34 +67,6 @@ export default {
             }
 
         },
-        //---------------------------------------------------------------------
-        localTimeShortFormat: function (value) {
-
-            const utcTime = new Date(value)
-
-            const date = utcTime.getDate();
-            const dateYear = utcTime.getFullYear();
-
-            const current = new Date()
-
-            const currentDate = current.getDate();
-            const currentYear = current.getFullYear();
-
-            if (date === currentDate) {
-                return utcTime.toLocaleTimeString();
-            } else if (dateYear === currentYear) {
-
-                return utcTime.toLocaleString('default', { month: 'short' })+
-                    ' '+utcTime.getDate();
-            } else {
-                return utcTime.toLocaleString('default', { month: 'short' })+
-                    ' '+utcTime.getDate()+
-                    ' '+utcTime.getFullYear();
-            }
-
-
-        },
-
         //-----------------------------------------------------------------
         reloadAssets: function ({ state, commit, dispatch, getters }) {
             let payload = {

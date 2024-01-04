@@ -40,7 +40,7 @@
                 </b-table-column>
 
                 <b-table-column v-slot="props" width="15%" field="updated_at" label="Updated At">
-                    {{localTimeShortFormat(props.row.updated_at) }}
+                    {{ $vaah.localTimeShortFormat(props.row.updated_at) }}
                 </b-table-column>
 
 
