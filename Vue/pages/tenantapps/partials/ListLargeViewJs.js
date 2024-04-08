@@ -87,6 +87,7 @@ export default {
             this.$vaah.console(data, 'copied data');
 
         },
+
         //---------------------------------------------------------------------
         hasPermission: function(slug)
         {

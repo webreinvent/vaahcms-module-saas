@@ -139,6 +139,16 @@ SESSION_DOMAIN=.domain.com
 ```
 Replace `domain.com` with you actual domain. Clear cache `php artisan config:cache` so that new setting can be applied.
 
+### Add Prefix to Tenant's Database and Username
+```dotenv
+SAAS_DB_PREFIX=example
+```
+This will result in database name like:
+```dotenv
+example_tenant_database
+example_tenant_database_user
+```
+
 ---
 
 #### For hot reload
@@ -210,6 +220,35 @@ $app = require_once __DIR__.'/../vaahsaas/bootstrap/app.php';
 not created any tenancy for the domain.
 
 ---
+
+## To deploy the project locally, please follow these steps:
+
+**1. Install VaahCMS:**
+
+- VaahCMS is the foundation for our project, and Saas is a module within it.
+- Follow the installation guide provided [here](https://docs.vaah.dev/vaahcms-2x/getting-started/installation) to set up VaahCMS on your local system.
+> **_NOTE:_**  VaahCMS Doc Link: https://docs.vaah.dev/vaahcms-2x
+
+
+**2. Integrate Saas Module:**
+
+- Once VaahCMS is successfully installed, navigate to the VaahCMS directory located at `<root-path>/VaahCms/Modules`.
+- Create a new folder named `Saas`.
+- Clone the Saas repository into this newly created folder.
+
+> **_NOTE:_**  Ensure that the module directory's name does not contain any spaces, as this could affect the namespace.
+
+**Activation Process:**
+
+Now, let's activate the Saas module to utilize its functionalities:
+
+1. Access the VaahCMS backend by visiting `<base-url>/public/backend#/vaah/modules`.
+2. Locate the Saas module in the list of available modules.
+3. Click on the "activate" button next to the Saas module.
+4. Once activated successfully, you'll see the module link appearing in the sidebar section of Vaah CMS.
+
+---
+
 ## Resource
 - https://tenancyforlaravel.com/docs/v3/tenants/
 

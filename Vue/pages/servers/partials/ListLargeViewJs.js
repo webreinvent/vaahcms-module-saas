@@ -87,6 +87,7 @@ export default {
 
         },
         //---------------------------------------------------------------------
+
         hasPermission: function(slug)
         {
             return this.$vaah.hasPermission(this.permissions, slug);

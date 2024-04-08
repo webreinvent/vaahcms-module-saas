@@ -8,10 +8,11 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use WebReinvent\VaahCms\Entities\Migration;
+use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
 
-class Tenant extends Model {
+class Tenant extends VaahModel {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;
@@ -78,6 +79,25 @@ class Tenant extends Model {
         }
     }*/
     //-------------------------------------------------
+    public function setDatabaseNameAttribute($value)
+    {
+        $prefix = env('SAAS_DB_PREFIX');
+
+        if(!empty($prefix))
+        {
+            $this->attributes['database_name'] = $prefix."_".$value;
+        }
+    }
+    //-------------------------------------------------
+    public function setDatabaseUsernameAttribute($value)
+    {
+        $prefix = env('SAAS_DB_PREFIX');
+
+        if(!empty($prefix))
+        {
+            $this->attributes['database_username'] = $prefix."_".$value;
+        }
+    }
     //-------------------------------------------------
     public function getNewDatabasePasswordAttribute()
     {
