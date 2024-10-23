@@ -86,6 +86,8 @@ class Tenant extends VaahModel {
         if(!empty($prefix))
         {
             $this->attributes['database_name'] = $prefix."_".$value;
+        } else {
+            $this->attributes['database_name'] = $value;
         }
     }
     //-------------------------------------------------
@@ -96,6 +98,8 @@ class Tenant extends VaahModel {
         if(!empty($prefix))
         {
             $this->attributes['database_username'] = $prefix."_".$value;
+        } else{
+            $this->attributes['database_username'] = $value;
         }
     }
     //-------------------------------------------------
