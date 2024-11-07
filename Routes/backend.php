@@ -26,6 +26,14 @@ Route::group(
         Route::post( '/assets', 'BackendController@getAssets' )
             ->name( 'vh.backend.saas.assets' );
         //------------------------------------------------
+
+        /*
+         * Saas Vue 3 Upgrade
+         */
+        Route::get( '/v3', 'BackendController@indexVueThree' )
+            ->name( 'vh.backend.saas.vuethree' );
+        Route::post( '/v3/assets', 'BackendController@getAssetsVueThree' )
+            ->name( 'vh.backend.saas.assets.vuethree' );
     });
 
 include('backend/routes-tenants.php');
