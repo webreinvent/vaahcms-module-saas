@@ -1,5 +1,5 @@
 <script  setup>
-document.title = 'VueThree';
+document.title = 'Saas V3';
 </script>
 <template  >
 
