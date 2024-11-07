@@ -47,9 +47,9 @@ class BackendController extends Controller
         $data=[];
 
         $data['module'] = [
-            'name' => config('appointment.name'),
-            'version' => config('settings.global.appointment_version')??config('appointment.version'),
-            'is_dev' => config('appointment.is_dev'),
+            'name' => config('saas.name'),
+            'version' => config('settings.global.saas_version')??config('saas.version'),
+            'is_dev' => config('saas.is_dev'),
         ];
 
         $v_version = config('vaahcms.version');
