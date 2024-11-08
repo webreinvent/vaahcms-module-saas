@@ -239,7 +239,7 @@ class ServersV3Controller extends Controller
             'driver' => 'required',
             'host' => 'required',
             'port' => 'required',
-            'username' => 'required',
+            'database_username' => 'required',
         );
 
         $validator = \Validator::make( $request->new_item, $rules);
@@ -251,7 +251,21 @@ class ServersV3Controller extends Controller
             return response()->json($response);
         }
 
-        $data = [];
+        // Modify keys
+        $updatedData = collect($request->new_item)->mapWithKeys(function ($value, $key) {
+            if ($key === 'database_username') {
+                return ['username' => $value];
+            }elseif ($key === 'database_password'){
+                return ['password' => $value];
+            }elseif ($key === 'database_sslmode'){
+                return ['sslmode' => $value];
+            }else{
+                return [$key => $value];
+            }
+        });
+
+        // Merge back the updated data into the request
+        $request->new_item = $updatedData->toArray();
 
         $item = new Server();
         $item->fill($request->new_item);
