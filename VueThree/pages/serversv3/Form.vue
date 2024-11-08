@@ -138,54 +138,55 @@ const toggleFormMenu = (event) => {
             </FloatLabel>
 
             <!-- Active Switch Field -->
-<!--            <div class="flex items-center gap-2 my-3">-->
-<!--                <ToggleSwitch v-bind:false-value="0"-->
-<!--                              v-bind:true-value="1"-->
-<!--                              size="small"-->
-<!--                              name="serversv3-active"-->
-<!--                              data-testid="serversv3-active"-->
-<!--                              inputId="serversv3-active"-->
-<!--                              v-model="store.item.is_active"/>-->
-<!--                <label for="serversv3-active">Remember Me</label>-->
-<!--            </div>-->
+            <div class="flex items-center gap-2 my-3">
+                <ToggleSwitch v-bind:false-value="0"
+                              v-bind:true-value="1"
+                              size="small"
+                              name="serversv3-active"
+                              data-testid="serversv3-active"
+                              inputId="serversv3-active"
+                              v-model="store.item.is_active"/>
+                <label for="serversv3-active">Is Active</label>
+            </div>
 
 
-            <div class="p-field p-col-12">
-                <label for="hostType">Server Host Type</label>
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select id="hostType"
                         v-model="store.item.host_type"
                         :options="store.assets.host_types"
                         optionLabel="name"
                         optionValue="name"
-                        placeholder="Select a Host Type" />
-            </div>
+                        class="w-full md:w-56" />
+                <label for="hostType">Server Host Type</label>
+            </FloatLabel>
 
 
-            <div class="p-field p-col-12">
-                <label for="driver">Database Driver</label>
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select id="driver"
                         v-model="store.item.driver"
                         :options="store.assets.drivers"
                         optionLabel="name"
                         optionValue="name"
-                        placeholder="Select a Driver" />
-            </div>
+                        class="w-full md:w-56" />
+                <label for="driver">Database Driver</label>
+            </FloatLabel>
 
             <!-- Host Input Field -->
-            <div class="p-field p-col-12">
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <label for="host">Host</label>
                 <InputText id="host"
                            v-model="store.item.host"
-                           placeholder="Enter Host"/>
-            </div>
+                           />
+            </FloatLabel>
 
             <!-- Port Input Field -->
-            <div class="p-field p-col-12">
-                <label for="port">Port</label>
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+
                 <InputText id="port"
                            v-model="store.item.port"
-                           placeholder="Enter Port"/>
-            </div>
+                           />
+                <label for="port">Port</label>
+            </FloatLabel>
 
 
             <!-- Additional Fields based on Host Type -->
@@ -223,15 +224,15 @@ const toggleFormMenu = (event) => {
 
 
 
-            <div class="p-field p-col-12">
-                <label for="sslMode">Database SSL Mode</label>
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select id="sslMode"
-                        v-model="store.item.sslmode"
+                        v-model="store.item.database_sslmode"
                         :options="store.assets.database_sslmodes"
                         optionLabel="name"
                         optionValue="name"
-                        placeholder="Select SSL Mode"/>
-            </div>
+                        class="w-full md:w-56"/>
+                <label for="sslMode">Database SSL Mode</label>
+            </FloatLabel>
 
 
             <div v-if="store.item.sslmode && store.item.sslmode !== 'disable'">
@@ -257,13 +258,6 @@ const toggleFormMenu = (event) => {
 
             <!-- Test Connection Button -->
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-<!--                <Button type="button"-->
-<!--                        class="p-button-primary"-->
-<!--                        :loading="is_btn_loading_connect"-->
-<!--                        @click="store.connect()"-->
-<!--                        icon="pi pi-database">-->
-<!--                    Test Database Connection-->
-<!--                </Button>-->
 
                 <Button label="Test Database Connection"
                         @click="store.connect()"
