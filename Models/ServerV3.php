@@ -47,7 +47,12 @@ class ServerV3 extends VaahModel
     ];
     //-------------------------------------------------
     protected $fill_except = [
-
+        'host_type',
+        'driver',
+        'host',
+        'port',
+        'count_tenants',
+        'count_db_instances'
     ];
 
     //-------------------------------------------------
