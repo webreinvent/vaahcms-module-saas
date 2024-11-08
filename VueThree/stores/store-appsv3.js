@@ -993,14 +993,6 @@ export const useAppV3Store = defineStore({
                 ];
             }
 
-            form_menu.push({
-                label: 'Fill',
-                icon: 'pi pi-pencil',
-                command: () => {
-                    this.getFormInputs();
-                }
-            },)
-
             this.form_menu_list = form_menu;
 
         },

@@ -137,29 +137,42 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select name="app-type"
-                        placeholder="Select App Type"
                         :options="store.assets.app_types_select"
                         option-label="name"
                         option-value="name"
                         v-model="store.item.app_type_id"
                 class="w-full"
                 showClear />
+                <label for="app_types">Select App Type</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select
                     v-if="store.item.app_type_id === 'Module'"
-                name="module-name"
-                placeholder="Select Module"
-                :options="store.assets.modules"
-                option-label="name"
-                option-value="name"
-                v-model="store.new_item.name"
-                class="w-full"
-                showClear
+                    name="module-name"
+                    :options="store.assets.modules"
+                    option-label="name"
+                    option-value="name"
+                    v-model="store.new_item.name"
+                    class="w-full"
+                    showClear
                 />
+                <label v-if="store.item.app_type_id === 'Module'" for="select_module">Select Module</label>
             </FloatLabel>
 
+
+
+            <FloatLabel v-if="store.item.app_type_id !== 'Module'" class="my-3" :variant="store.float_label_variants">
+                <InputText
+                    class="w-full"
+                    name="appsv3-name"
+                    data-testid="appsv3-name"
+                    id="appsv3-name"
+                    v-model="store.new_item.name"
+                    required
+                />
+                <label for="appsv3-name">Name</label>
+            </FloatLabel>
 
 
 
@@ -168,10 +181,57 @@ const toggleFormMenu = (event) => {
                            name="appsv3-slug"
                            data-testid="appsv3-slug"
                            id="appsv3-slug"
-                           v-model="store.item.slug" required/>
-                <label for="appsv3-slug">Enter the slug</label>
+                           v-model="store.new_item.slug" required/>
+                <label for="appsv3-slug">Slug</label>
             </FloatLabel>
 
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <InputText class="w-full"
+                           name="appsv3-relative_path"
+                           data-testid="appsv3-relative_path"
+                           id="appsv3-relative_path"
+                           v-model="store.new_item.relative_path" required/>
+                <label for="appsv3-relative-path">Relative Path</label>
+            </FloatLabel>
+
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <InputText class="w-full"
+                           name="appsv3-migration_path"
+                           data-testid="appsv3-migration_path"
+                           id="appsv3-migration_path"
+                           v-model="store.new_item.migration_path" required/>
+                <label for="appsv3-migration-path">Migration Path</label>
+            </FloatLabel>
+
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <InputText class="w-full"
+                           name="appsv3-seed_class"
+                           data-testid="appsv3-seed_class"
+                           id="appsv3-seed_class"
+                           v-model="store.new_item.seed_class" required/>
+                <label for="appsv3-seed-class">Seed Class</label>
+            </FloatLabel>
+
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <InputText class="w-full"
+                           name="appsv3-sample_data_class"
+                           data-testid="appsv3-sample_data_class"
+                           id="appsv3-sample_data_class"
+                           v-model="store.new_item.sample_data_class" required/>
+                <label for="appsv3-sample-data-class">Sample Data Class</label>
+            </FloatLabel>
+
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <Textarea v-model="store.new_item.excerpt" rows="5" cols="64"
+                            maxlength="200" label="Excerpt"></Textarea>
+                <label for="appsv3-Excerpt">Excerpt</label>
+            </FloatLabel>
+
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <Textarea v-model="store.new_item.notes" rows="5" cols="64"
+                          maxlength="200" label="notes"></Textarea>
+                <label for="appsv3-notes">Notes</label>
+            </FloatLabel>
 
             <div class="flex items-center gap-2 my-3" >
                 <ToggleSwitch v-bind:false-value="0"
@@ -182,8 +242,13 @@ const toggleFormMenu = (event) => {
                               inputId="appsv3-active"
                               v-model="store.item.is_active"/>
 
-                <label for="appsv3-active">Remember Me</label>
+                <label for="appsv3-active">Is Active</label>
+
+
             </div>
+
+
+
 
 
         </div>

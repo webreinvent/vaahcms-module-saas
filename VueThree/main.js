@@ -23,6 +23,11 @@ import Menubar from "primevue/menubar";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
 
+import Textarea from 'primevue/textarea';
+
+
+
+
 //-------------/PrimeVue Imports
 
 //-------------CRUD PrimeVue Imports
@@ -118,7 +123,8 @@ app.component('ToggleButton', ToggleButton);
 app.component('Menubar', Menubar);
 app.component('Select', Select);
 app.component('InputNumber', InputNumber);
-app.component('Dropdown', Dropdown);
+app.component('Textarea', Textarea);
+
 
 //-------------/CRUD PrimeVue Use
 
