@@ -41,17 +41,29 @@ const useVaah = vaah();
 
             </Column>
 
-
-            <Column field="updated_at" header="Updated"
-                    v-if="store.isListView() && !store.isMobile"
-                    style="width:150px;"
+            <Column field="slug" header="Slug"
+                    class="overflow-wrap-anywhere"
                     :sortable="true">
 
                 <template #body="prop">
-                    {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
+
+                    {{prop.data.slug}}
                 </template>
 
             </Column>
+
+            <Column field="count_tenants" header="Tenants"
+                    class="overflow-wrap-anywhere"
+                    :sortable="true">
+
+                <template #body="prop">
+                    <Badge severity="primary">
+                        {{ prop.data.count_tenants_active }} / {{prop.data.count_tenants}}
+                    </Badge>
+                </template>
+
+            </Column>
+
 
             <Column field="is_active" v-if="store.isListView() && !store.isMobile"
                     :sortable="true"
@@ -70,6 +82,16 @@ const useVaah = vaah();
 
             </Column>
 
+            <Column field="updated_at" header="Updated"
+                    v-if="store.isListView() && !store.isMobile"
+                    style="width:150px;"
+                    :sortable="true">
+
+                <template #body="prop">
+                    {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
+                </template>
+
+            </Column>
             <Column field="actions" style="width:150px;"
                     :style="{width: store.getActionWidth() }"
                     :header="store.getActionLabel()">

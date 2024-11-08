@@ -21,7 +21,7 @@
                 <b-table-column v-slot="props" field="slug" label="Slug">
                     <vh-copy class="text-copyable"
                              :data="props.row.slug"
-                             :label="props.row.slug"
+                             :label="props.row.slug"z
                              @copied="copiedData"
                     >
                     </vh-copy>
