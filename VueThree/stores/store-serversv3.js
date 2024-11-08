@@ -1031,7 +1031,7 @@ export const useServerV3Store = defineStore({
                 method: 'POST',
                 show_success: true
             };
-            // vaah().ajax(url, this.params, this.connectAfter);
+
             vaah().ajax(
                 url,
                 this.connectAfter,
