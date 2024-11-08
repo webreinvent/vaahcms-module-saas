@@ -14,6 +14,11 @@ const items = ref([
         icon: 'fa-regular fa-chart-bar',
         route: "/"
       },
+        {
+            label: 'ServerV3',
+            icon: 'fa-regular fa-chart-bar',
+            route: "/serversv3"
+        },
     ]
   },
 ]);
