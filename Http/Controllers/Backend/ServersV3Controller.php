@@ -2,7 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use VaahCms\Modules\Saas\Entities\Server;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use VaahCms\Modules\Saas\Models\ServerV3;
+use WebReinvent\VaahCms\Models\Taxonomy;
 
 
 class ServersV3Controller extends Controller
@@ -30,6 +33,9 @@ class ServersV3Controller extends Controller
             $data['fillable']['columns'] = ServerV3::getFillableColumns();
             $data['fillable']['except'] = ServerV3::getUnFillableColumns();
             $data['empty_item'] = ServerV3::getEmptyItem();
+            $data['host_types'] = Taxonomy::getTaxonomyByType('server-host-type');
+            $data['drivers'] = Taxonomy::getTaxonomyByType('database-driver');
+            $data['database_sslmodes'] = Taxonomy::getTaxonomyByType('database-ssl-mode');
 
             $data['actions'] = [];
 
@@ -226,5 +232,35 @@ class ServersV3Controller extends Controller
     }
     //----------------------------------------------------------
 
+    public function connect(Request $request)
+    {
+        $rules = array(
+            'host_type' => 'required',
+            'driver' => 'required',
+            'host' => 'required',
+            'port' => 'required',
+            'username' => 'required',
+        );
+
+        $validator = \Validator::make( $request->new_item, $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return response()->json($response);
+        }
+
+        $data = [];
+
+        $item = new Server();
+        $item->fill($request->new_item);
+
+        $db_manager = new DatabaseManager($item);
+        $response = $db_manager->testServerConnection();
+
+        return response()->json($response);
+
+    }
 
 }
