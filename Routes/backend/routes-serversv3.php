@@ -5,9 +5,9 @@ use VaahCms\Modules\Saas\Http\Controllers\Backend\ServersV3Controller;
 Route::group(
     [
         'prefix' => 'backend/saas/serversv3',
-        
+
         'middleware' => ['web', 'has.backend.access'],
-        
+
 ],
 function () {
     /**
@@ -72,5 +72,8 @@ function () {
         ->name('vh.backend.saas.serversv3.item.action');
 
     //---------------------------------------------------------
+
+    Route::post('/connect', [ServersV3Controller::class, 'connect'])
+        ->name('vh.backend.saas.servers.connect');
 
 });

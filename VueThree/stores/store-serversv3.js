@@ -69,6 +69,7 @@ export const useServerV3Store = defineStore({
         window_width: 0,
         screen_size: null,
         float_label_variants: 'on',
+        new_item: null
     }),
     getters: {
         isMobile: (state) => {
@@ -1015,6 +1016,33 @@ export const useServerV3Store = defineStore({
             }
         },
         //---------------------------------------------------------------------
+        connect: function () {
+            this.is_btn_loading_connect = true;
+
+            // this.$Progress.start();
+
+            this.params = {
+                new_item: this.item
+            };
+
+            let url = this.ajax_url+'/connect';
+            let options = {
+                params: this.params,
+                method: 'POST',
+                show_success: true
+            };
+            // vaah().ajax(url, this.params, this.connectAfter);
+            vaah().ajax(
+                url,
+                this.connectAfter,
+                options
+            );
+        },
+        //---------------------------------------------------------------------
+        connectAfter: function (data, res) {
+            this.is_btn_loading_connect = false;
+            // this.$Progress.finish();
+        },
     }
 });
 
