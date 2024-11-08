@@ -69,20 +69,7 @@ export const useAppV3Store = defineStore({
         window_width: 0,
         screen_size: null,
         float_label_variants: 'on',
-        new_item:{
-            app_type: null,
-            name: null,
-            slug: null,
-            excerpt: null,
-            version	: null,
-            version_number	: null,
-            relative_path: null,
-            migration_path: null,
-            seed_class: null,
-            sample_data_class: null,
-            is_active: null,
-            notes: null,
-        },
+
     }),
     getters: {
         isMobile: (state) => {
@@ -1020,9 +1007,51 @@ export const useAppV3Store = defineStore({
                 this.screen_size = 'large';
             }
         },
-        //---------------------------------------------------------------------
-    }
-});
+        //-----------------------------VUE 3 UPGRADE----------------------------------------
+
+
+        setNewItemValues() {
+            let new_item = this.item;
+            console.log('--->', new_item);
+
+            // Validate 'new_item' and its 'name'
+            if (!new_item || !new_item.name || typeof new_item.name !== 'string') {
+                console.error('Invalid new_item.name:', new_item.name);
+                return;
+            }
+
+            if (typeof vaah !== 'function') {
+                console.error('vaah is not a function');
+                return;
+            }
+
+            // Find the module based on 'name'
+            let module = vaah().findInArrayByKey(this.assets.modules, 'name', new_item.name);
+
+
+            if (module) {
+                if (typeof module === 'object' && Object.keys(module).length > 0) {
+                    for (let key in module) {
+                        if (new_item.hasOwnProperty(key)) {
+                            new_item[key] = module[key];
+                        } else {
+                            console.warn(`Key ${key} not found in new_item.`);
+                        }
+                    }
+                } else {
+                    console.error('Invalid module data:', module);
+                }
+
+                new_item.slug = new_item.name ? new_item.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '') : '';
+
+            } else {
+                console.error('Module not found for name:', new_item.name);
+            }
+
+            console.log('---> new_item after update', new_item);
+        }
+    },
+    });
 
 
 

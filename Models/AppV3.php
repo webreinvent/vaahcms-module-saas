@@ -160,7 +160,6 @@ class AppV3 extends VaahModel
     //-------------------------------------------------
     public static function createItem($request)
     {
-
         $inputs = $request->all();
 
         $validation = self::validation($inputs);
@@ -187,6 +186,32 @@ class AppV3 extends VaahModel
             $response['success'] = false;
             $response['messages'][] = $error_message;
             return $response;
+        }
+
+        if(!isset($inputs['version']))
+        {
+            $composer_path = base_path($inputs['relative_path']).'/composer.json';
+
+            if(!\File::exists($composer_path))
+            {
+                $response['success'] = false;
+                $response['errors'][] = 'composer.json does not exist at '.$composer_path;
+
+                return $response;
+            }
+
+            $composer = json_decode(file_get_contents($composer_path), true);
+
+            if(!isset($composer['version']))
+            {
+                $response['success'] = false;
+                $response['errors'][] = 'version variable does not exist in composer.json at '.$composer_path;
+
+                return $response;
+            }
+
+            $inputs['version'] = $composer['version'];
+            $inputs['version_number'] = (int) filter_var($inputs['version'] , FILTER_SANITIZE_NUMBER_INT);
         }
 
         $item = new self();

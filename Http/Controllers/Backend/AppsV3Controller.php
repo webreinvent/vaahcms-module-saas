@@ -37,7 +37,7 @@ class AppsV3Controller extends Controller
             ];
 
 
-            $data['app_types_select'] = $app_types;
+            $data['app_type'] = $app_types;
 
             $modules = \VaahModule::getAllNames();
             $modules_list = [];

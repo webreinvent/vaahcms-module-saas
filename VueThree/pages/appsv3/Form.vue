@@ -107,7 +107,6 @@ const toggleFormMenu = (event) => {
 
         </template>
 
-
         <div v-if="store.item" class="mt-2">
 
             <Message severity="error"
@@ -137,10 +136,10 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select name="app-type"
-                        :options="store.assets.app_types_select"
+                        :options="store.assets.app_type"
                         option-label="name"
                         option-value="name"
-                        v-model="store.item.app_type_id"
+                        v-model="store.item.app_type"
                 class="w-full"
                 showClear />
                 <label for="app_types">Select App Type</label>
@@ -148,27 +147,29 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select
-                    v-if="store.item.app_type_id === 'Module'"
+                    v-if="store.item.app_type === 'Module'"
                     name="module-name"
                     :options="store.assets.modules"
                     option-label="name"
                     option-value="name"
-                    v-model="store.new_item.name"
+                    v-model="store.item.name"
                     class="w-full"
                     showClear
+                    @change="store.setNewItemValues"
                 />
-                <label v-if="store.item.app_type_id === 'Module'" for="select_module">Select Module</label>
+                <label v-if="store.item.app_type === 'Module'" for="select_module">Select Module</label>
             </FloatLabel>
 
 
 
-            <FloatLabel v-if="store.item.app_type_id !== 'Module'" class="my-3" :variant="store.float_label_variants">
+
+            <FloatLabel v-if="store.item.app_type !== 'Module'" class="my-3" :variant="store.float_label_variants">
                 <InputText
                     class="w-full"
                     name="appsv3-name"
                     data-testid="appsv3-name"
                     id="appsv3-name"
-                    v-model="store.new_item.name"
+                    v-model="store.item.name"
                     required
                 />
                 <label for="appsv3-name">Name</label>
@@ -181,7 +182,7 @@ const toggleFormMenu = (event) => {
                            name="appsv3-slug"
                            data-testid="appsv3-slug"
                            id="appsv3-slug"
-                           v-model="store.new_item.slug" required/>
+                           v-model="store.item.slug" required/>
                 <label for="appsv3-slug">Slug</label>
             </FloatLabel>
 
@@ -190,7 +191,7 @@ const toggleFormMenu = (event) => {
                            name="appsv3-relative_path"
                            data-testid="appsv3-relative_path"
                            id="appsv3-relative_path"
-                           v-model="store.new_item.relative_path" required/>
+                           v-model="store.item.relative_path" required/>
                 <label for="appsv3-relative-path">Relative Path</label>
             </FloatLabel>
 
@@ -199,7 +200,7 @@ const toggleFormMenu = (event) => {
                            name="appsv3-migration_path"
                            data-testid="appsv3-migration_path"
                            id="appsv3-migration_path"
-                           v-model="store.new_item.migration_path" required/>
+                           v-model="store.item.migration_path" required/>
                 <label for="appsv3-migration-path">Migration Path</label>
             </FloatLabel>
 
@@ -208,7 +209,7 @@ const toggleFormMenu = (event) => {
                            name="appsv3-seed_class"
                            data-testid="appsv3-seed_class"
                            id="appsv3-seed_class"
-                           v-model="store.new_item.seed_class" required/>
+                           v-model="store.item.seed_class" required/>
                 <label for="appsv3-seed-class">Seed Class</label>
             </FloatLabel>
 
@@ -217,18 +218,18 @@ const toggleFormMenu = (event) => {
                            name="appsv3-sample_data_class"
                            data-testid="appsv3-sample_data_class"
                            id="appsv3-sample_data_class"
-                           v-model="store.new_item.sample_data_class" required/>
+                           v-model="store.item.sample_data_class" required/>
                 <label for="appsv3-sample-data-class">Sample Data Class</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-                <Textarea v-model="store.new_item.excerpt" rows="5" cols="64"
+                <Textarea v-model="store.item.excerpt" rows="5" cols="64"
                             maxlength="200" label="Excerpt"></Textarea>
                 <label for="appsv3-Excerpt">Excerpt</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-                <Textarea v-model="store.new_item.notes" rows="5" cols="64"
+                <Textarea v-model="store.item.notes" rows="5" cols="64"
                           maxlength="200" label="notes"></Textarea>
                 <label for="appsv3-notes">Notes</label>
             </FloatLabel>
