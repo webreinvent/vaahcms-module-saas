@@ -226,7 +226,7 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select id="sslMode"
-                        v-model="store.item.sslmode"
+                        v-model="store.item.database_sslmode"
                         :options="store.assets.database_sslmodes"
                         optionLabel="name"
                         optionValue="name"
