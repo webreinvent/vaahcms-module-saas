@@ -69,6 +69,20 @@ export const useAppV3Store = defineStore({
         window_width: 0,
         screen_size: null,
         float_label_variants: 'on',
+        new_item:{
+            app_type: null,
+            name: null,
+            slug: null,
+            excerpt: null,
+            version	: null,
+            version_number	: null,
+            relative_path: null,
+            migration_path: null,
+            seed_class: null,
+            sample_data_class: null,
+            is_active: null,
+            notes: null,
+        },
     }),
     getters: {
         isMobile: (state) => {

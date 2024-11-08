@@ -31,6 +31,32 @@ class AppsV3Controller extends Controller
             $data['fillable']['except'] = AppV3::getUnFillableColumns();
             $data['empty_item'] = AppV3::getEmptyItem();
 
+            $app_types = [
+                ['name' => 'Module', 'code' => 'MDL'],
+                ['name' => 'Other', 'code' => 'OTR'],
+            ];
+
+
+            $data['app_types_select'] = $app_types;
+
+            $modules = \VaahModule::getAllNames();
+            $modules_list = [];
+            $i = 0;
+            foreach ($modules as $module)
+            {
+                $modules_list[$i]['name'] = $module;
+                $modules_list[$i]['relative_path'] = \VaahModule::getRelativePath($module);
+                $modules_list[$i]['migration_path'] = \VaahModule::getTenantMigrationPath($module);
+                $modules_list[$i]['seed_class'] = \VaahModule::getTenantSeedsClass($module);
+                $modules_list[$i]['sample_data_class'] = \VaahModule::getTenantSampleDataClass($module);
+                $modules_list[$i]['version'] = \VaahModule::getVersion($module);
+                $modules_list[$i]['version_number'] = \VaahModule::getVersionNumber($module);
+
+                $i++;
+            }
+
+            $data['modules'] = $modules_list;
+
             $data['actions'] = [];
 
             $response['success'] = true;

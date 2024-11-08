@@ -136,14 +136,31 @@ const toggleFormMenu = (event) => {
 
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-                <InputText class="w-full"
-                           name="appsv3-name"
-                           data-testid="appsv3-name"
-                           id="appsv3-name"
-                           @update:modelValue="store.watchItem"
-                           v-model="store.item.name" required/>
-                <label for="appsv3-name">Enter the name</label>
+                <Select name="app-type"
+                        placeholder="Select App Type"
+                        :options="store.assets.app_types_select"
+                        option-label="name"
+                        option-value="name"
+                        v-model="store.item.app_type_id"
+                class="w-full"
+                showClear />
             </FloatLabel>
+
+            <FloatLabel class="my-3" :variant="store.float_label_variants">
+                <Select
+                    v-if="store.item.app_type_id === 'Module'"
+                name="module-name"
+                placeholder="Select Module"
+                :options="store.assets.modules"
+                option-label="name"
+                option-value="name"
+                v-model="store.new_item.name"
+                class="w-full"
+                showClear
+                />
+            </FloatLabel>
+
+
 
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
