@@ -18,7 +18,6 @@ import StyleClass from 'primevue/styleclass';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
-
 import Menubar from "primevue/menubar";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";

@@ -40,3 +40,4 @@ include('backend/routes-tenants.php');
 include('backend/routes-tenantapps.php');
 include('backend/routes-apps.php');
 include('backend/routes-servers.php');
+include('backend/routes-tenantsv3.php');

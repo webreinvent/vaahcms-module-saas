@@ -14,6 +14,11 @@ const items = ref([
         icon: 'fa-regular fa-chart-bar',
         route: "/"
       },
+        {
+            label: 'Tenant',
+            icon: 'fa-regular fa-chart-bar',
+            route: "/tenantsv3"
+        },
     ]
   },
 ]);
