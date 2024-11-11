@@ -239,9 +239,8 @@ const toggleFormMenu = (event) => {
                 />
             </FloatLabel>
 
-
             <!-- Conditional SSL Fields -->
-            <div v-if="store.assets.database_sslmodes && store.item.database_sslmode !== 'disable'" class="mt-4">
+            <div v-if="store.item.database_sslmode && store.item.database_sslmode !== 'disable'" class="mt-4">
                 <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <InputText
                         v-model="store.item.meta.ssl_key_path"
@@ -266,6 +265,7 @@ const toggleFormMenu = (event) => {
                     />
                 </FloatLabel>
             </div>
+
 
 
 
