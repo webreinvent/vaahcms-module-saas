@@ -144,7 +144,7 @@ class Tenant extends VaahModel {
     {
         $name = '';
 
-        if($this->server->slug)
+        if($this->server && $this->server->slug)
         {
             $name .= $this->server->slug.'-';
         }
