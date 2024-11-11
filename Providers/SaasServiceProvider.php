@@ -57,7 +57,7 @@ class SaasServiceProvider extends ServiceProvider
 
         $this->app->register(RouteServiceProvider::class);
         $this->app->register(EventServiceProvider::class);
-//        $this->app->register(\WebReinvent\CPanel\CPanelServiceProvider::class);
+        $this->app->register(\WebReinvent\CPanel\CPanelServiceProvider::class);
 
         $loader = \Illuminate\Foundation\AliasLoader::getInstance();
 
