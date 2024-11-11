@@ -71,6 +71,11 @@ function () {
     Route::any('/{id}/action/{action}', [TenantsV3Controller::class, 'itemAction'])
         ->name('vh.backend.saas.tenantsv3.item.action');
 
+
+    Route::any('/server', [TenantsV3Controller::class, 'getServers'])
+        ->name('vh.backend.saas.tenantsv3.server');
+
     //---------------------------------------------------------
+
 
 });

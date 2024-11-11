@@ -58,6 +58,16 @@ export const useTenantV3Store = defineStore({
             delay_time: 600, // time delay in milliseconds
             delay_timer: 0 // time delay in milliseconds
         },
+        server_suggestions:null,
+        query_string: {
+            page: 1,
+            q: null,
+            trashed: null,
+            filter: null,
+            sort_by: null,
+            sort_order: 'desc',
+            search_by: null,
+        },
         route: null,
         watch_stopper: null,
         route_prefix: 'tenantsv3.',
@@ -95,7 +105,7 @@ export const useTenantV3Store = defineStore({
             { id: 4, name: 'Server 4'},
 
         ],
-        
+
 
     }),
     getters: {
@@ -445,7 +455,7 @@ export const useTenantV3Store = defineStore({
 
             this.form.action = type;
 
-            let ajax_url = this.ajax_url+'/create';
+            let ajax_url = this.ajax_url;
 
             let options = {
                 method: 'post',
@@ -465,7 +475,9 @@ export const useTenantV3Store = defineStore({
                 case 'create-and-close':
                 case 'create-and-clone':
                     options.method = 'POST';
+                    item.vh_saas_server_id= this.selected_server?.id
                     options.params = item;
+                    ajax_url += '/create'
                     break;
 
                 /**
@@ -669,6 +681,28 @@ export const useTenantV3Store = defineStore({
             //update applied filters
             this.countFilters(query_object);
 
+        },
+        //---------------------------------------------------------------------
+
+        async searchServer(event) {
+            console.log('hello');
+            const query = event;
+            const options = {
+                params: query,
+                method: 'post',
+            };
+
+            await vaah().ajax(
+                this.ajax_url + '/server',
+                this.searchServerAfter,
+                options
+            );
+        },
+     //---------------------------------------------------------------------
+        searchServerAfter(data, res) {
+            if (data) {
+                this.server_suggestions = data;
+            }
         },
         //---------------------------------------------------------------------
         countFilters: function (query)

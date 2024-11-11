@@ -21,6 +21,7 @@ import Tooltip from 'primevue/tooltip';
 import Menubar from "primevue/menubar";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
+import AutoComplete from "primevue/autocomplete";
 
 //-------------/PrimeVue Imports
 
@@ -114,6 +115,7 @@ app.component('ToggleButton', ToggleButton);
 app.component('Menubar', Menubar);
 app.component('Select', Select);
 app.component('InputNumber', InputNumber);
+app.component('AutoComplete', AutoComplete);
 
 //-------------/CRUD PrimeVue Use
 

@@ -132,16 +132,16 @@ const toggleFormMenu = (event) => {
                 </div>
 
             </Message>
-
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-                <Select
-                    v-model="store.item.vh_saas_server_id"
-                    :options="store.servers"
+                <AutoComplete
+                    v-model="store.selected_server"
+                    field="vh_saas_server_id"
+                    :suggestions="store.server_suggestions"
                     optionLabel="name"
-                    optionValue="id"
-                    placeholder="Select Server"
-                    dusk="tenants-server"
-                    class="w-full"
+                placeholder="Search & Select Server"
+                @complete="store.searchServer"
+                class="w-full"
+                dusk="tenants-server"
                 />
             </FloatLabel>
 

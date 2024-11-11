@@ -2,7 +2,10 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Models\TenantV3;
+
+
 
 
 class TenantsV3Controller extends Controller
@@ -232,6 +235,52 @@ return $list;
             }
             return $response;
         }
+    }
+    //----------------------------------------------------------
+    public function getServers(Request $request)
+    {
+       $inputs = $request->all();
+        try {
+            $rules = [
+                'query' => 'required',
+            ];
+
+
+
+
+            // Validate the request
+            $validator = \Validator::make($inputs, $rules);
+            if ($validator->fails()) {
+                $errors = errorsToArray($validator->errors());
+
+                $response = [
+                    'success' => false,
+                    'errors' => $errors,
+                ];
+                return response()->json($response);
+            }
+            // Query the servers with the provided search term
+            $list = Server::where(function ($query) use ($inputs) {
+                $query->where('name', 'LIKE', '%' . $inputs['query'] . '%')
+                    ->orWhere('slug', 'LIKE', '%' . $inputs['query'] . '%');
+            })->take(10)->get();
+
+            $response = [
+                'success' => true,
+                'data' => $list,
+            ];
+        } catch (\Exception $e) {
+            $response = [
+                'success' => false,
+                'errors' => [env('APP_DEBUG') ? $e->getMessage() : trans("vaahcms-general.something_went_wrong")],
+            ];
+
+            if (env('APP_DEBUG')) {
+                $response['hint'] = $e->getTrace();
+            }
+        }
+
+        return response()->json($response);
     }
     //----------------------------------------------------------
 

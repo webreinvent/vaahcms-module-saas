@@ -77,6 +77,24 @@ class TenantV3 extends VaahModel
             'deleted_by',
         ];
     }
+
+    //-------------------------------------------------
+
+    public function setMetaAttribute($value)
+    {
+        $meta = [];
+        $this->attributes['meta'] = json_encode($meta);
+    }
+//-------------------------------------------------
+    public function getMetaAttribute($value)
+    {
+        if($value && $value!='null'){
+            return json_decode($value);
+        }else{
+            return json_decode('{}');
+        }
+
+    }
     //-------------------------------------------------
     public static function getFillableColumns()
     {
@@ -202,7 +220,6 @@ class TenantV3 extends VaahModel
 
         $item = new self();
         $item->fill($inputs);
-        $item->meta = json_encode($inputs['meta']);
         $item->save();
 
         $response = self::getItem($item->id);
@@ -490,7 +507,7 @@ class TenantV3 extends VaahModel
         $response['success'] = true;
 
         $response['data'] = $item;
-        
+
 
         return $response;
 

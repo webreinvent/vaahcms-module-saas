@@ -53,19 +53,22 @@ const useVaah = vaah();
                 </template>
 
             </Column>
-
-
-
-            <Column field="updated_at" header="Updated"
-                    v-if="store.isListView() && !store.isMobile"
-                    style="width:150px;"
+            <Column field="count_Apps" header="Apps"
+                    class="overflow-wrap-anywhere"
                     :sortable="true">
 
                 <template #body="prop">
-                    {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
+                    <Badge severity="primary">
+                        {{ (prop.data.count_apps_active || prop.data.count_apps) ?
+                        `${prop.data.count_apps_active || 0} / ${prop.data.count_apps || 0}` :
+                        '0 / 0' }}
+                    </Badge>
                 </template>
 
             </Column>
+
+
+
 
             <Column field="is_active" v-if="store.isListView() && !store.isMobile"
                     :sortable="true"
@@ -81,6 +84,16 @@ const useVaah = vaah();
                                   @input="store.toggleIsActive(prop.data)">
                     </ToggleSwitch>
                 </template>
+                <Column field="updated_at" header="Updated"
+                        v-if="store.isListView() && !store.isMobile"
+                        style="width:150px;"
+                        :sortable="true">
+
+                    <template #body="prop">
+                        {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
+                    </template>
+
+                </Column>
 
             </Column>
 
