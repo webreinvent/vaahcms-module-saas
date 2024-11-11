@@ -43,6 +43,11 @@ class ExtendController extends Controller
             'link'=> route('vh.backend.saas')
         ];
 
+        $links[1] = [
+            'icon' => 'box',
+            'label'=> 'SaaS V-3',
+            'link'=> route('vh.backend.saas.vuethree')
+        ];
         if(version_compare(config('vaahcms.version'), '2.0.0', '<' )){
             $links[0]['link'] = route('vh.backend.saas');
         } else{
