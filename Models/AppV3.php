@@ -603,6 +603,12 @@ class AppV3 extends VaahModel
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'relative_path' => 'required|max:150',
+            'migration_path' => 'max:150',
+            'seed_class' => 'max:150',
+            'sample_data_class' => 'max:150',
+            'excerpt' => 'max:255',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make($inputs, $rules);
