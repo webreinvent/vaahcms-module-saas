@@ -314,11 +314,12 @@ class AppV3 extends VaahModel
     {
 
 
-        if ($request->has('recount') !== null && $request->has('recount') == true) {
+        if ($request->has('recount') && $request->recount == true) {
 
             App::recountRelations();
             Tenant::recountRelations();
         }
+
         $list = self::getSorted($request->filter);
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);

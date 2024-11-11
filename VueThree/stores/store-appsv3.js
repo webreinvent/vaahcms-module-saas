@@ -270,14 +270,24 @@ export const useAppV3Store = defineStore({
         async getList(recount = false) {
             let options = {
                 query: vaah().clone(this.query),
-                recount: recount,
             };
+
+            if (recount) {
+                options.query.recount = recount;
+            }
 
             await vaah().ajax(
                 this.ajax_url,
                 this.afterGetList,
                 options
             );
+
+            if (recount) {
+
+                let url = new URL(window.location);
+                url.searchParams.delete("recount");
+                window.history.pushState({}, "", url.toString());
+            }
         },
 
         //---------------------------------------------------------------------
