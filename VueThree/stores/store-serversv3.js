@@ -1016,10 +1016,8 @@ export const useServerV3Store = defineStore({
             }
         },
         //---------------------------------------------------------------------
-        connect: function () {
+        async connect() {
             this.is_btn_loading_connect = true;
-
-            // this.$Progress.start();
 
             this.params = {
                 new_item: this.item
@@ -1032,14 +1030,14 @@ export const useServerV3Store = defineStore({
                 show_success: true
             };
 
-            vaah().ajax(
+            await vaah().ajax(
                 url,
                 this.connectAfter,
                 options
             );
         },
         //---------------------------------------------------------------------
-        connectAfter: function (data, res) {
+        async connectAfter(data, res) {
             this.is_btn_loading_connect = false;
             // this.$Progress.finish();
         },
