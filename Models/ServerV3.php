@@ -17,7 +17,7 @@ class ServerV3 extends VaahModel
     use CrudWithUuidObservantTrait;
 
     //-------------------------------------------------
-    protected $table = 'vh_saas_tenants';
+    protected $table = 'vh_saas_servers';
     //-------------------------------------------------
     protected $dates = [
         'created_at',
@@ -29,9 +29,15 @@ class ServerV3 extends VaahModel
         'uuid',
         'name',
         'slug',
-        'database_username',
-        'database_password',
-        'database_sslmode',
+        'username',
+        'password',
+        'sslmode',
+        'host_type',
+        'driver',
+        'host',
+        'port',
+        'count_tenants',
+        'count_db_instances',
         'activated_at',
         'meta',
         'is_active',
@@ -41,12 +47,7 @@ class ServerV3 extends VaahModel
     ];
     //-------------------------------------------------
     protected $fill_except = [
-        'host_type',
-        'driver',
-        'host',
-        'port',
-        'count_tenants',
-        'count_db_instances'
+
     ];
 
     //-------------------------------------------------
@@ -575,9 +576,9 @@ class ServerV3 extends VaahModel
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
-            'database_username' => 'required',
-            'database_password' => 'required',
-            'database_sslmode' => 'required'
+            'username' => 'required',
+            'password' => 'required',
+            'sslmode' => 'required'
         );
 
         $validator = \Validator::make($inputs, $rules);

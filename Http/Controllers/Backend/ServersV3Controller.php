@@ -239,7 +239,8 @@ class ServersV3Controller extends Controller
             'driver' => 'required',
             'host' => 'required',
             'port' => 'required',
-            'database_username' => 'required',
+            'username' => 'required',
+            'password' => 'nullable'
         );
 
         $validator = \Validator::make( $request->new_item, $rules);
@@ -253,12 +254,12 @@ class ServersV3Controller extends Controller
 
         // Modify keys
         $updatedData = collect($request->new_item)->mapWithKeys(function ($value, $key) {
-            if ($key === 'database_username') {
-                return ['username' => $value];
-            }elseif ($key === 'database_password'){
-                return ['password' => $value];
-            }elseif ($key === 'database_sslmode'){
-                return ['sslmode' => $value];
+            if ($key === 'username') {
+                return ['database_username' => $value];
+            }elseif ($key === 'password'){
+                return ['database_password' => $value];
+            }elseif ($key === 'sslmode'){
+                return ['database_sslmode' => $value];
             }else{
                 return [$key => $value];
             }
@@ -267,7 +268,7 @@ class ServersV3Controller extends Controller
         // Merge back the updated data into the request
         $request->new_item = $updatedData->toArray();
 
-        $item = new Server();
+        $item = new ServerV3();
         $item->fill($request->new_item);
 
         $db_manager = new DatabaseManager($item);

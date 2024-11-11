@@ -10,6 +10,7 @@ use VaahCms\Modules\Saas\Libraries\DatabaseManagers\CpanelMySqlDatabaseManager;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\MySqlDatabaseManager;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DoMySqlDatabaseManager;
 use App;
+use VaahCms\Modules\Saas\Models\ServerV3;
 
 
 class DatabaseManager
@@ -20,7 +21,7 @@ class DatabaseManager
 
     protected $db_manager;
 
-    public function __construct(Server $server, Tenant $tenant=null)
+    public function __construct(ServerV3 $server, Tenant $tenant=null)
     {
         $this->server = $server;
 
