@@ -1014,18 +1014,13 @@ export const useAppV3Store = defineStore({
             let new_item = this.item;
             console.log('--->', new_item);
 
-            // Validate 'new_item' and its 'name'
+
             if (!new_item || !new_item.name || typeof new_item.name !== 'string') {
                 console.error('Invalid new_item.name:', new_item.name);
                 return;
             }
 
-            if (typeof vaah !== 'function') {
-                console.error('vaah is not a function');
-                return;
-            }
-
-            // Find the module based on 'name'
+            
             let module = vaah().findInArrayByKey(this.assets.modules, 'name', new_item.name);
 
 
