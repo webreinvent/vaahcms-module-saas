@@ -113,7 +113,7 @@ const toggleCreateMenu = (event) => {
                             <Button data-testid="appsv3-list-reload"
                                     size="small"
                                     icon="pi pi-refresh"
-                                    @click="store.getList()">
+                                    @click="store.getList(true)">
                             </Button>
 
                             <!--form_menu-->
