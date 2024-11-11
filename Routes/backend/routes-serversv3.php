@@ -74,6 +74,6 @@ function () {
     //---------------------------------------------------------
 
     Route::post('/connect', [ServersV3Controller::class, 'connect'])
-        ->name('vh.backend.saas.servers.connect');
+        ->name('vh.backend.saas.serversv3.connect');
 
 });
