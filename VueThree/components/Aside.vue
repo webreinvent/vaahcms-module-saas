@@ -14,6 +14,11 @@ const items = ref([
         icon: 'fa-regular fa-chart-bar',
         route: "/"
       },
+        {
+            label: 'Apps',
+            icon: 'fa-regular fa-chart-bar',
+            route: "/appsv3"
+        },
     ]
   },
 ]);
