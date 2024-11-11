@@ -5,6 +5,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Faker\Factory;
+use VaahCms\Modules\Saas\Entities\App;
+use VaahCms\Modules\Saas\Entities\Tenant;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
@@ -310,6 +312,13 @@ class AppV3 extends VaahModel
     //-------------------------------------------------
     public static function getList($request)
     {
+
+
+        if ($request->has('recount') !== null && $request->has('recount') == true) {
+
+            App::recountRelations();
+            Tenant::recountRelations();
+        }
         $list = self::getSorted($request->filter);
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);
