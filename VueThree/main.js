@@ -22,6 +22,8 @@ import Menubar from "primevue/menubar";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
 import AutoComplete from "primevue/autocomplete";
+import Password from "primevue/password";
+
 
 //-------------/PrimeVue Imports
 
@@ -116,6 +118,7 @@ app.component('Menubar', Menubar);
 app.component('Select', Select);
 app.component('InputNumber', InputNumber);
 app.component('AutoComplete', AutoComplete);
+app.component('Password', Password);
 
 //-------------/CRUD PrimeVue Use
 

@@ -204,13 +204,19 @@ const toggleFormMenu = (event) => {
                 <label for="tenantsv3-database_username">Enter the database username</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-                <InputText class="w-full"
-                           name="tenantsv3-database_password"
-                           data-testid="tenantsv3-database_password"
-                           id="tenantsv3-database_password"
-                           v-model="store.item.database_password" required/>
+                <Password
+                    class="w-full"
+                    name="tenantsv3-database_password"
+                    data-testid="tenantsv3-database_password"
+                    id="tenantsv3-database_password"
+                    v-model="store.item.database_password"
+                    feedback
+                    toggleMask
+                    promptLabel="Enter the database password"
+                />
                 <label for="tenantsv3-database_password">Enter the database password</label>
             </FloatLabel>
+
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
                            name="tenantsv3-database_charset"
