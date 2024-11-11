@@ -194,13 +194,13 @@ const toggleFormMenu = (event) => {
                 <div class="p-field p-col-12">
                     <label for="username">Username</label>
                     <InputText id="username"
-                               v-model="store.item.database_username"
+                               v-model="store.item.username"
                                placeholder="Enter Username"/>
                 </div>
                 <div class="p-field p-col-12">
                     <label for="password">Password</label>
                     <InputText id="password"
-                               v-model="store.item.database_password"
+                               v-model="store.item.password"
                                type="password"
                                placeholder="Enter Password"/>
                 </div>
@@ -226,7 +226,7 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Select id="sslMode"
-                        v-model="store.item.database_sslmode"
+                        v-model="store.item.sslmode"
                         :options="store.assets.database_sslmodes"
                         optionLabel="name"
                         optionValue="name"
