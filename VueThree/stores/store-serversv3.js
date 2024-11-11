@@ -1017,7 +1017,6 @@ export const useServerV3Store = defineStore({
         },
         //---------------------------------------------------------------------
         async connect() {
-            this.is_btn_loading_connect = true;
 
             this.params = {
                 new_item: this.item
@@ -1038,8 +1037,7 @@ export const useServerV3Store = defineStore({
         },
         //---------------------------------------------------------------------
         async connectAfter(data, res) {
-            this.is_btn_loading_connect = false;
-            // this.$Progress.finish();
+
         },
     }
 });
