@@ -18,6 +18,11 @@ const items = ref([
             label: 'Tenant',
             icon: 'fa-regular fa-chart-bar',
             route: "/tenantsv3"
+
+            label: 'Apps',
+            icon: 'fa-regular fa-chart-bar',
+            route: "/appsv3"
+
         },
     ]
   },
