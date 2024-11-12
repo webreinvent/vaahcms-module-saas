@@ -117,18 +117,7 @@ const toggleCreateMenu = (event) => {
                             </Button>
 
                             <!--form_menu-->
-
-                            <Button v-if="root.assets && root.assets.module
-                                                && root.assets.module.is_dev"
-                                    type="button"
-                                    @click="toggleCreateMenu"
-                                    size="small"
-                                    data-testid="appsv3-create-menu"
-                                    icon="pi pi-angle-down"
-                                    aria-haspopup="true"/>
-                            <Menu ref="create_menu"
-                                  :model="store.list_create_menu"
-                                  :popup="true" />
+                            
                         </InputGroup>
 
                     </template>
