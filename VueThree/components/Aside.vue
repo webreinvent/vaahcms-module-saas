@@ -22,7 +22,7 @@ const items = ref([
         {
 
             label: 'Apps',
-            icon: 'fa-regular fa-chart-bar',
+            icon: 'fa-brands fa-app-store',
             route: "/appsv3"
 
         },
