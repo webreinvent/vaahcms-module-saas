@@ -307,15 +307,27 @@ export const useTenantV3Store = defineStore({
             }
         },
         //---------------------------------------------------------------------
-        async getList() {
+        async getList(recount = false) {
             let options = {
-                query: vaah().clone(this.query)
+                query: vaah().clone(this.query),
             };
+
+            if (recount) {
+                options.query.recount = recount;
+            }
+
             await vaah().ajax(
                 this.ajax_url,
                 this.afterGetList,
                 options
             );
+
+            if (recount) {
+
+                let url = new URL(window.location);
+                url.searchParams.delete("recount");
+                window.history.pushState({}, "", url.toString());
+            }
         },
         //---------------------------------------------------------------------
         afterGetList: function (data, res)
