@@ -616,8 +616,17 @@ class TenantV3 extends VaahModel
     {
 
         $rules = array(
+            'vh_saas_server_id' => 'required|max:150',
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
+            'path' => 'max:150',
+            'domain' => 'max:150',
+            'sub_domain' => 'max:150',
+            'database_name' => 'required|alpha_dash|max:20',
+            'database_username' => 'required|alpha_dash|max:20',
+            'database_charset' => 'max:150',
+            'database_collation' => 'max:150',
+            'notes' => 'max:255',
         );
 
         $validator = \Validator::make($inputs, $rules);
