@@ -247,8 +247,8 @@ class ServersV3Controller extends Controller
         if ( $validator->fails() ) {
 
             $errors             = errorsToArray($validator->errors());
-            $response['status'] = 'failed';
-            $response['errors'] = $errors;
+            $response['status'] = false;
+            $response['errors'][] = $errors;
             return response()->json($response);
         }
 
