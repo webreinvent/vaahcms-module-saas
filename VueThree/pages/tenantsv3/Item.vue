@@ -140,6 +140,9 @@ const toggleItemMenu = (event) => {
                                        type="user"
                             />
                         </template>
+                        <template v-else-if="column === 'meta' && typeof value === 'object' && value !== null">
+                            <VhViewRow :label="column" :value="JSON.stringify(value, null, 2)" />
+                        </template>
 
                         <template v-else-if="column === 'is_active'">
                             <VhViewRow :label="column"
