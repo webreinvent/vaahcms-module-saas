@@ -116,8 +116,6 @@ const toggleCreateMenu = (event) => {
                                     @click="store.getList(true)">
                             </Button>
 
-                            <!--form_menu-->
-                            
                         </InputGroup>
 
                     </template>

@@ -281,13 +281,6 @@ export const useAppV3Store = defineStore({
                 this.afterGetList,
                 options
             );
-
-            if (recount) {
-
-                let url = new URL(window.location);
-                url.searchParams.delete("recount");
-                window.history.pushState({}, "", url.toString());
-            }
         },
 
         //---------------------------------------------------------------------
