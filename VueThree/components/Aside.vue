@@ -21,7 +21,7 @@ const items = ref([
         },
         {
 
-            label: 'TenantApps',
+            label: 'Tenant\'s Apps',
             icon: 'fa-regular fa-chart-bar',
             route: "/tenantappsv3"
         },
