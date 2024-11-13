@@ -22,7 +22,7 @@ const items = ref([
         {
 
             label: 'Tenant\'s Apps',
-            icon: 'fa-regular fa-chart-bar',
+            icon: 'fa-solid fa-briefcase',
             route: "/tenantappsv3"
         },
         {
@@ -33,7 +33,7 @@ const items = ref([
         },
         {
             label: 'ServerV3',
-            icon: 'fa-regular fa-chart-bar',
+            icon: 'fa-solid fa-server',
             route: "/serversv3"
         }
     ]
