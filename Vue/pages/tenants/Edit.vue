@@ -182,7 +182,7 @@
                             <b-input name="tenant-ssl_key_path"
                                      v-model="item.meta.ssl_key_path"></b-input>
                         </b-field>
-{{item.meta.ssl_key_path}}
+
                         <b-field label="CERT Path" :label-position="labelPosition">
                             <b-input name="tenant-cert_path"
                                      v-model="item.meta.cert_path"></b-input>
