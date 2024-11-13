@@ -119,7 +119,7 @@ class TenantAppV3 extends VaahModel
     }
 
     public function saasTenant(){
-        return $this->belongsTo(Tenant::class,
+        return $this->belongsTo(TenantV3::class,
             'vh_saas_tenant_id', 'id'
         )->select('id','name','slug');
     }
