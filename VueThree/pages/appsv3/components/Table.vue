@@ -57,8 +57,11 @@ const useVaah = vaah();
                     :sortable="true">
 
                 <template #body="prop">
-                    <Badge severity="primary">
-                        {{ prop.data.count_tenants_active }} / {{prop.data.count_tenants}}
+                    <Badge severity="primary"
+                           v-tooltip="'View Tenants'"
+                           @click="store.getItemTenants(prop.data)"
+                    >
+                        {{ prop.data.count_tenants_active }} / {{ prop.data.count_tenants }}
                     </Badge>
                 </template>
 

@@ -1050,6 +1050,10 @@ export const useAppV3Store = defineStore({
             }
 
             console.log('---> new_item after update', new_item);
+        },
+
+        getItemTenants(data) {
+            this.$router.push({name: 'tenantappsv3.index', query:{search_by:'app',q:data.name}});
         }
     },
     });
