@@ -76,6 +76,7 @@ const useVaah = vaah();
                                   v-bind:false-value="0"  v-bind:true-value="1"
                                   size="small"
                                   variant="success"
+                                  v-tooltip="'Change status'"
                                   @input="store.toggleIsActive(prop.data)">
                     </ToggleSwitch>
                 </template>

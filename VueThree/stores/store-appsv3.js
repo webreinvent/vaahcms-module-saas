@@ -267,16 +267,22 @@ export const useAppV3Store = defineStore({
             }
         },
         //---------------------------------------------------------------------
-        async getList() {
+        async getList(recount = false) {
             let options = {
-                query: vaah().clone(this.query)
+                query: vaah().clone(this.query),
             };
+
+            if (recount) {
+                options.query.recount = recount;
+            }
+
             await vaah().ajax(
                 this.ajax_url,
                 this.afterGetList,
                 options
             );
         },
+
         //---------------------------------------------------------------------
         afterGetList: function (data, res)
         {
@@ -1020,7 +1026,7 @@ export const useAppV3Store = defineStore({
                 return;
             }
 
-            
+
             let module = vaah().findInArrayByKey(this.assets.modules, 'name', new_item.name);
 
 
