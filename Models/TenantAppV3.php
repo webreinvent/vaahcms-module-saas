@@ -298,6 +298,8 @@ class TenantAppV3 extends VaahModel
 
         $rows = config('vaahcms.per_page');
 
+        dd($request->has('app'));
+
         if($request->has('rows'))
         {
             $rows = $request->rows;
