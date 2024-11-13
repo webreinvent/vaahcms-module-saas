@@ -5,21 +5,20 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Faker\Factory;
-use VaahCms\Modules\Saas\Entities\App;
 use VaahCms\Modules\Saas\Entities\Tenant;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
 use WebReinvent\VaahCms\Libraries\VaahSeeder;
 
-class AppV3 extends VaahModel
+class TenantAppV3 extends VaahModel
 {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;
 
     //-------------------------------------------------
-    protected $table = 'vh_saas_apps';
+    protected $table = 'vh_saas_tenant_apps';
     //-------------------------------------------------
     protected $dates = [
         'created_at',
@@ -28,23 +27,15 @@ class AppV3 extends VaahModel
     ];
     //-------------------------------------------------
     protected $fillable = [
-        'uuid',
-        'app_type',
-        'name',
-        'slug',
-        'excerpt',
+        'vh_saas_tenant_id',
+        'vh_saas_app_id',
         'version',
         'version_number',
-        'relative_path',
-        'migration_path',
-        'seed_class',
-        'sample_data_class',
-        'count_tenants_active',
-        'count_tenants',
-        'activated_at',
         'is_active',
-        'is_deactivated_at',
+        'last_migrated_at',
+        'last_seeded_at',
         'notes',
+        'meta',
         'created_by',
         'updated_by',
         'deleted_by',
@@ -127,6 +118,18 @@ class AppV3 extends VaahModel
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
     }
 
+    public function saasTenant(){
+        return $this->belongsTo(TenantV3::class,
+            'vh_saas_tenant_id', 'id'
+        )->select('id','name','slug');
+    }
+
+    public function saasApp(){
+        return $this->belongsTo(AppV3::class,
+            'vh_saas_app_id', 'id'
+        )->select('id','name','slug');
+    }
+
     //-------------------------------------------------
     public function getTableColumns()
     {
@@ -162,6 +165,7 @@ class AppV3 extends VaahModel
     //-------------------------------------------------
     public static function createItem($request)
     {
+
         $inputs = $request->all();
 
         $validation = self::validation($inputs);
@@ -188,32 +192,6 @@ class AppV3 extends VaahModel
             $response['success'] = false;
             $response['messages'][] = $error_message;
             return $response;
-        }
-
-        if(!isset($inputs['version']))
-        {
-            $composer_path = base_path($inputs['relative_path']).'/composer.json';
-
-            if(!\File::exists($composer_path))
-            {
-                $response['success'] = false;
-                $response['errors'][] = 'composer.json does not exist at '.$composer_path;
-
-                return $response;
-            }
-
-            $composer = json_decode(file_get_contents($composer_path), true);
-
-            if(!isset($composer['version']))
-            {
-                $response['success'] = false;
-                $response['errors'][] = 'version variable does not exist in composer.json at '.$composer_path;
-
-                return $response;
-            }
-
-            $inputs['version'] = $composer['version'];
-            $inputs['version_number'] = (int) filter_var($inputs['version'] , FILTER_SANITIZE_NUMBER_INT);
         }
 
         $item = new self();
@@ -312,18 +290,11 @@ class AppV3 extends VaahModel
     //-------------------------------------------------
     public static function getList($request)
     {
-
-
-        if ($request->has('recount') && $request->recount == true) {
-
-            App::recountRelations();
-            Tenant::recountRelations();
-        }
-
         $list = self::getSorted($request->filter);
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);
         $list->searchFilter($request->filter);
+        $list->with(['saasTenant','saasApp']);
 
         $rows = config('vaahcms.per_page');
 
@@ -501,7 +472,7 @@ class AppV3 extends VaahModel
     {
 
         $item = self::where('id', $id)
-            ->with(['createdByUser', 'updatedByUser', 'deletedByUser'])
+            ->with(['saasTenant','saasApp','createdByUser', 'updatedByUser', 'deletedByUser'])
             ->withTrashed()
             ->first();
 
@@ -582,6 +553,9 @@ class AppV3 extends VaahModel
     {
         switch($type)
         {
+            case 'sync-tenant-apps':
+                TenantAppV3::syncTenantApps();
+                break;
             case 'activate':
                 self::where('id', $id)
                     ->withTrashed()
@@ -613,12 +587,6 @@ class AppV3 extends VaahModel
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
-            'relative_path' => 'required|max:150',
-            'migration_path' => 'max:150',
-            'seed_class' => 'max:150',
-            'sample_data_class' => 'max:150',
-            'excerpt' => 'max:255',
-            'notes' => 'max:255',
         );
 
         $validator = \Validator::make($inputs, $rules);
@@ -696,29 +664,14 @@ class AppV3 extends VaahModel
 
     //-------------------------------------------------
 
-    public static function syncAppsWithTenants()
+    public static function syncTenantApps()
     {
-        $all_apps = AppV3::select('id', 'version', 'version_number')->get();
+        AppV3::syncAppsWithTenants();
+        $response['status'] = 'success';
+        $response['data'] = [];
+        $response['messages'][] = 'Action was successful';
 
-        if(!$all_apps)
-        {
-            return false;
-        }
-
-        foreach ($all_apps as $app)
-        {
-            $pivots = [
-                'version' => $app->version,
-                'version_number' => $app->version_number,
-            ];
-
-            $pivotData = array_fill(0, count($all_tenants), $pivots);
-            $syncData  = array_combine($all_tenants, $pivotData);
-
-            $app->tenants()->syncWithoutDetaching($syncData);
-
-        }
-
+        return $response;
     }
     //-------------------------------------------------
     //-------------------------------------------------
