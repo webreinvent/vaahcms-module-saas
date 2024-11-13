@@ -89,7 +89,7 @@ const toggleCreateMenu = (event) => {
 
                         <div class="flex flex-row">
                             <div >
-                                <b class="mr-1">TenantAppsV3</b>
+                                <b class="mr-1">Tenant's Apps V3</b>
                                 <Badge v-if="store.list && store.list.total > 0"
                                        :value="store.list.total">
                                 </Badge>
