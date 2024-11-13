@@ -3,6 +3,7 @@
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Faker\Factory;
 use WebReinvent\VaahCms\Models\VaahModel;
@@ -54,6 +55,35 @@ class ServerV3 extends VaahModel
     protected $appends = [
     ];
 
+    public function setPasswordAttribute($value)
+    {
+        if($value)
+        {
+            $this->attributes['password'] = Crypt::encrypt($value);
+        }
+    }
+    //-------------------------------------------------
+    public function setMetaAttribute($value)
+    {
+
+        if(isset($value['cpanel_api_token']))
+        {
+            $value['cpanel_api_token'] = \Crypt::encrypt($value['cpanel_api_token']);
+        }
+
+        if(isset($value['password']))
+        {
+            $value['password'] = \Crypt::encrypt($value['password']);
+        }
+
+        $this->attributes['meta'] = json_encode($value);
+    }
+    //-------------------------------------------------
+    public function getMetaAttribute($value)
+    {
+        return json_decode($value);
+    }
+
     //-------------------------------------------------
     protected function serializeDate(DateTimeInterface $date)
     {
@@ -91,7 +121,19 @@ class ServerV3 extends VaahModel
         foreach ($fillable as $column)
         {
             $empty_item[$column] = null;
-        }
+            if($column == 'meta'){
+                $empty_item[$column] = [
+                    "cpanel_domain" => null,
+                    "cpanel_api_token" => null,
+                    "cpanel_username" => null,
+                    "protocol" => "https",
+                    "port" => 2083,
+                    "ssl_key_path" => null,
+                    "cert_path" => null,
+                    "ssl_ca_path" => null
+                ];
+                }
+            }
 
         $empty_item['is_active'] = 1;
 

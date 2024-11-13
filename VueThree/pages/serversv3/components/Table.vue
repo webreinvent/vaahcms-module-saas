@@ -41,6 +41,16 @@ const useVaah = vaah();
 
             </Column>
 
+            <Column field="slug" header="Slug"
+                    class="overflow-wrap-anywhere"
+                    :sortable="true">
+
+                <template #body="prop">
+                    {{prop.data.slug}}
+                </template>
+
+            </Column>
+
 
             <Column field="updated_at" header="Updated"
                     v-if="store.isListView() && !store.isMobile"

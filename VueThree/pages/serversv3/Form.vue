@@ -220,6 +220,24 @@ const toggleFormMenu = (event) => {
                                v-model="store.item.meta.cpanel_api_token"
                                placeholder="Enter CPanel API Token"/>
                 </div>
+                <div class="p-field p-col-12">
+                    <label for="cpanelUserName">CPanel Username</label>
+                    <InputText id="cpanelUserName"
+                               v-model="store.item.meta.cpanel_username"
+                               placeholder="Enter CPanel Username"/>
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="cpanelprotocol">CPanel Protocol</label>
+                    <InputText id="cpanelprotocol"
+                               v-model="store.item.meta.protocol"
+                               placeholder="Enter CPanel Protocol"/>
+                </div>
+                <div class="p-field p-col-12">
+                    <label for="cpanelport">CPanel Port</label>
+                    <InputText id="cpanelport"
+                               v-model="store.item.meta.port"
+                               placeholder="Enter CPanel Port"/>
+                </div>
             </div>
 
 
