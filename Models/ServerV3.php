@@ -516,6 +516,20 @@ class ServerV3 extends VaahModel
             $response['errors'][] = 'Record not found with ID: '.$id;
             return $response;
         }
+        if(!$item->meta){
+//            setting default value for cpanel data
+            $item->meta = [
+                "cpanel_domain" => null,
+                "cpanel_api_token" => null,
+                "cpanel_username" => null,
+                "protocol" => "https",
+                "port" => 2083,
+                "ssl_key_path" => null,
+                "cert_path" => null,
+                "ssl_ca_path" => null
+            ];
+        }
+
         $response['success'] = true;
         $response['data'] = $item;
 
