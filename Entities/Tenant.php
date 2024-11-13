@@ -265,6 +265,7 @@ class Tenant extends VaahModel {
     public static function createItem($request)
     {
 
+
         $inputs = $request->new_item;
 
         $validation = static::validation($inputs);

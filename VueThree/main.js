@@ -18,10 +18,12 @@ import StyleClass from 'primevue/styleclass';
 import Toast from 'primevue/toast';
 import ToastService from 'primevue/toastservice';
 import Tooltip from 'primevue/tooltip';
-
 import Menubar from "primevue/menubar";
 import Select from "primevue/select";
 import InputNumber from "primevue/inputnumber";
+import AutoComplete from "primevue/autocomplete";
+import Password from "primevue/password";
+
 
 import Textarea from 'primevue/textarea';
 
@@ -123,8 +125,9 @@ app.component('ToggleButton', ToggleButton);
 app.component('Menubar', Menubar);
 app.component('Select', Select);
 app.component('InputNumber', InputNumber);
+app.component('AutoComplete', AutoComplete);
+app.component('Password', Password);
 app.component('Textarea', Textarea);
-
 
 //-------------/CRUD PrimeVue Use
 
