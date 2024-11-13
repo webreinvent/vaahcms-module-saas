@@ -30,12 +30,7 @@ const items = ref([
             label: 'ServerV3',
             icon: 'fa-regular fa-chart-bar',
             route: "/serversv3"
-        },
-        {
-            label: 'ServerV3',
-            icon: 'fa-regular fa-chart-bar',
-            route: "/serversv3"
-        },
+        }
     ]
   },
 ]);
