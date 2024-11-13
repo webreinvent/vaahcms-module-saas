@@ -314,6 +314,11 @@ class TenantV3 extends VaahModel
     //-------------------------------------------------
     public static function getList($request)
     {
+        if ($request->has('recount') && $request->recount == true) {
+
+            App::recountRelations();
+            Tenant::recountRelations();
+        }
         $list = self::getSorted($request->filter);
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);
