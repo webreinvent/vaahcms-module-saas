@@ -45,9 +45,12 @@ const props = defineProps({
       <td colspan="2" >
 
         <template v-if="typeof value === 'object' && value !== null">
-          <Button  @click="vaah().copy(value.id)"  class="p-button-outlined p-button-secondary p-button-sm">
+          <Button  @click="vaah().copy(value.id)"  class="p-button-outlined p-button-secondary p-button-sm" v-if="value.name">
             {{value.name}}
           </Button>
+            <span v-else>
+                <template v-for="(val,index) in value"><tr><td :style="{width: label_width}"><b>{{vaah().toLabel(index)}}</b></td> {{val}}</tr></template>
+            </span>
         </template>
 
       </td>
