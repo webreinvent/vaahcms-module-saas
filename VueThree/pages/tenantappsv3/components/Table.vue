@@ -63,8 +63,12 @@ const useVaah = vaah();
                     :sortable="true">
 
                 <template #body="prop">
-                    {{prop.data.version_number}}
+                    <Badge style="background-color: lightgrey; color: black;">
+                        {{prop.data.version}} / {{prop.data.version}}
+                    </Badge>
+
                 </template>
+
 
             </Column>
 
