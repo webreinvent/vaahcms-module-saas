@@ -68,8 +68,7 @@ export const useServerV3Store = defineStore({
         form_menu_list: [],
         window_width: 0,
         screen_size: null,
-        float_label_variants: 'on',
-        new_item: null
+        float_label_variants: 'on'
     }),
     getters: {
         isMobile: (state) => {
@@ -1019,7 +1018,7 @@ export const useServerV3Store = defineStore({
         async connect() {
 
             this.params = {
-                new_item: this.item
+                item: this.item
             };
 
             let url = this.ajax_url+'/connect';

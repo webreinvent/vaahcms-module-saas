@@ -243,7 +243,7 @@ class ServersV3Controller extends Controller
             'password' => 'nullable'
         );
 
-        $validator = \Validator::make( $request->new_item, $rules);
+        $validator = \Validator::make( $request->item, $rules);
         if ( $validator->fails() ) {
 
             $errors             = errorsToArray($validator->errors());
@@ -253,7 +253,7 @@ class ServersV3Controller extends Controller
         }
 
         // Modify keys
-        $updatedData = collect($request->new_item)->mapWithKeys(function ($value, $key) {
+        $updatedData = collect($request->item)->mapWithKeys(function ($value, $key) {
             if ($key === 'username') {
                 return ['database_username' => $value];
             }elseif ($key === 'password'){
@@ -266,10 +266,10 @@ class ServersV3Controller extends Controller
         });
 
         // Merge back the updated data into the request
-        $request->new_item = $updatedData->toArray();
+        $request->item = $updatedData->toArray();
 
         $item = new ServerV3();
-        $item->fill($request->new_item);
+        $item->fill($request->item);
 
         $db_manager = new DatabaseManager($item);
         $response = $db_manager->testServerConnection();
