@@ -2,6 +2,7 @@ import {watch} from 'vue'
 import {acceptHMRUpdate, defineStore} from 'pinia'
 import qs from 'qs'
 import {vaah} from '../vaahvue/pinia/vaah'
+import {useTenantAppV3Store} from "./store-tenantappsv3";
 
 let model_namespace = 'VaahCms\\Modules\\Saas\\Models\\TenantV3';
 
@@ -1090,6 +1091,12 @@ export const useTenantStore = defineStore({
             {
                 this.screen_size = 'large';
             }
+        },
+        //---------------------------------------------------------------------
+        async getItemTenants (item) {
+            useTenantAppV3Store().query.filter.q= await item.name;
+            console.log(123,useTenantAppV3Store().query.filter.q);
+            this.$router.push({name: 'tenantappsv3.index', query:{q:item.name}})
         },
         //---------------------------------------------------------------------
     }

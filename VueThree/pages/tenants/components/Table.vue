@@ -58,7 +58,13 @@ const useVaah = vaah();
                     :sortable="true">
 
                 <template #body="prop">
-                    <Badge severity="primary">
+                    <Badge
+                        severity="primary"
+                        v-tooltip="'View Apps'"
+                        @click="store.getItemTenants(prop.data)"
+                        style="cursor: pointer"
+                    >
+
                         {{ (prop.data.count_apps_active || prop.data.count_apps) ?
                         `${prop.data.count_apps_active || 0} / ${prop.data.count_apps || 0}` :
                         '0 / 0' }}
