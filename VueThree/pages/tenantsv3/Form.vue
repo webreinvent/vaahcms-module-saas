@@ -277,13 +277,13 @@ const toggleFormMenu = (event) => {
 
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
-    <textarea class="w-full"
+    <Textarea class="w-full"
               name="tenantsv3-notes"
               data-testid="tenantsv3-notes"
               id="tenantsv3-notes"
               maxlength="200"
               v-model="store.item.notes"
-              required></textarea>
+              required></Textarea>
                 <label for="tenantsv3-notes">Enter notes</label>
             </FloatLabel>
             <div class="flex items-center gap-2 my-3" >
