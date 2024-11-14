@@ -176,7 +176,7 @@ class AppV3 extends VaahModel
         if ($item) {
             $error_message = "This name is already exist".($item->deleted_at?' in trash.':'.');
             $response['success'] = false;
-            $response['messages'][] = $error_message;
+            $response['errors'][] = $error_message;
             return $response;
         }
 
@@ -186,7 +186,7 @@ class AppV3 extends VaahModel
         if ($item) {
             $error_message = "This slug is already exist".($item->deleted_at?' in trash.':'.');
             $response['success'] = false;
-            $response['messages'][] = $error_message;
+            $response['errors'][] = $error_message;
             return $response;
         }
 

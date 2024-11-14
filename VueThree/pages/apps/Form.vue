@@ -1,13 +1,13 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
 import { useRootStore } from '@/stores/root'
-import { useAppV3Store } from '@/stores/store-appsv3'
+import { useAppStore } from '../../stores/store-apps'
 
 import {useRoute} from 'vue-router';
 
 
 const root = useRootStore();
-const store = useAppV3Store();
+const store = useAppStore();
 const route = useRoute();
 
 onMounted(async () => {
@@ -62,14 +62,14 @@ const toggleFormMenu = (event) => {
                 <Button class="p-button-sm"
                         v-tooltip.left="'View'"
                         v-if="store.item && store.item.id"
-                        data-testid="appsv3-view_item"
+                        data-testid="apps-view_item"
                         @click="store.toView(store.item)"
                         icon="pi pi-eye"/>
 
                 <Button label="Save"
                         class="p-button-sm"
                         v-if="store.item && store.item.id"
-                        data-testid="appsv3-save"
+                        data-testid="apps-save"
                         @click="store.itemAction('save')"
                         icon="pi pi-save"/>
 
@@ -77,7 +77,7 @@ const toggleFormMenu = (event) => {
                         v-else
                         @click="store.itemAction('create-and-new')"
                         class="p-button-sm"
-                        data-testid="appsv3-create-and-new"
+                        data-testid="apps-create-and-new"
                         icon="pi pi-save"/>
 
 
@@ -86,7 +86,7 @@ const toggleFormMenu = (event) => {
                         type="button"
                         @click="toggleFormMenu"
                         class="p-button-sm"
-                        data-testid="appsv3-form-menu"
+                        data-testid="apps-form-menu"
                         icon="pi pi-angle-down"
                         aria-haspopup="true"/>
 
@@ -98,7 +98,7 @@ const toggleFormMenu = (event) => {
 
                 <Button class="p-button-primary p-button-sm"
                         icon="pi pi-times"
-                        data-testid="appsv3-to-list"
+                        data-testid="apps-to-list"
                         @click="store.toList()">
                 </Button>
             </div>
@@ -124,7 +124,7 @@ const toggleFormMenu = (event) => {
                     <div class="ml-3">
                         <Button label="Restore"
                                 class="p-button-sm"
-                                data-testid="appsv3-item-restore"
+                                data-testid="apps-item-restore"
                                 @click="store.itemAction('restore')">
                         </Button>
                     </div>
@@ -166,84 +166,84 @@ const toggleFormMenu = (event) => {
             <FloatLabel v-if="store.item.app_type !== 'Module'" class="my-3" :variant="store.float_label_variants">
                 <InputText
                     class="w-full"
-                    name="appsv3-name"
-                    data-testid="appsv3-name"
-                    id="appsv3-name"
+                    name="apps-name"
+                    data-testid="apps-name"
+                    id="apps-name"
                     v-model="store.item.name"
                     required
                 />
-                <label for="appsv3-name">Name</label>
+                <label for="apps-name">Name</label>
             </FloatLabel>
 
 
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="appsv3-slug"
-                           data-testid="appsv3-slug"
-                           id="appsv3-slug"
+                           name="apps-slug"
+                           data-testid="apps-slug"
+                           id="apps-slug"
                            v-model="store.item.slug" required/>
-                <label for="appsv3-slug">Slug</label>
+                <label for="apps-slug">Slug</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="appsv3-relative_path"
-                           data-testid="appsv3-relative_path"
-                           id="appsv3-relative_path"
+                           name="apps-relative_path"
+                           data-testid="apps-relative_path"
+                           id="apps-relative_path"
                            v-model="store.item.relative_path" required/>
-                <label for="appsv3-relative-path">Relative Path</label>
+                <label for="apps-relative-path">Relative Path</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="appsv3-migration_path"
-                           data-testid="appsv3-migration_path"
-                           id="appsv3-migration_path"
+                           name="apps-migration_path"
+                           data-testid="apps-migration_path"
+                           id="apps-migration_path"
                            v-model="store.item.migration_path" required/>
-                <label for="appsv3-migration-path">Migration Path</label>
+                <label for="apps-migration-path">Migration Path</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="appsv3-seed_class"
-                           data-testid="appsv3-seed_class"
-                           id="appsv3-seed_class"
+                           name="apps-seed_class"
+                           data-testid="apps-seed_class"
+                           id="apps-seed_class"
                            v-model="store.item.seed_class" required/>
-                <label for="appsv3-seed-class">Seed Class</label>
+                <label for="apps-seed-class">Seed Class</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="appsv3-sample_data_class"
-                           data-testid="appsv3-sample_data_class"
-                           id="appsv3-sample_data_class"
+                           name="apps-sample_data_class"
+                           data-testid="apps-sample_data_class"
+                           id="apps-sample_data_class"
                            v-model="store.item.sample_data_class" required/>
-                <label for="appsv3-sample-data-class">Sample Data Class</label>
+                <label for="apps-sample-data-class">Sample Data Class</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Textarea v-model="store.item.excerpt" rows="5" cols="64"
                             maxlength="200" label="Excerpt"></Textarea>
-                <label for="appsv3-Excerpt">Excerpt</label>
+                <label for="apps-Excerpt">Excerpt</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Textarea v-model="store.item.notes" rows="5" cols="64"
                           maxlength="200" label="notes"></Textarea>
-                <label for="appsv3-notes">Notes</label>
+                <label for="apps-notes">Notes</label>
             </FloatLabel>
 
             <div class="flex items-center gap-2 my-3" >
                 <ToggleSwitch v-bind:false-value="0"
                               v-bind:true-value="1"
                               size="small"
-                              name="appsv3-active"
-                              data-testid="appsv3-active"
-                              inputId="appsv3-active"
+                              name="apps-active"
+                              data-testid="apps-active"
+                              inputId="apps-active"
                               v-model="store.item.is_active"/>
 
-                <label for="appsv3-active">Is Active</label>
+                <label for="apps-active">Is Active</label>
 
 
             </div>
