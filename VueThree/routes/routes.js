@@ -1,17 +1,17 @@
 let routes= [];
 
 import dashboard from "./vue-routes-dashboard";
-import AppsV3 from "./vue-routes-appsv3";
-import TenantV3 from "./vue-routes-tenantsv3";
-import serverv3 from "./vue-routes-serversv3";
-import TenantAppsV3 from "./vue-routes-tenantappsv3";
+import Apps from "./vue-routes-apps";
+import Tenant from "./vue-routes-tenants";
+import server from "./vue-routes-servers";
+import TenantApps from "./vue-routes-tenantapps";
 
-routes = routes.concat(serverv3);
-routes = routes.concat(TenantAppsV3);
+routes = routes.concat(server);
+routes = routes.concat(TenantApps);
 routes = routes.concat(dashboard);
-routes = routes.concat(TenantV3);
+routes = routes.concat(Tenant);
 routes = routes.concat(dashboard);
-routes = routes.concat(AppsV3);
+routes = routes.concat(Apps);
 
 
 export default routes;

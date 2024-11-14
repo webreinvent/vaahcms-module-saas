@@ -294,7 +294,32 @@ class TenantAppV3 extends VaahModel
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);
         $list->searchFilter($request->filter);
-        $list->with(['saasTenant','saasApp']);
+        $list->with(['saasTenant','saasApp'])->has('saasApp');
+
+        if(isset($request->q))
+        {
+            if(isset($request['search_by']) && $request['search_by'])
+            {
+                if($request['search_by'] == 'tenent'){
+                    $list->whereHas('saasTenant', function ($tenant) use ($request) {
+                        $tenant->where('name', 'like',  '%'.$request->q.'%');
+                    });
+                }elseif($request['search_by'] == 'app'){
+                    $list->whereHas('saasApp', function ($app) use ($request) {
+                        $app->where('name', 'like',  '%'.$request->q.'%');
+                    });
+                }
+
+            }else{
+                $list->whereHas('saasTenant', function ($tenant) use ($request) {
+                    $tenant->where('name', 'like',  '%'.$request->q.'%');
+                });
+
+                $list->orWhereHas('saasApp', function ($app) use ($request) {
+                    $app->where('name', 'like',  '%'.$request->q.'%');
+                });
+            }
+        }
 
         $rows = config('vaahcms.per_page');
 
