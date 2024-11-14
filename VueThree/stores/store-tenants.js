@@ -2,7 +2,6 @@ import {watch} from 'vue'
 import {acceptHMRUpdate, defineStore} from 'pinia'
 import qs from 'qs'
 import {vaah} from '../vaahvue/pinia/vaah'
-import {useTenantAppV3Store} from "./store-tenantappsv3";
 
 let model_namespace = 'VaahCms\\Modules\\Saas\\Models\\TenantV3';
 
