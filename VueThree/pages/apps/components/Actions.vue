@@ -2,9 +2,9 @@
 import {ref, reactive, watch, onMounted} from 'vue';
 import {useRoute} from 'vue-router';
 
-import { useAppV3Store } from '@/stores/store-appsv3'
+import { useAppStore } from '../../../stores/store-apps'
 
-const store = useAppV3Store();
+const store = useAppStore();
 const route = useRoute();
 
 onMounted(async () => {
@@ -41,7 +41,7 @@ const toggleBulkMenuState = (event) => {
                 <Button size="small"
                         type="button"
                         @click="toggleSelectedMenuState"
-                        data-testid="appsv3-actions-menu"
+                        data-testid="apps-actions-menu"
                         aria-haspopup="true"
                         aria-controls="overlay_menu">
                     <i class="pi pi-angle-down"></i>
@@ -65,19 +65,19 @@ const toggleBulkMenuState = (event) => {
                                size="small"
                                @keyup.enter.native="store.delayedSearch()"
                                @keyup.13="store.delayedSearch()"
-                               data-testid="appsv3-actions-search"
+                               data-testid="apps-actions-search"
                                placeholder="Search"/>
                     <Button @click="store.delayedSearch()"
                             size="small"
-                            data-testid="appsv3-actions-search-button"
+                            data-testid="apps-actions-search-button"
                             icon="pi pi-search"/>
                     <Button v-if="!store.isMobile"
                             as="router-link"
-                            :to="`/appsv3/filters`"
+                            :to="`/apps/filters`"
                             type="button"
                             size="small"
                             :disabled="Object.keys(route.params).length"
-                            data-testid="appsv3-actions-show-filters"
+                            data-testid="apps-actions-show-filters"
                     >
                         <span style="font-weight: var(--p-button-label-font-weight);" >Filters</span>
                         <Badge v-if="store.count_filters > 0" :value="store.count_filters"></Badge>
@@ -86,7 +86,7 @@ const toggleBulkMenuState = (event) => {
                     <Button
                             type="button"
                             icon="pi pi-filter-slash"
-                            data-testid="appsv3-actions-reset-filters"
+                            data-testid="apps-actions-reset-filters"
                             size="small"
                             :label="store?.isMobile ? '' : 'Reset'"
                             @click="store.resetQuery()" />
@@ -97,7 +97,7 @@ const toggleBulkMenuState = (event) => {
                             size="small"
                             @click="toggleBulkMenuState"
                             severity="danger" outlined
-                            data-testid="appsv3-actions-bulk-menu"
+                            data-testid="apps-actions-bulk-menu"
                             aria-haspopup="true"
                             aria-controls="bulk_menu_state"
                     >

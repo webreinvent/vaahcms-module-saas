@@ -17,24 +17,24 @@ const items = ref([
         {
             label: 'Tenants',
             icon: 'fas fa-users',
-            route: "/tenantsv3"
+            route: "/tenants"
         },
         {
 
             label: 'Tenant\'s Apps',
             icon: 'fa-solid fa-briefcase',
-            route: "/tenantappsv3"
+            route: "/tenantapps"
         },
         {
             label: 'Apps',
             icon: 'fa-brands fa-app-store',
-            route: "/appsv3"
+            route: "/apps"
 
         },
         {
-            label: 'ServerV3',
+            label: 'Server',
             icon: 'fa-solid fa-server',
-            route: "/serversv3"
+            route: "/servers"
         }
     ]
   },
