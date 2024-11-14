@@ -60,6 +60,7 @@ const useVaah = vaah();
                     <Badge severity="primary"
                            v-tooltip="'View Tenants'"
                            @click="store.getItemTenants(prop.data)"
+                           style="cursor: pointer"
                     >
                         {{ prop.data.count_tenants_active }} / {{ prop.data.count_tenants }}
                     </Badge>
