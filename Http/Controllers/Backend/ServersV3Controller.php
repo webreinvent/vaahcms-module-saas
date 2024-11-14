@@ -33,9 +33,19 @@ class ServersV3Controller extends Controller
             $data['fillable']['columns'] = ServerV3::getFillableColumns();
             $data['fillable']['except'] = ServerV3::getUnFillableColumns();
             $data['empty_item'] = ServerV3::getEmptyItem();
-            $data['host_types'] = Taxonomy::getTaxonomyByType('server-host-type');
-            $data['drivers'] = Taxonomy::getTaxonomyByType('database-driver');
-            $data['database_sslmodes'] = Taxonomy::getTaxonomyByType('database-ssl-mode');
+            $data['host_types'] = [
+              ['name'=>'MySql','value'=>'mysql'],
+                ['name'=>'CPanel MySql','value'=>'cpanel-mysql'],
+                ['name'=>'DigitalOcean MySql','value'=>'digitalocean-mysql'],
+            ];
+            $data['drivers'] = [
+              ['name'=>'MySql','value'=>'mysql']
+            ];
+            $data['database_sslmodes'] = [
+              ['name'=>'Disable','value'=>'disable'],
+              ['name'=>'Require','value'=>'require'],
+              ['name'=>'Prefer','value'=>'prefer']
+            ];
 
             $data['actions'] = [];
 

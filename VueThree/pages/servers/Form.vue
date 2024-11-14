@@ -155,8 +155,9 @@ const toggleFormMenu = (event) => {
                         v-model="store.item.host_type"
                         :options="store.assets.host_types"
                         optionLabel="name"
-                        optionValue="name"
+                        optionValue="value"
                         class="w-full md:w-56" />
+
                 <label for="hostType">Server Host Type</label>
             </FloatLabel>
 
@@ -166,7 +167,7 @@ const toggleFormMenu = (event) => {
                         v-model="store.item.driver"
                         :options="store.assets.drivers"
                         optionLabel="name"
-                        optionValue="name"
+                        optionValue="value"
                         class="w-full md:w-56" />
                 <label for="driver">Database Driver</label>
             </FloatLabel>
@@ -247,7 +248,7 @@ const toggleFormMenu = (event) => {
                         v-model="store.item.sslmode"
                         :options="store.assets.database_sslmodes"
                         optionLabel="name"
-                        optionValue="name"
+                        optionValue="value"
                         class="w-full md:w-56"/>
                 <label for="sslMode">Database SSL Mode</label>
             </FloatLabel>

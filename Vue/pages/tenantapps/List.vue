@@ -108,7 +108,7 @@
                                     <div class="level-right">
 
                                         <div class="level-item">
-
+                                            {{query_string.search_by}}
                                             <b-field>
                                                 <p class="control">
                                                     <b-dropdown v-model="query_string.search_by" @input="getList">
