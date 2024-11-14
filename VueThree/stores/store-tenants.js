@@ -7,7 +7,7 @@ let model_namespace = 'VaahCms\\Modules\\Saas\\Models\\TenantV3';
 
 
 let base_url = document.getElementsByTagName('base')[0].getAttribute("href");
-let ajax_url = base_url + "/saas/tenants";
+let ajax_url = base_url + "/saas/tenantsv3";
 
 let empty_states = {
     query: {
