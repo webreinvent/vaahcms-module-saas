@@ -3,11 +3,11 @@ import {acceptHMRUpdate, defineStore} from 'pinia'
 import qs from 'qs'
 import {vaah} from '../vaahvue/pinia/vaah'
 
-let model_namespace = 'VaahCms\\Modules\\Saas\\Models\\AppV3';
+let model_namespace = 'VaahCms\\Modules\\Saas\\Models\\TenantV3';
 
 
 let base_url = document.getElementsByTagName('base')[0].getAttribute("href");
-let ajax_url = base_url + "/saas/appsv3";
+let ajax_url = base_url + "/saas/tenants";
 
 let empty_states = {
     query: {
@@ -26,8 +26,8 @@ let empty_states = {
     }
 };
 
-export const useAppV3Store = defineStore({
-    id: 'appsv3',
+export const useTenantStore = defineStore({
+    id: 'tenants',
     state: () => ({
         base_url: base_url,
         ajax_url: ajax_url,
@@ -38,6 +38,17 @@ export const useAppV3Store = defineStore({
         rows_per_page: [10,20,30,50,100,500],
         list: null,
         item: null,
+        path: null,
+        domain: null,
+        sub_domain: null,
+        database_name: null,
+        database_username: null,
+        database_password: null,
+        database_sslmode: null,
+        database_charset: 'utf8mb4',
+        database_collation: 'utf8mb4_unicode_ci',
+        notes: null,
+        is_active: null,
         fillable:null,
         empty_query:empty_states.query,
         empty_action:empty_states.action,
@@ -47,9 +58,19 @@ export const useAppV3Store = defineStore({
             delay_time: 600, // time delay in milliseconds
             delay_timer: 0 // time delay in milliseconds
         },
+        server_suggestions:null,
+        query_string: {
+            page: 1,
+            q: null,
+            trashed: null,
+            filter: null,
+            sort_by: null,
+            sort_order: 'desc',
+            search_by: null,
+        },
         route: null,
         watch_stopper: null,
-        route_prefix: 'appsv3.',
+        route_prefix: 'tenants.',
         view: 'large',
         show_filters: false,
         list_view_width: 12,
@@ -68,7 +89,23 @@ export const useAppV3Store = defineStore({
         form_menu_list: [],
         window_width: 0,
         screen_size: null,
+        meta: {
+
+            ssl_key_path: null,
+            ssl_cert_path: null,
+            ssl_ca_path: null,
+
+        },
+        vh_saas_server_id: null,
         float_label_variants: 'on',
+        servers: [
+            { id: 1, name: 'Server 1'},
+            { id: 2, name: 'Server 2'},
+            { id: 3, name: 'Server 3'},
+            { id: 4, name: 'Server 4'},
+
+        ],
+
 
     }),
     getters: {
@@ -130,6 +167,9 @@ export const useAppV3Store = defineStore({
         },
     },
     actions: {
+        updateServerId(selected) {
+            this.selectedServer = selected;
+        },
         //---------------------------------------------------------------------
         async onLoad(route)
         {
@@ -163,13 +203,13 @@ export const useAppV3Store = defineStore({
 
             this.view = 'list';
 
-            if(route_name.includes('appsv3.view')
-                || route_name.includes('appsv3.form')
+            if(route_name.includes('tenants.view')
+                || route_name.includes('tenants.form')
             ){
                 this.view = 'list-and-item';
             }
 
-            if(route_name.includes('appsv3.filters')){
+            if(route_name.includes('tenants.filters')){
                 this.view = 'list-and-filters';
             }
 
@@ -281,8 +321,14 @@ export const useAppV3Store = defineStore({
                 this.afterGetList,
                 options
             );
-        },
 
+            if (recount) {
+
+                let url = new URL(window.location);
+                url.searchParams.delete("recount");
+                window.history.pushState({}, "", url.toString());
+            }
+        },
         //---------------------------------------------------------------------
         afterGetList: function (data, res)
         {
@@ -308,7 +354,7 @@ export const useAppV3Store = defineStore({
             {
                 this.item = data;
             }else{
-                this.$router.push({name: 'appsv3.index',query:this.query});
+                this.$router.push({name: 'tenants.index',query:this.query});
             }
             await this.getItemMenu();
             await this.getFormMenu();
@@ -441,7 +487,9 @@ export const useAppV3Store = defineStore({
                 case 'create-and-close':
                 case 'create-and-clone':
                     options.method = 'POST';
+                    item.vh_saas_server_id= this.selected_server?.id
                     options.params = item;
+                    ajax_url += '/create'
                     break;
 
                 /**
@@ -504,12 +552,12 @@ export const useAppV3Store = defineStore({
                 case 'create-and-close':
                 case 'save-and-close':
                     this.setActiveItemAsEmpty();
-                    this.$router.push({name: 'appsv3.index',query:this.query});
+                    this.$router.push({name: 'tenants.index',query:this.query});
                     break;
                 case 'save-and-clone':
                 case 'create-and-clone':
                     this.item.id = null;
-                    this.$router.push({name: 'appsv3.form',query:this.query,params: { id: null }});
+                    this.$router.push({name: 'tenants.form',query:this.query,params: { id: null }});
                     await this.getFormMenu();
                     break;
                 case 'trash':
@@ -647,6 +695,28 @@ export const useAppV3Store = defineStore({
 
         },
         //---------------------------------------------------------------------
+
+        async searchServer(event) {
+            console.log('hello');
+            const query = event;
+            const options = {
+                params: query,
+                method: 'post',
+            };
+
+            await vaah().ajax(
+                this.ajax_url + '/server',
+                this.searchServerAfter,
+                options
+            );
+        },
+     //---------------------------------------------------------------------
+        searchServerAfter(data, res) {
+            if (data) {
+                this.server_suggestions = data;
+            }
+        },
+        //---------------------------------------------------------------------
         countFilters: function (query)
         {
             this.count_filters = 0;
@@ -684,20 +754,20 @@ export const useAppV3Store = defineStore({
         //---------------------------------------------------------------------
         closeForm()
         {
-            this.$router.push({name: 'appsv3.index',query:this.query})
+            this.$router.push({name: 'tenants.index',query:this.query})
         },
         //---------------------------------------------------------------------
         toList()
         {
             this.item = vaah().clone(this.assets.empty_item);
-            this.$router.push({name: 'appsv3.index',query:this.query})
+            this.$router.push({name: 'tenants.index',query:this.query})
         },
         //---------------------------------------------------------------------
         toForm()
         {
             this.item = vaah().clone(this.assets.empty_item);
             this.getFormMenu();
-            this.$router.push({name: 'appsv3.form',query:this.query})
+            this.$router.push({name: 'tenants.form',query:this.query})
         },
         //---------------------------------------------------------------------
         toView(item)
@@ -705,7 +775,7 @@ export const useAppV3Store = defineStore({
             if(!this.item || !this.item.id || this.item.id !== item.id){
                 this.item = vaah().clone(item);
             }
-            this.$router.push({name: 'appsv3.view', params:{id:item.id},query:this.query})
+            this.$router.push({name: 'tenants.view', params:{id:item.id},query:this.query})
         },
         //---------------------------------------------------------------------
         toEdit(item)
@@ -713,7 +783,7 @@ export const useAppV3Store = defineStore({
             if(!this.item || !this.item.id || this.item.id !== item.id){
                 this.item = vaah().clone(item);
             }
-            this.$router.push({name: 'appsv3.form', params:{id:item.id},query:this.query})
+            this.$router.push({name: 'tenants.form', params:{id:item.id},query:this.query})
         },
         //---------------------------------------------------------------------
         isListView()
@@ -986,6 +1056,14 @@ export const useAppV3Store = defineStore({
                 ];
             }
 
+            form_menu.push({
+                label: 'Fill',
+                icon: 'pi pi-pencil',
+                command: () => {
+                    this.getFormInputs();
+                }
+            },)
+
             this.form_menu_list = form_menu;
 
         },
@@ -1013,54 +1091,13 @@ export const useAppV3Store = defineStore({
                 this.screen_size = 'large';
             }
         },
-        //-----------------------------VUE 3 UPGRADE----------------------------------------
-
-
-        setNewItemValues() {
-            let new_item = this.item;
-            console.log('--->', new_item);
-
-
-            if (!new_item || !new_item.name || typeof new_item.name !== 'string') {
-                console.error('Invalid new_item.name:', new_item.name);
-                return;
-            }
-
-
-            let module = vaah().findInArrayByKey(this.assets.modules, 'name', new_item.name);
-
-
-            if (module) {
-                if (typeof module === 'object' && Object.keys(module).length > 0) {
-                    for (let key in module) {
-                        if (new_item.hasOwnProperty(key)) {
-                            new_item[key] = module[key];
-                        } else {
-                            console.warn(`Key ${key} not found in new_item.`);
-                        }
-                    }
-                } else {
-                    console.error('Invalid module data:', module);
-                }
-
-                new_item.slug = new_item.name ? new_item.name.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '') : '';
-
-            } else {
-                console.error('Module not found for name:', new_item.name);
-            }
-
-            console.log('---> new_item after update', new_item);
-        },
-
-        getItemTenants(data) {
-            this.$router.push({ name: 'tenantappsv3.index', query: { search_by: 'app', filter: {q: data.name }} });
-        }
-    },
-    });
+        //---------------------------------------------------------------------
+    }
+});
 
 
 
 // Pinia hot reload
 if (import.meta.hot) {
-    import.meta.hot.accept(acceptHMRUpdate(useAppV3Store, import.meta.hot))
+    import.meta.hot.accept(acceptHMRUpdate(useTenantStore, import.meta.hot))
 }

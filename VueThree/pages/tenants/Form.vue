@@ -1,13 +1,13 @@
 <script setup>
 import {onMounted, ref, watch} from "vue";
 import { useRootStore } from '@/stores/root'
-import { useTenantV3Store } from '@/stores/store-tenantsv3'
+import { useTenantStore } from '../../stores/store-tenants'
 
 import {useRoute} from 'vue-router';
 
 
 const root = useRootStore();
-const store = useTenantV3Store();
+const store = useTenantStore();
 const route = useRoute();
 
 onMounted(async () => {
@@ -61,14 +61,14 @@ const toggleFormMenu = (event) => {
                 <Button class="p-button-sm"
                         v-tooltip.left="'View'"
                         v-if="store.item && store.item.id"
-                        data-testid="tenantsv3-view_item"
+                        data-testid="tenants-view_item"
                         @click="store.toView(store.item)"
                         icon="pi pi-eye"/>
 
                 <Button label="Save"
                         class="p-button-sm"
                         v-if="store.item && store.item.id"
-                        data-testid="tenantsv3-save"
+                        data-testid="tenants-save"
                         @click="store.itemAction('save')"
                         icon="pi pi-save"/>
 
@@ -76,7 +76,7 @@ const toggleFormMenu = (event) => {
                         v-else
                         @click="store.itemAction('create-and-new')"
                         class="p-button-sm"
-                        data-testid="tenantsv3-create-and-new"
+                        data-testid="tenants-create-and-new"
                         icon="pi pi-save"/>
 
 
@@ -85,7 +85,7 @@ const toggleFormMenu = (event) => {
                         type="button"
                         @click="toggleFormMenu"
                         class="p-button-sm"
-                        data-testid="tenantsv3-form-menu"
+                        data-testid="tenants-form-menu"
                         icon="pi pi-angle-down"
                         aria-haspopup="true"/>
 
@@ -97,7 +97,7 @@ const toggleFormMenu = (event) => {
 
                 <Button class="p-button-primary p-button-sm"
                         icon="pi pi-times"
-                        data-testid="tenantsv3-to-list"
+                        data-testid="tenants-to-list"
                         @click="store.toList()">
                 </Button>
             </div>
@@ -124,7 +124,7 @@ const toggleFormMenu = (event) => {
                     <div class="ml-3">
                         <Button label="Restore"
                                 class="p-button-sm"
-                                data-testid="tenantsv3-item-restore"
+                                data-testid="tenants-item-restore"
                                 @click="store.itemAction('restore')">
                         </Button>
                     </div>
@@ -148,90 +148,90 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-name"
-                           data-testid="tenantsv3-name"
-                           id="tenantsv3-name"
+                           name="tenants-name"
+                           data-testid="tenants-name"
+                           id="tenants-name"
                            @update:modelValue="store.watchItem"
                            v-model="store.item.name" required/>
-                <label for="tenantsv3-name">Enter the name</label>
+                <label for="tenants-name">Enter the name</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-slug"
-                           data-testid="tenantsv3-slug"
-                           id="tenantsv3-slug"
+                           name="tenants-slug"
+                           data-testid="tenants-slug"
+                           id="tenants-slug"
                            v-model="store.item.slug" required/>
-                <label for="tenantsv3-slug">Enter the slug</label>
+                <label for="tenants-slug">Enter the slug</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-path"
-                           data-testid="tenantsv3-path"
-                           id="tenantsv3-path"
+                           name="tenants-path"
+                           data-testid="tenants-path"
+                           id="tenants-path"
                            v-model="store.item.path" required/>
-                <label for="tenantsv3-path">Enter the path</label>
+                <label for="tenants-path">Enter the path</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-domain"
-                           data-testid="tenantsv3-domain"
-                           id="tenantsv3-domain"
+                           name="tenants-domain"
+                           data-testid="tenants-domain"
+                           id="tenants-domain"
                            v-model="store.item.domain" required/>
-                <label for="tenantsv3-domain">Enter the domain</label>
+                <label for="tenants-domain">Enter the domain</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-sub_domain"
-                           data-testid="tenantsv3-sub_domain"
-                           id="tenantsv3-sub_domain"
+                           name="tenants-sub_domain"
+                           data-testid="tenants-sub_domain"
+                           id="tenants-sub_domain"
                            v-model="store.item.sub_domain" required/>
-                <label for="tenantsv3-sub_domain">Enter the sub-domain</label>
+                <label for="tenants-sub_domain">Enter the sub-domain</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-database_name"
-                           data-testid="tenantsv3-database_name"
-                           id="tenantsv3-database_name"
+                           name="tenants-database_name"
+                           data-testid="tenants-database_name"
+                           id="tenants-database_name"
                            v-model="store.item.database_name" required/>
-                <label for="tenantsv3-database_name">Enter the database name</label>
+                <label for="tenants-database_name">Enter the database name</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-database_username"
-                           data-testid="tenantsv3-database_username"
-                           id="tenantsv3-database_username"
+                           name="tenants-database_username"
+                           data-testid="tenants-database_username"
+                           id="tenants-database_username"
                            v-model="store.item.database_username" required/>
-                <label for="tenantsv3-database_username">Enter the database username</label>
+                <label for="tenants-database_username">Enter the database username</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <Password
                     class="w-full"
-                    name="tenantsv3-database_password"
-                    data-testid="tenantsv3-database_password"
-                    id="tenantsv3-database_password"
+                    name="tenants-database_password"
+                    data-testid="tenants-database_password"
+                    id="tenants-database_password"
                     v-model="store.item.database_password"
                     feedback
                     toggleMask
                     promptLabel="Enter the database password"
                 />
-                <label for="tenantsv3-database_password">Enter the database password</label>
+                <label for="tenants-database_password">Enter the database password</label>
             </FloatLabel>
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-database_charset"
-                           data-testid="tenantsv3-database_charset"
-                           id="tenantsv3-database_charset"
+                           name="tenants-database_charset"
+                           data-testid="tenants-database_charset"
+                           id="tenants-database_charset"
                            v-model="store.item.database_charset" required/>
-                <label for="tenantsv3-database_charset">Enter the database charset</label>
+                <label for="tenants-database_charset">Enter the database charset</label>
             </FloatLabel>
             <FloatLabel class="my-3" :variant="store.float_label_variants">
                 <InputText class="w-full"
-                           name="tenantsv3-database_collation"
-                           data-testid="tenantsv3-database_collation"
-                           id="tenantsv3-database_collation"
+                           name="tenants-database_collation"
+                           data-testid="tenants-database_collation"
+                           id="tenants-database_collation"
                            v-model="store.item.database_collation" required/>
-                <label for="tenantsv3-database_collation">Enter the database collation</label>
+                <label for="tenants-database_collation">Enter the database collation</label>
             </FloatLabel>
             <!-- Database SSL Mode Selection -->
             <FloatLabel class="my-3" :variant="store.float_label_variants">
@@ -278,24 +278,24 @@ const toggleFormMenu = (event) => {
 
             <FloatLabel class="my-3" :variant="store.float_label_variants">
     <Textarea class="w-full"
-              name="tenantsv3-notes"
-              data-testid="tenantsv3-notes"
-              id="tenantsv3-notes"
+              name="tenants-notes"
+              data-testid="tenants-notes"
+              id="tenants-notes"
               maxlength="200"
               v-model="store.item.notes"
               required></Textarea>
-                <label for="tenantsv3-notes">Enter notes</label>
+                <label for="tenants-notes">Enter notes</label>
             </FloatLabel>
             <div class="flex items-center gap-2 my-3" >
                 <ToggleSwitch v-bind:false-value="0"
                               v-bind:true-value="1"
                               size="small"
-                              name="tenantsv3-active"
-                              data-testid="tenantsv3-active"
-                              inputId="tenantsv3-active"
+                              name="tenants-active"
+                              data-testid="tenants-active"
+                              inputId="tenants-active"
                               v-model="store.item.is_active"/>
 
-                <label for="tenantsv3-active">Is Active</label>
+                <label for="tenants-active">Is Active</label>
             </div>
 
 
