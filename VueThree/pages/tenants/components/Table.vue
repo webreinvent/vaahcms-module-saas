@@ -1,8 +1,8 @@
 <script setup>
 import { vaah } from '@/vaahvue/pinia/vaah'
-import { useTenantV3Store } from '@/stores/store-tenantsv3'
+import { useTenantStore } from '../../../stores/store-tenants'
 
-const store = useTenantV3Store();
+const store = useTenantStore();
 const useVaah = vaah();
 
 </script>
@@ -82,7 +82,7 @@ const useVaah = vaah();
 
                 <template #body="prop">
                     <ToggleSwitch v-model.bool="prop.data.is_active"
-                                  data-testid="tenantsv3-table-is-active"
+                                  data-testid="tenants-table-is-active"
                                   v-bind:false-value="0"  v-bind:true-value="1"
                                   size="small"
                                   variant="success"
@@ -110,19 +110,19 @@ const useVaah = vaah();
                     <div class="p-inputgroup ">
 
                         <Button class="p-button-tiny p-button-text"
-                                data-testid="tenantsv3-table-to-view"
+                                data-testid="tenants-table-to-view"
                                 v-tooltip.top="'View'"
                                 @click="store.toView(prop.data)"
                                 icon="pi pi-eye" />
 
                         <Button class="p-button-tiny p-button-text"
-                                data-testid="tenantsv3-table-to-edit"
+                                data-testid="tenants-table-to-edit"
                                 v-tooltip.top="'Update'"
                                 @click="store.toEdit(prop.data)"
                                 icon="pi pi-pencil" />
 
                         <Button class="p-button-tiny p-button-danger p-button-text"
-                                data-testid="tenantsv3-table-action-trash"
+                                data-testid="tenants-table-action-trash"
                                 v-if="store.isListView() && !prop.data.deleted_at && !store.isMobile"
                                 @click="store.itemAction('trash', prop.data)"
                                 v-tooltip.top="'Trash'"
@@ -130,7 +130,7 @@ const useVaah = vaah();
 
 
                         <Button class="p-button-tiny p-button-success p-button-text"
-                                data-testid="tenantsv3-table-action-restore"
+                                data-testid="tenants-table-action-restore"
                                 v-if="store.isListView() && prop.data.deleted_at && !store.isMobile"
                                 @click="store.itemAction('restore', prop.data)"
                                 v-tooltip.top="'Restore'"

@@ -3,12 +3,12 @@ import {onMounted, ref, watch} from "vue";
 import {useRoute} from 'vue-router';
 
 import { useRootStore } from '@/stores/root'
-import { useTenantV3Store } from '@/stores/store-tenantsv3'
+import { useTenantStore } from '../../stores/store-tenants'
 
 import VhViewRow from '../../vaahvue/components/VhViewRow.vue';
 
 const root = useRootStore();
-const store = useTenantV3Store();
+const store = useTenantStore();
 const route = useRoute();
 
 onMounted(async () => {
@@ -62,7 +62,7 @@ const toggleItemMenu = (event) => {
                 <Button label="Edit"
                         class="p-button-sm"
                         @click="store.toEdit(store.item)"
-                        data-testid="tenantsv3-item-to-edit"
+                        data-testid="tenants-item-to-edit"
                         icon="pi pi-save"/>
 
                 <!--item_menu-->
@@ -70,7 +70,7 @@ const toggleItemMenu = (event) => {
                         type="button"
                         class="p-button-sm"
                         @click="toggleItemMenu"
-                        data-testid="tenantsv3-item-menu"
+                        data-testid="tenants-item-menu"
                         icon="pi pi-angle-down"
                         aria-haspopup="true"/>
 
@@ -81,7 +81,7 @@ const toggleItemMenu = (event) => {
 
                 <Button class="p-button-primary p-button-sm"
                         icon="pi pi-times"
-                        data-testid="tenantsv3-item-to-list"
+                        data-testid="tenants-item-to-list"
                         @click="store.toList()"/>
 
             </div>
@@ -108,7 +108,7 @@ const toggleItemMenu = (event) => {
                     <div class="ml-3">
                         <Button label="Restore"
                                 class="p-button-sm"
-                                data-testid="tenantsv3-item-restore"
+                                data-testid="tenants-item-restore"
                                 @click="store.itemAction('restore')">
                         </Button>
                     </div>

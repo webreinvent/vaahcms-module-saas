@@ -3,14 +3,14 @@ import {onMounted, reactive, ref} from "vue";
 import {useRoute} from 'vue-router';
 
 import {useRootStore} from '@/stores/root'
-import {useTenantV3Store} from '@/stores/store-tenantsv3'
+import { useTenantStore } from '../../stores/store-tenants'
 
 import Actions from "./components/Actions.vue";
 import Table from "./components/Table.vue";
 
 
 const root = useRootStore();
-const store = useTenantV3Store();
+const store = useTenantStore();
 const route = useRoute();
 
 import { useConfirm } from "primevue/useconfirm";
@@ -23,7 +23,7 @@ function handleScreenResize() {
 
 
 onMounted(async () => {
-    document.title = 'TenantsV3 - Saas';
+    document.title = 'Tenants - Saas';
 
     window.addEventListener('resize', handleScreenResize);
 
@@ -89,7 +89,7 @@ const toggleCreateMenu = (event) => {
 
                         <div class="flex flex-row">
                             <div >
-                                <b class="mr-1">TenantsV3</b>
+                                <b class="mr-1">Tenants</b>
                                 <Badge v-if="store.list && store.list.total > 0"
                                        :value="store.list.total">
                                 </Badge>
@@ -102,7 +102,7 @@ const toggleCreateMenu = (event) => {
                     <template #icons>
 
                         <InputGroup >
-                            <Button data-testid="tenantsv3-list-create"
+                            <Button data-testid="tenants-list-create"
                                     size="small"
                                     icon="pi pi-plus"
                                     label="Create"
@@ -110,7 +110,7 @@ const toggleCreateMenu = (event) => {
 
                             </Button>
 
-                            <Button data-testid="tenantsv3-list-reload"
+                            <Button data-testid="tenants-list-reload"
                                     size="small"
                                     icon="pi pi-refresh"
                                     @click="store.getList(true)">
