@@ -192,53 +192,54 @@ const toggleFormMenu = (event) => {
 
             <!-- Additional Fields based on Host Type -->
             <div v-if="store.item.host_type === 'mysql' || store.item.host_type === 'digitalocean-mysql'">
-                <div class="p-field p-col-12">
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="username">Username</label>
                     <InputText id="username"
                                v-model="store.item.username"
                                placeholder="Enter Username"/>
-                </div>
-                <div class="p-field p-col-12">
+                </FloatLabel>
+
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="password">Password</label>
                     <InputText id="password"
                                v-model="store.item.password"
                                type="password"
                                placeholder="Enter Password"/>
-                </div>
+                </FloatLabel>
             </div>
 
 
             <div v-if="store.item.host_type === 'cpanel-mysql'">
-                <div class="p-field p-col-12">
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="cpanelDomain">CPanel Domain</label>
                     <InputText id="cpanelDomain"
                                v-model="store.item.meta.cpanel_domain"
-                               placeholder="Enter CPanel Domain"/>
-                </div>
-                <div class="p-field p-col-12">
+                               />
+                </FloatLabel>
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="cpanelApiToken">CPanel API Token</label>
                     <InputText id="cpanelApiToken"
                                v-model="store.item.meta.cpanel_api_token"
-                               placeholder="Enter CPanel API Token"/>
-                </div>
-                <div class="p-field p-col-12">
+                               />
+                </FloatLabel>
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="cpanelUserName">CPanel Username</label>
                     <InputText id="cpanelUserName"
                                v-model="store.item.meta.cpanel_username"
-                               placeholder="Enter CPanel Username"/>
-                </div>
-                <div class="p-field p-col-12">
+                               />
+                </FloatLabel>
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="cpanelprotocol">CPanel Protocol</label>
                     <InputText id="cpanelprotocol"
                                v-model="store.item.meta.protocol"
-                               placeholder="Enter CPanel Protocol"/>
-                </div>
-                <div class="p-field p-col-12">
+                               />
+                </FloatLabel>
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="cpanelport">CPanel Port</label>
                     <InputText id="cpanelport"
                                v-model="store.item.meta.port"
-                               placeholder="Enter CPanel Port"/>
-                </div>
+                               />
+                </FloatLabel>
             </div>
 
 
@@ -255,24 +256,24 @@ const toggleFormMenu = (event) => {
 
 
             <div v-if="store.item.sslmode && store.item.sslmode !== 'disable'">
-                <div class="p-field p-col-12">
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="sslKeyPath">SSL Key Path</label>
                     <InputText id="sslKeyPath"
                                v-model="store.item.meta.ssl_key_path"
-                               placeholder="Enter SSL Key Path"/>
-                </div>
-                <div class="p-field p-col-12">
+                               />
+                </FloatLabel>
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="certPath">CERT Path</label>
                     <InputText id="certPath"
                                v-model="store.item.meta.cert_path"
-                               placeholder="Enter CERT Path"/>
-                </div>
-                <div class="p-field p-col-12">
+                               />
+                </FloatLabel>
+                <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="sslCaPath">SSL CA Path</label>
                     <InputText id="sslCaPath"
                                v-model="store.item.meta.ssl_ca_path"
-                               placeholder="Enter SSL CA Path"/>
-                </div>
+                               />
+                </FloatLabel>
             </div>
 
             <!-- Test Connection Button -->
