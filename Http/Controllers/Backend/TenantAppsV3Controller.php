@@ -30,6 +30,10 @@ class TenantAppsV3Controller extends Controller
             $data['fillable']['columns'] = TenantAppV3::getFillableColumns();
             $data['fillable']['except'] = TenantAppV3::getUnFillableColumns();
             $data['empty_item'] = TenantAppV3::getEmptyItem();
+            $data['search_by'] = [
+                ['name'=>'Tenant','value'=>'tenant'],
+                ['name'=>'App','value'=>'app']
+            ];
 
             $data['actions'] = [];
 

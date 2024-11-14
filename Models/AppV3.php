@@ -127,6 +127,17 @@ class AppV3 extends VaahModel
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
     }
 
+    public function tenants(){
+        return $this->belongsToMany( TenantV3::class,
+            'vh_saas_tenant_apps',
+            'vh_saas_app_id', 'vh_saas_tenant_id'
+        )->withPivot('version',
+            'version_number', 'is_active',
+            'last_migrated_at', 'last_seeded_at',
+            'created_at', 'updated_at');
+    }
+
+
     //-------------------------------------------------
     public function getTableColumns()
     {
@@ -698,6 +709,7 @@ class AppV3 extends VaahModel
 
     public static function syncAppsWithTenants()
     {
+        $all_tenants = TenantV3::select('id')->get()->pluck('id')->toArray();
         $all_apps = AppV3::select('id', 'version', 'version_number')->get();
 
         if(!$all_apps)
