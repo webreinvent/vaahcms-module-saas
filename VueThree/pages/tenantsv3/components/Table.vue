@@ -90,18 +90,19 @@ const useVaah = vaah();
                                   @input="store.toggleIsActive(prop.data)">
                     </ToggleSwitch>
                 </template>
-                <Column field="updated_at" header="Updated"
-                        v-if="store.isListView() && !store.isMobile"
-                        style="width:150px;"
-                        :sortable="true">
-
-                    <template #body="prop">
-                        {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
-                    </template>
-
-                </Column>
 
             </Column>
+            <Column field="updated_at" header="Updated"
+                    v-if="store.isListView() && !store.isMobile"
+                    style="width:150px;"
+                    :sortable="true">
+
+                <template #body="prop">
+                    {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
+                </template>
+
+            </Column>
+
 
             <Column field="actions" style="width:150px;"
                     :style="{width: store.getActionWidth() }"
