@@ -1093,10 +1093,8 @@ export const useTenantStore = defineStore({
             }
         },
         //---------------------------------------------------------------------
-        async getItemTenants (item) {
-            useTenantAppV3Store().query.filter.q= await item.name;
-            console.log(123,useTenantAppV3Store().query.filter.q);
-            this.$router.push({name: 'tenantappsv3.index', query:{q:item.name}})
+        async getItemTenants (data) {
+            this.$router.push({name: 'tenantappsv3.index', query: { search_by: 'tenant', filter: {q:data.name }} });
         },
         //---------------------------------------------------------------------
     }
