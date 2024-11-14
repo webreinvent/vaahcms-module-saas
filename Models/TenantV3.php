@@ -158,6 +158,11 @@ class TenantV3 extends VaahModel
     }
 
     //-------------------------------------------------
+    public function tenantApps()
+    {
+        return $this->hasMany(TenantAppV3::class,'vh_saas_tenant_id','id');
+    }
+    //-------------------------------------------------
     public function getTableColumns()
     {
         return $this->getConnection()->getSchemaBuilder()
@@ -404,6 +409,7 @@ class TenantV3 extends VaahModel
     //-------------------------------------------------
     public static function deleteList($request): array
     {
+
         $inputs = $request->all();
 
         $rules = array(
@@ -424,8 +430,12 @@ class TenantV3 extends VaahModel
             $response['errors'] = $errors;
             return $response;
         }
-
+        // Collect the IDs of tenants to delete
         $items_id = collect($inputs['items'])->pluck('id')->toArray();
+        $tenants = self::whereIn('id', $items_id)->with('tenantApps')->get();
+        foreach ($tenants as $tenant) {
+            $tenant->tenantApps()->delete();
+        }
         self::whereIn('id', $items_id)->forceDelete();
 
         $response['success'] = true;
@@ -573,6 +583,7 @@ class TenantV3 extends VaahModel
             $response['errors'][] = trans("vaahcms-general.record_does_not_exist");
             return $response;
         }
+
         $item->forceDelete();
 
         $response['success'] = true;
