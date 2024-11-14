@@ -60,6 +60,12 @@ const toggleBulkMenuState = (event) => {
             <div >
 
                 <InputGroup>
+                    <Select v-model="store.query.filter.search_by"
+                            :options="store.assets.search_by"
+                            optionLabel="name"
+                            optionValue="value"
+                            placeholder="Select to search a specific"
+                            />
                     <InputText v-model="store.query.filter.q"
                                @keyup.enter="store.delayedSearch()"
                                size="small"

@@ -277,14 +277,32 @@ class TenantAppV3 extends VaahModel
         {
             return $query;
         }
-        $search_array = explode(' ',$filter['q']);
-        foreach ($search_array as $search_item){
-            $query->where(function ($q1) use ($search_item) {
-                $q1->where('name', 'LIKE', '%' . $search_item . '%')
-                    ->orWhere('slug', 'LIKE', '%' . $search_item . '%')
-                    ->orWhere('id', 'LIKE', $search_item . '%');
-            });
+        $search_array = explode(' ', $filter['q']);
+
+        foreach ($search_array as $search_item) {
+
+            if (isset($filter['search_by']) && $filter['search_by']) {
+                if ($filter['search_by'] === 'tenant') {
+                    $query->whereHas('saasTenant', function ($tenant) use ($search_item) {
+                        $tenant->where('name', 'like', '%' . $search_item . '%');
+                    });
+                }elseif ($filter['search_by'] === 'app') {
+                    $query->whereHas('saasApp', function ($app) use ($search_item) {
+                        $app->where('name', 'like', '%' . $search_item . '%');
+                    });
+                }
+            } else {
+                $query->where(function ($q) use ($search_item) {
+                    $q->whereHas('saasTenant', function ($tenant) use ($search_item) {
+                        $tenant->where('name', 'like', '%' . $search_item . '%');
+                    })
+                        ->orWhereHas('saasApp', function ($app) use ($search_item) {
+                            $app->where('name', 'like', '%' . $search_item . '%');
+                        });
+                });
+            }
         }
+
 
     }
     //-------------------------------------------------
@@ -420,6 +438,9 @@ class TenantAppV3 extends VaahModel
         }
 
         switch ($type) {
+            case 'sync-tenant-apps':
+                TenantAppV3::syncTenantApps();
+                break;
             case 'activate-all':
                 $list->withTrashed()->where(function ($q){
                     $q->where('is_active', 0)->orWhereNull('is_active');
