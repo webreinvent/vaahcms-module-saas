@@ -99,6 +99,7 @@ class ServerV3 extends VaahModel
             'created_by',
             'updated_by',
             'deleted_by',
+            'meta'
         ];
     }
     //-------------------------------------------------
