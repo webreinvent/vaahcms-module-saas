@@ -1053,7 +1053,7 @@ export const useAppV3Store = defineStore({
         },
 
         getItemTenants(data) {
-            this.$router.push({ name: 'tenantappsv3.index', query: { search_by: 'app', q: data.name } });
+            this.$router.push({ name: 'tenantappsv3.index', query: { search_by: 'app', filter: {q: data.name }} });
         }
     },
     });
