@@ -4,7 +4,7 @@ use VaahCms\Modules\Saas\Http\Controllers\Backend\TenantsV3Controller;
 
 Route::group(
     [
-        'prefix' => 'backend/saas/tenants',
+        'prefix' => 'backend/saas/tenantsv3',
 
         'middleware' => ['web', 'has.backend.access'],
 

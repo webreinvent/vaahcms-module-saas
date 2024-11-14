@@ -4,7 +4,7 @@ use VaahCms\Modules\Saas\Http\Controllers\Backend\ServersV3Controller;
 
 Route::group(
     [
-        'prefix' => 'backend/saas/servers',
+        'prefix' => 'backend/saas/serversv3',
 
         'middleware' => ['web', 'has.backend.access'],
 

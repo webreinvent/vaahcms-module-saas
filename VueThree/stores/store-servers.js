@@ -7,7 +7,7 @@ let model_namespace = 'VaahCms\\Modules\\Saas\\Models\\ServerV3';
 
 
 let base_url = document.getElementsByTagName('base')[0].getAttribute("href");
-let ajax_url = base_url + "/saas/servers";
+let ajax_url = base_url + "/saas/serversv3";
 
 let empty_states = {
     query: {
