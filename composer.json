@@ -1,7 +1,7 @@
 {
     "name": "vaahcms/saas",
     "description": "Module for multi-tenancy SaaS product development",
-    "version": "0.0.6" ,
+    "version": "0.0.7" ,
     "authors": [
         {
             "name": "vaah",
