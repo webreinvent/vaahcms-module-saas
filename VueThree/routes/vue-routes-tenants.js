@@ -8,7 +8,7 @@ import Filters from '../pages/tenants/Filters.vue'
 
 routes_list = {
 
-    path: '/tenants',
+    path: '/',
     name: 'tenants.index',
     component: List,
     props: true,

@@ -7,17 +7,12 @@ const height = ref(window.innerHeight)
 
 const items = ref([
   {
-    label: 'Saas Vue 3',
+    label: 'Saas',
     items: [
-      {
-        label: 'Dashboard',
-        icon: 'fa-regular fa-chart-bar',
-        route: "/"
-      },
         {
             label: 'Tenants',
             icon: 'fas fa-users',
-            route: "/tenants"
+            route: "/"
         },
         {
 
