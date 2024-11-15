@@ -434,7 +434,7 @@ class TenantV3 extends VaahModel
         $items_id = collect($inputs['items'])->pluck('id')->toArray();
         $tenants = self::whereIn('id', $items_id)->with('tenantApps')->get();
         foreach ($tenants as $tenant) {
-            $tenant->tenantApps()->delete();
+            $tenant->tenantApps()->forceDelete();
         }
         self::whereIn('id', $items_id)->forceDelete();
 
