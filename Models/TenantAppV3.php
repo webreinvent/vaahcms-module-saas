@@ -312,7 +312,7 @@ class TenantAppV3 extends VaahModel
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);
         $list->searchFilter($request->filter);
-        $list->with(['saasTenant','saasApp'])->has('saasApp');
+        $list->with(['saasTenant','saasApp'])->has('saasApp')->has('saasTenant');
 
         if(isset($request->q))
         {

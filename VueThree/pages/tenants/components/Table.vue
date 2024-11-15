@@ -58,7 +58,13 @@ const useVaah = vaah();
                     :sortable="true">
 
                 <template #body="prop">
-                    <Badge severity="primary">
+                    <Badge
+                        severity="primary"
+                        v-tooltip="'View Apps'"
+                        @click="store.getItemTenants(prop.data)"
+                        style="cursor: pointer"
+                    >
+
                         {{ (prop.data.count_apps_active || prop.data.count_apps) ?
                         `${prop.data.count_apps_active || 0} / ${prop.data.count_apps || 0}` :
                         '0 / 0' }}
@@ -84,18 +90,19 @@ const useVaah = vaah();
                                   @input="store.toggleIsActive(prop.data)">
                     </ToggleSwitch>
                 </template>
-                <Column field="updated_at" header="Updated"
-                        v-if="store.isListView() && !store.isMobile"
-                        style="width:150px;"
-                        :sortable="true">
-
-                    <template #body="prop">
-                        {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
-                    </template>
-
-                </Column>
 
             </Column>
+            <Column field="updated_at" header="Updated"
+                    v-if="store.isListView() && !store.isMobile"
+                    style="width:150px;"
+                    :sortable="true">
+
+                <template #body="prop">
+                    {{useVaah.toLocalTimeShortFormat(prop.data.updated_at)}}
+                </template>
+
+            </Column>
+
 
             <Column field="actions" style="width:150px;"
                     :style="{width: store.getActionWidth() }"
