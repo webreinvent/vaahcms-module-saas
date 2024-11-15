@@ -60,7 +60,7 @@ const toggleBulkMenuState = (event) => {
             <div >
 
                 <InputGroup>
-                    
+
                     <InputText v-model="store.query.filter.q"
                                @keyup.enter="store.delayedSearch()"
                                size="small"
@@ -74,7 +74,7 @@ const toggleBulkMenuState = (event) => {
                             icon="pi pi-search"/>
                     <Button v-if="!store.isMobile"
                             as="router-link"
-                            :to="`/tenantsapps/filters`"
+                            :to="`/tenantapps/filters`"
                             type="button"
                             size="small"
                             :disabled="Object.keys(route.params).length"
