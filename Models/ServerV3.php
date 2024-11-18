@@ -633,9 +633,10 @@ class ServerV3 extends VaahModel
         $rules = array(
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
-            'username' => 'required',
-            'password' => 'sometimes',
-            'sslmode' => 'required'
+            'host_type' => 'required|max:150',
+            'driver' => 'required|max:150',
+            'host' => 'required|max:150',
+            'port' => 'required|max:150',
         );
 
         $validator = \Validator::make($inputs, $rules);
