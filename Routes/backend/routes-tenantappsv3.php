@@ -73,4 +73,7 @@ function () {
 
     //---------------------------------------------------------
 
+    Route::any('/item/{id}/database/actions/{action}', [TenantAppsV3Controller::class, 'databaseActions'])
+        ->name('vh.backend.saas.tenantapps.database.actions');
+
 });

@@ -7,6 +7,7 @@ use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
 use Illuminate\Support\Facades\Config;
 use VaahCms\Modules\Saas\Models\ServerV3;
+use VaahCms\Modules\Saas\Models\TenantV3;
 
 class MySqlDatabaseManager
 {
@@ -21,7 +22,7 @@ class MySqlDatabaseManager
     protected $tenant_connection;
 
     //--------------------------------------------------------
-    public function __construct(ServerV3 $server, Tenant $tenant=null)
+    public function __construct(ServerV3 $server, TenantV3 $tenant=null)
     {
         $this->server = $server;
         $this->setServerConfig();
@@ -54,7 +55,7 @@ class MySqlDatabaseManager
             && $this->server->password != ""
         )
         {
-            $config['password'] = Crypt::decrypt($this->server->password);
+            $config['password'] = $this->server->password;
         }
 
 
@@ -101,7 +102,7 @@ class MySqlDatabaseManager
 
         if(isset($this->tenant->database_password) && !empty($this->tenant->database_password))
         {
-            $config['password'] = Crypt::decrypt($this->tenant->database_password);
+            $config['password'] = $this->tenant->database_password;
         }
 
         if(!is_null($this->tenant->database_sslmode) && $this->tenant->database_sslmode != 'disable')

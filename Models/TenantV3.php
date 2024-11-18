@@ -4,11 +4,13 @@ use Carbon\Carbon;
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Faker\Factory;
 use VaahCms\Modules\Saas\Entities\App;
-use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
+use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
@@ -170,6 +172,10 @@ class TenantV3 extends VaahModel
     {
         return $this->getConnection()->getSchemaBuilder()
             ->getColumnListing($this->getTable());
+    }
+
+    public function server(){
+        return $this->belongsTo(ServerV3::class,'vh_saas_server_id','id');
     }
 
     //-------------------------------------------------
@@ -513,7 +519,7 @@ class TenantV3 extends VaahModel
     {
 
         $item = self::where('id', $id)
-            ->with(['createdByUser', 'updatedByUser', 'deletedByUser'])
+            ->with(['server','createdByUser', 'updatedByUser', 'deletedByUser'])
             ->withTrashed()
             ->first();
 

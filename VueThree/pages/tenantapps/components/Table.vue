@@ -33,8 +33,8 @@ const useVaah = vaah();
                     :sortable="true">
 
                 <template #body="prop">
-                    <span v-if="prop.data.saas_tenant">
-                        {{prop.data.saas_tenant.name}}
+                    <span v-if="prop.data.tenant">
+                        {{prop.data.tenant.name}}
                     </span>
                     <span v-else>
                         -
@@ -48,8 +48,8 @@ const useVaah = vaah();
                     :sortable="true">
 
                 <template #body="prop">
-                    <span v-if="prop.data.saas_app">
-                        {{prop.data.saas_app.name}}
+                    <span v-if="prop.data.app">
+                        {{prop.data.app.name}}
                     </span>
                     <span v-else>
                         -
