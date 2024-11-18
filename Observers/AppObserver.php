@@ -2,7 +2,7 @@
 
 use VaahCms\Modules\Saas\Entities\App;
 use VaahCms\Modules\Saas\Entities\Tenant;
-use VaahCms\Modules\Saas\Models\TenantV3;
+
 class AppObserver {
 
 
