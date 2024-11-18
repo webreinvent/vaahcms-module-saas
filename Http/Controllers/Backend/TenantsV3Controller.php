@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use VaahCms\Modules\Saas\Entities\Server;
-use VaahCms\Modules\Saas\Entities\Tenant;
 use VaahCms\Modules\Saas\Models\TenantV3;
 
 
@@ -237,19 +236,6 @@ return $list;
             return $response;
         }
     }
-    //----------------------------------------------------------
-    //----------------------------------------------------------
-    public function postMigrate(Request $request, $uuid)
-    {
-
-        $inputs = $request->all();
-
-        $response = Tenant::migrate($inputs, $uuid);
-
-        return response()->json($response);
-
-    }
-
     //----------------------------------------------------------
     public function getServers(Request $request)
     {
