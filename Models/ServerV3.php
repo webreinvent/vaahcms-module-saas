@@ -634,7 +634,7 @@ class ServerV3 extends VaahModel
             'name' => 'required|max:150',
             'slug' => 'required|max:150',
             'username' => 'required',
-            'password' => 'required',
+            'password' => 'sometimes',
             'sslmode' => 'required'
         );
 

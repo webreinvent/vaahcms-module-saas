@@ -3,10 +3,13 @@
 use DateTimeInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
 use Faker\Factory;
 use VaahCms\Modules\Saas\Entities\App;
+use VaahCms\Modules\Saas\Entities\Server;
 use VaahCms\Modules\Saas\Entities\Tenant;
+use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
@@ -167,6 +170,10 @@ class TenantV3 extends VaahModel
     {
         return $this->getConnection()->getSchemaBuilder()
             ->getColumnListing($this->getTable());
+    }
+
+    public function server(){
+        return $this->belongsTo(ServerV3::class,'vh_saas_server_id','id');
     }
 
     //-------------------------------------------------
@@ -510,7 +517,7 @@ class TenantV3 extends VaahModel
     {
 
         $item = self::where('id', $id)
-            ->with(['createdByUser', 'updatedByUser', 'deletedByUser'])
+            ->with(['server','createdByUser', 'updatedByUser', 'deletedByUser'])
             ->withTrashed()
             ->first();
 
@@ -713,6 +720,29 @@ class TenantV3 extends VaahModel
     }
 
     //-------------------------------------------------
+    public static function createDatabase($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = static::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+
+        $server = ServerV3::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->createDatabase();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_active = 1;
+            $item->activated_at = \Carbon::now();
+            $item->is_database_created_at = \Carbon::now();
+            $item->is_deactivated_at = null;
+            $item->save();
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+
     //-------------------------------------------------
     //-------------------------------------------------
 

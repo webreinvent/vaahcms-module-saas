@@ -141,7 +141,7 @@ const toggleItemMenu = (event) => {
                             />
                         </template>
 
-                        <template v-else-if="(column === 'saas_app' || column === 'saas_tenant'
+                        <template v-else-if="(column === 'app' || column === 'tenant'
                             ) && (typeof value === 'object' && value !== null)">
                             <VhViewRow :label="column"
                                        :value="value"
