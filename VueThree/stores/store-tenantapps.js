@@ -69,6 +69,7 @@ export const useTenantAppStore = defineStore({
         window_width: 0,
         screen_size: null,
         float_label_variants: 'on',
+        database_action: null,
     }),
     getters: {
         isMobile: (state) => {
@@ -822,7 +823,28 @@ export const useTenantAppStore = defineStore({
         //---------------------------------------------------------------------
         getItemMenu()
         {
+            console.log(this.item.tenant);
             let item_menu = [];
+
+            if(this.item.tenant && !this.item.tenant.is_database_created_at){
+                item_menu.push({
+                    label: 'Create Database',
+                    icon: 'pi pi-database',
+                    command: () => {
+                        this.confirmDatabaseCreate();
+                    }
+                });
+            }
+
+            if(this.item.tenant && !this.item.tenant.is_database_user_created_at){
+                item_menu.push({
+                    label: 'Create Database User',
+                    icon: 'pi pi-user',
+                    command: () => {
+                        this.confirmDatabaseUserCreate();
+                    }
+                });
+            }
 
             if(this.item && this.item.deleted_at)
             {
@@ -1032,6 +1054,49 @@ export const useTenantAppStore = defineStore({
 
             //reload page list
             await this.getList();
+        },
+
+        //---------------------------------------------------------------------
+        async confirmDatabaseCreate() {
+            this.database_action = 'create';
+
+            vaah().confirmDialog('Create Database','Are you sure you to create '+this.item.tenant.database_name
+                +' database user to on '+this.item.tenant.server.name+' server?',
+                this.databaseActions,null,'p-button-primary');
+
+        },
+
+        async confirmDatabaseUserCreate() {
+            this.database_action = 'create-user';
+
+            vaah().confirmDialog('Create Database User','Are you sure you to create '+this.item.tenant.database_name
+                +' database to user '+this.item.tenant.database_username+' on '+this.item.tenant.server.name+' server?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        async databaseActions() {
+
+            if(!this.database_action)
+            {
+                vaah().toastErrors(['Database action not set']);
+                return false;
+            }
+
+            let url = this.ajax_url+'/item/'+this.item.id+'/database/actions/'+this.database_action;
+            await vaah().ajax(
+                url,
+                this.databaseActionsAfter
+            );
+        },
+
+        databaseActionsAfter: function (data, res) {
+
+            this.database_action = null;
+            if(data)
+            {
+                this.getFormMenu();
+                this.getList();
+            }
         },
     }
 });

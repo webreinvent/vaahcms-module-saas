@@ -11,6 +11,7 @@ use VaahCms\Modules\Saas\Libraries\DatabaseManagers\MySqlDatabaseManager;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DoMySqlDatabaseManager;
 use App;
 use VaahCms\Modules\Saas\Models\ServerV3;
+use VaahCms\Modules\Saas\Models\TenantV3;
 
 
 class DatabaseManager
@@ -21,7 +22,7 @@ class DatabaseManager
 
     protected $db_manager;
 
-    public function __construct(ServerV3 $server, Tenant $tenant=null)
+    public function __construct(ServerV3 $server, TenantV3 $tenant=null)
     {
         $this->server = $server;
 
@@ -39,15 +40,15 @@ class DatabaseManager
         $manager = null;
         switch ($this->server->host_type)
         {
-            case 'MySql':
+            case 'mysql':
                 $manager = new MySQLDatabaseManager($this->server, $this->tenant);
                 break;
 
-            case 'CPanel-MySql':
+            case 'cpanel-mysql':
                 $manager = new CpanelMySqlDatabaseManager($this->server, $this->tenant);
                 break;
 
-            case 'DigitalOcean-MySql':
+            case 'digitalocean-mysql':
                 $manager = new DoMySqlDatabaseManager($this->server, $this->tenant);
                 break;
 
