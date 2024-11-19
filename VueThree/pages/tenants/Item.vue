@@ -123,7 +123,7 @@ const toggleItemMenu = (event) => {
                     <template v-for="(value, column) in store.item ">
 
                         <template v-if="column === 'created_by' || column === 'updated_by'
-                        || column === 'deleted_by' || column === 'server'">
+                        || column === 'deleted_by'">
                         </template>
 
                         <template v-else-if="column === 'id' || column === 'uuid'">
@@ -134,7 +134,7 @@ const toggleItemMenu = (event) => {
                         </template>
 
                         <template v-else-if="(column === 'created_by_user' || column === 'updated_by_user'
-                        || column === 'deleted_by_user') && (typeof value === 'object' && value !== null)">
+                        || column === 'deleted_by_user' || column === 'server') && (typeof value === 'object' && value !== null)">
                             <VhViewRow :label="column"
                                        :value="value"
                                        type="user"

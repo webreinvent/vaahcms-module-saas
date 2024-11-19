@@ -21,7 +21,7 @@ class DatabaseManager
 
     protected $db_manager;
 
-    public function __construct(ServerV3 $server, TenantV3 $tenant=null)
+    public function __construct(Server $server, Tenant $tenant=null)
     {
         $this->server = $server;
 
