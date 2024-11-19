@@ -7,12 +7,13 @@ use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use VaahCms\Modules\Saas\Libraries\DatabaseManagers\DatabaseManager;
+use VaahCms\Modules\Saas\Models\TenantV3;
 use WebReinvent\VaahCms\Entities\Migration;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
 
-class Tenant extends VaahModel {
+class Tenant extends TenantV3 {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;
