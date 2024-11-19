@@ -139,7 +139,6 @@ const toggleItemMenu = (event) => {
                             <VhViewRow :label="column"
                                        :value="value"
                                        type="user"
-                                       :btn="true"
                             />
                         </template>
 
@@ -150,6 +149,7 @@ const toggleItemMenu = (event) => {
                                        :arrs="['database_name','database_username','is_database_created_at','is_active',
                                             'is_database_user_assigned_at','is_database_user_created_at','created_at','created_by'
                                             ]"
+                                       :btn="false"
                             />
                         </template>
 
@@ -158,6 +158,7 @@ const toggleItemMenu = (event) => {
                                        :value="value"
                                        type="user"
                                        :arrs="['name','slug','version']"
+                                       :btn="false"
                             />
                         </template>
 
