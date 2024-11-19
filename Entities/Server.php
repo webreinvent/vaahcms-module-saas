@@ -5,11 +5,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Crypt;
 use Illuminate\Support\Str;
+use VaahCms\Modules\Saas\Models\ServerV3;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
 
-class Server extends VaahModel {
+class Server extends ServerV3 {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;
