@@ -823,7 +823,6 @@ export const useTenantAppStore = defineStore({
         //---------------------------------------------------------------------
         getItemMenu()
         {
-            console.log(this.item.tenant);
             let item_menu = [];
 
             if(this.item.tenant && !this.item.tenant.is_database_created_at){

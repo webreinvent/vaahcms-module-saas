@@ -11,7 +11,7 @@
 @section('vaahcms_extend_backend_js')
 
     @if(env('APP_MODULE_SAAS_ENV') == 'develop')
-        <script type="module" src="http://localhost:8811/main.js"></script>
+        <script type="module" src="http://localhost:8810/main.js"></script>
     @else
         <script type="module" src="{{vh_module_assets_url("Saas", "build/index.js")}}"></script>
     @endif
