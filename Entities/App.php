@@ -4,11 +4,12 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use VaahCms\Modules\Saas\Models\AppV3;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 use WebReinvent\VaahCms\Models\User;
 
-class App extends VaahModel {
+class App extends AppV3 {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;

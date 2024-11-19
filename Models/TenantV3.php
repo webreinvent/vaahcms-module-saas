@@ -5,6 +5,7 @@ use DateTimeInterface;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Faker\Factory;
 use VaahCms\Modules\Saas\Entities\App;
@@ -1281,8 +1282,260 @@ class TenantV3 extends VaahModel
         });
     }
     //-------------------------------------------------
+    public static function deleteDatabase($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = self::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = ServerV3::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+
+        $response = $db_manager->deleteDatabase();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_active = null;
+            $item->activated_at = null;
+            $item->is_database_created_at = null;
+            $item->is_database_user_assigned_at = null;
+            $item->is_deactivated_at = \Carbon::now();
+            $item->save();
+
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+
     //-------------------------------------------------
     //-------------------------------------------------
 
+        $item = self::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = ServerV3::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->createDatabaseUser();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_database_user_created_at = \Carbon::now();
+            $item->save();
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+
+    //-------------------------------------------------
+    public static function assignUserToDatabase($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = self::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = ServerV3::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->assignUserToDatabase();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_database_user_assigned_at = \Carbon::now();
+            $item->save();
+
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+
+    //-------------------------------------------------
+    public static function deleteDatabaseUser($tenant_column_value, $tenant_column_name='id')
+    {
+
+        $item = self::where($tenant_column_name, $tenant_column_value)->withTrashed()->first();
+        $server = Server::find($item->vh_saas_server_id);
+
+        $db_manager = new DatabaseManager($server, $item);
+        $response = $db_manager->deleteDatabaseUser();
+
+        if($response['status'] == 'success')
+        {
+            $item->is_database_user_created_at = null;
+            $item->is_database_user_assigned_at = null;
+            $item->save();
+            $response['data'] = [];
+        }
+
+        return $response;
+    }
+
+    //-------------------------------------------------
+    public static function databaseActionValidation($value, $key='id')
+    {
+        $tenant = self::where($key, $value)->first();
+
+        if(!$tenant)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant does not exist';
+            return $response;
+        }
+
+        if(!$tenant->is_active)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "Tenant is not active";
+            return $response;
+        }
+
+        $server = ServerV3::find($tenant->vh_saas_server_id);
+
+        if(!$server)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "Tenant's server does not exist";
+            return $response;
+        }
+
+        if(!$server->is_active)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = "Tenant's server is not active";
+            return $response;
+        }
+
+        $db_manager = new DatabaseManager($server, $tenant);
+
+        //check server connection
+        $is_connected = $db_manager->testServerConnection();
+
+        if($is_connected['status'] == 'failed')
+        {
+            return $is_connected;
+        }
+
+        //check if database does not exist on the server
+        $db_exist = $db_manager->databaseExists();
+        if($db_exist['status'] == 'failed')
+        {
+            return $db_exist;
+        }
+    }
+
+    //-------------------------------------------------
+    public static function migrate($inputs, $tenant_column_value, $tenant_column_name='id')
+    {
+        $rules = array(
+            'command' => 'required',
+        );
+
+        if(isset($inputs['command']))
+        {
+            $rules['path'] = 'required';
+        }
+
+        $validator = Validator::make( $inputs, $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return $response;
+        }
+
+        $is_valid = self::databaseActionValidation($tenant_column_value, $tenant_column_name);
+
+        if(isset($is_valid['status']) && $is_valid['status'] == 'failed')
+        {
+            return $is_valid;
+        }
+
+        $tenant = self::withTrashed()->where($tenant_column_name, $tenant_column_value)->first();
+
+        //check database is created for the tenant
+        if(!$tenant->is_database_created_at)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant database is not created';
+            return $response;
+        }
+
+        $server = ServerV3::find($tenant->vh_saas_server_id);
+        $db_manager = new DatabaseManager($server, $tenant);
+
+        //connect to database
+        $connection = $db_manager->configDbConnection();
+
+        if(isset($connection['status']) && $connection['status'] == 'failed')
+        {
+            return $connection;
+        }
+
+        $db_connection_name = $tenant->db_connection_name;
+
+        $response = \VaahArtisan::migrate($inputs['command'], $inputs['path'], $db_connection_name);
+
+        return $response;
+    }
+
+    //-------------------------------------------------
+    public static function seed($inputs, $tenant_column_value, $tenant_column_name='id')
+    {
+        $rules = array(
+            'command' => 'required',
+        );
+
+        if(isset($inputs['command']) && $inputs['command']=='db:seed')
+        {
+            $rules['class'] = 'required';
+        }
+
+        $validator = Validator::make( $inputs, $rules);
+        if ( $validator->fails() ) {
+
+            $errors             = errorsToArray($validator->errors());
+            $response['status'] = 'failed';
+            $response['errors'] = $errors;
+            return $response;
+        }
+
+        $is_valid = self::databaseActionValidation($tenant_column_value, $tenant_column_name);
+
+        if(isset($is_valid['status']) && $is_valid['status'] == 'failed')
+        {
+            return $is_valid;
+        }
+
+        $tenant = self::withTrashed()->where($tenant_column_name, $tenant_column_value)->first();
+
+        //check database is created for the tenant
+        if(!$tenant->is_database_created_at)
+        {
+            $response['status'] = 'failed';
+            $response['errors'][] = 'Tenant database is not created';
+            return $response;
+        }
+
+        $server = ServerV3::find($tenant->vh_saas_server_id);
+        $db_manager = new DatabaseManager($server, $tenant);
+
+        //connect to database
+        $connection = $db_manager->configDbConnection();
+
+        if(isset($connection['status']) && $connection['status'] == 'failed')
+        {
+            return $connection;
+        }
+
+        $db_connection_name = $tenant->db_connection_name;
+
+        if(!isset($inputs['class']))
+        {
+            $inputs['class'] = null;
+        }
+
+        $response = \VaahArtisan::seed($inputs['command'], $inputs['class'], $db_connection_name );
+
+        return $response;
+    }
 
 }
