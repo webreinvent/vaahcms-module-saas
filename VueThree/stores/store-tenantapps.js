@@ -833,13 +833,6 @@ export const useTenantAppStore = defineStore({
                         this.confirmDatabaseCreate();
                     }
                 });
-                item_menu.push({
-                    label: 'Create Database User',
-                    icon: 'pi pi-user',
-                    command: () => {
-                        this.confirmDatabaseUserCreate();
-                    }
-                });
             }else{
                 item_menu.push({
                     label: 'Update',
@@ -849,17 +842,28 @@ export const useTenantAppStore = defineStore({
                     }
                 });
                 item_menu.push({
-                    label: 'Delete Database User',
-                    icon: 'pi pi-user',
-                    command: () => {
-                        this.confirmDatabaseUserDelete();
-                    }
-                });
-                item_menu.push({
                     label: 'Delete Database',
                     icon: 'pi pi-database',
                     command: () => {
                         this.confirmDatabaseDelete();
+                    }
+                });
+            }
+
+            if(this.item.tenant && !this.item.tenant.is_database_user_created_at){
+                item_menu.push({
+                    label: 'Create Database User',
+                    icon: 'pi pi-user',
+                    command: () => {
+                        this.confirmDatabaseUserCreate();
+                    }
+                });
+            }else{
+                item_menu.push({
+                    label: 'Delete Database User',
+                    icon: 'pi pi-user',
+                    command: () => {
+                        this.confirmDatabaseUserDelete();
                     }
                 });
             }
@@ -887,7 +891,7 @@ export const useTenantAppStore = defineStore({
                 });
                 item_menu.push({
                     label: 'Wipe Data',
-                    icon: 'pi pi-eraser',
+                    icon: 'pi pi-trash',
                     command: () => {
                         this.confirmWipeData();
                     }
