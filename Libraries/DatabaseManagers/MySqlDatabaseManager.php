@@ -55,7 +55,7 @@ class MySqlDatabaseManager
             && $this->server->password != ""
         )
         {
-            $config['password'] = $this->server->password;
+            $config['password'] = Crypt::decrypt($this->server->password);
         }
 
 
@@ -102,7 +102,7 @@ class MySqlDatabaseManager
 
         if(isset($this->tenant->database_password) && !empty($this->tenant->database_password))
         {
-            $config['password'] = $this->tenant->database_password;
+            $config['password'] = Crypt::decrypt($this->tenant->database_password);
         }
 
         if(!is_null($this->tenant->database_sslmode) && $this->tenant->database_sslmode != 'disable')
