@@ -195,16 +195,14 @@ const toggleFormMenu = (event) => {
                 <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="username">Username</label>
                     <InputText id="username"
-                               v-model="store.item.username"
-                               placeholder="Enter Username"/>
+                               v-model="store.item.username"/>
                 </FloatLabel>
 
                 <FloatLabel class="my-3" :variant="store.float_label_variants">
                     <label for="password">Password</label>
                     <InputText id="password"
                                v-model="store.item.password"
-                               type="password"
-                               placeholder="Enter Password"/>
+                               type="password"/>
                 </FloatLabel>
             </div>
 

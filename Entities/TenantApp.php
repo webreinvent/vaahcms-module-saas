@@ -5,12 +5,13 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Str;
+use VaahCms\Modules\Saas\Models\TenantAppV3;
 use WebReinvent\VaahCms\Models\User;
 use WebReinvent\VaahCms\Models\VaahModel;
 use WebReinvent\VaahCms\Traits\CrudWithUuidObservantTrait;
 
 
-class TenantApp extends VaahModel {
+class TenantApp extends TenantAppV3 {
 
     use SoftDeletes;
     use CrudWithUuidObservantTrait;

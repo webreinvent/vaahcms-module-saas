@@ -69,6 +69,7 @@ export const useTenantAppStore = defineStore({
         window_width: 0,
         screen_size: null,
         float_label_variants: 'on',
+        database_action: null,
     }),
     getters: {
         isMobile: (state) => {
@@ -824,9 +825,107 @@ export const useTenantAppStore = defineStore({
         {
             let item_menu = [];
 
+            if(this.item.tenant && !this.item.tenant.is_database_created_at){
+                item_menu.push({
+                    label: 'Create Database',
+                    icon: 'pi pi-database',
+                    command: () => {
+                        this.confirmDatabaseCreate();
+                    }
+                });
+            }else{
+                item_menu.push({
+                    label: 'Update',
+                    icon: 'pi pi-download',
+                    command: () => {
+                        this.confirmUpdate();
+                    }
+                });
+                item_menu.push({
+                    label: 'Delete Database',
+                    icon: 'pi pi-database',
+                    command: () => {
+                        this.confirmDatabaseDelete();
+                    }
+                });
+            }
+
+            if(this.item.tenant && !this.item.tenant.is_database_user_created_at){
+                item_menu.push({
+                    label: 'Create Database User',
+                    icon: 'pi pi-user',
+                    command: () => {
+                        this.confirmDatabaseUserCreate();
+                    }
+                });
+            }else{
+                item_menu.push({
+                    label: 'Delete Database User',
+                    icon: 'pi pi-user',
+                    command: () => {
+                        this.confirmDatabaseUserDelete();
+                    }
+                });
+            }
+
+            if(this.item.tenant && this.item.tenant.is_database_created_at
+                && !this.item.tenant.is_database_user_assigned_at){
+                item_menu.push({
+                    label: 'Assign User To Database',
+                    icon: 'pi pi-key',
+                    command: () => {
+                        this.confirmAssignDatabaseUser();
+                    }
+                });
+            }
+
+            if(this.item.tenant && this.item.tenant.is_database_created_at
+                && this.item.tenant.is_database_user_assigned_at
+                && this.item.tenant.is_database_created_at){
+                item_menu.push({
+                    label: 'Run Migration',
+                    icon: 'pi pi-server',
+                    command: () => {
+                        this.confirmMigration();
+                    }
+                });
+                item_menu.push({
+                    label: 'Wipe Data',
+                    icon: 'pi pi-trash',
+                    command: () => {
+                        this.confirmWipeData();
+                    }
+                });
+            }
+
+            if(this.item.tenant && this.item.tenant.is_database_created_at
+                && this.item.tenant.is_database_user_assigned_at
+                && this.item.last_migrated_at){
+                item_menu.push({
+                    label: 'Run Seed',
+                    icon: 'pi pi-bars',
+                    command: () => {
+                        this.confirmSeed();
+                    }
+                });
+                item_menu.push({
+                    label: 'Insert Sample Data',
+                    icon: 'pi pi-file-download',
+                    command: () => {
+                        this.confirmInsertSampleData();
+                    }
+                });
+                item_menu.push({
+                    label: 'Migration Rollback',
+                    icon: 'pi pi-undo',
+                    command: () => {
+                        this.confirmRollback();
+                    }
+                });
+            }
+
             if(this.item && this.item.deleted_at)
             {
-
                 item_menu.push({
                     label: 'Restore',
                     icon: 'pi pi-refresh',
@@ -1032,6 +1131,123 @@ export const useTenantAppStore = defineStore({
 
             //reload page list
             await this.getList();
+        },
+
+        //---------------------------------------------------------------------
+        async confirmDatabaseCreate() {
+            this.database_action = 'create';
+
+            vaah().confirmDialog('Create Database','Are you sure you to create '+this.item.tenant.database_name
+                +' database user to on '+this.item.tenant.server.name+' server?',
+                this.databaseActions,null,'p-button-primary');
+
+        },
+
+        async confirmDatabaseUserCreate() {
+            this.database_action = 'create-user';
+
+            vaah().confirmDialog('Create Database User','Are you sure you to create '+this.item.tenant.database_name
+                +' database to user '+this.item.tenant.database_username+' on '+this.item.tenant.server.name+' server?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmAssignDatabaseUser() {
+            this.database_action = 'assign-user';
+
+            vaah().confirmDialog('Assign User to Database','Are you sure? Database name '+this.item.tenant.database_name
+                +' will be created on '+this.item.tenant.server.name+' server?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        async confirmUpdate() {
+            this.database_action = 'update';
+
+            vaah().confirmDialog('Update App','Are you sure? Update will run migration & seed on ' +this.item.tenant.name+' database?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        async confirmMigration() {
+            this.database_action = 'migrate';
+
+            vaah().confirmDialog('Migrating database','Are you sure you want to run migration on '+this.item.tenant.name+' database?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmSeed() {
+            this.database_action = 'seed';
+
+            vaah().confirmDialog('Migrating database','Are you sure you want to run seeds on '+this.item.tenant.name+' database?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmInsertSampleData() {
+            this.database_action = 'insert-sample-data';
+
+            vaah().confirmDialog('Insert Sample Data','Are you sure? This will insert dummy data on '+this.item.tenant.name+' database?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmRollback() {
+            this.database_action = 'rollback';
+
+            vaah().confirmDialog('Delete Database','Are you sure? The Database '+this.item.tenant.database_name+' will be' +
+                ' altered on '+this.item.tenant.server.name+' server?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmWipeData() {
+            this.database_action = 'wipe';
+
+            vaah().confirmDialog('Wipe Data','Are you sure? This will drop all the tables on '+this.item.tenant.name+' database?',
+                this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmDatabaseUserDelete() {
+            this.database_action = 'delete-user';
+
+            vaah().confirmDialog('Delete Database User','Are you sure? Database username '+this.item.tenant.database_username
+                +' will be deleted on '+this.item.tenant.server.name+' server?',this.databaseActions,null,'p-button-primary');
+        },
+
+        //---------------------------------------------------------------------
+        async confirmDatabaseDelete() {
+            this.database_action = 'delete';
+
+            vaah().confirmDialog('Delete Database','Are you sure? Database name '+this.item.tenant.database_name
+                +' will be delete on '+this.item.tenant.server.name+' server?',this.databaseActions,null,'p-button-primary');
+        },
+
+        async databaseActions() {
+            if(!this.database_action)
+            {
+                vaah().toastErrors(['Database action not set']);
+                return false;
+            }
+
+            let url = this.ajax_url+'/item/'+this.item.id+'/database/actions/'+this.database_action;
+            let options = {
+                method: 'POST'
+            }
+            await vaah().ajax(
+                url,
+                this.databaseActionsAfter,
+                options
+            );
+        },
+
+        databaseActionsAfter: function(data, res) {
+
+            this.database_action = null;
+            if(res)
+            {
+                this.getItem(this.item.id);
+            }
         },
     }
 });

@@ -123,7 +123,8 @@ const toggleItemMenu = (event) => {
                     <template v-for="(value, column) in store.item ">
 
                         <template v-if="column === 'created_by' || column === 'updated_by'
-                        || column === 'deleted_by' || column === 'vh_saas_tenant_id' || column === 'vh_saas_app_id'">
+                        || column === 'deleted_by' || column === 'vh_saas_tenant_id' || column === 'vh_saas_app_id'
+                         || column === 'meta' || column === 'version_number'">
                         </template>
 
                         <template v-else-if="column === 'id' || column === 'uuid'">
@@ -138,14 +139,25 @@ const toggleItemMenu = (event) => {
                             <VhViewRow :label="column"
                                        :value="value"
                                        type="user"
+                                       :btn="true"
                             />
                         </template>
 
-                        <template v-else-if="(column === 'saas_app' || column === 'saas_tenant'
-                            ) && (typeof value === 'object' && value !== null)">
+                        <template v-else-if="(column === 'tenant') && (typeof value === 'object' && value !== null)">
                             <VhViewRow :label="column"
                                        :value="value"
                                        type="user"
+                                       :arrs="['database_name','database_username','is_database_created_at','is_active',
+                                            'is_database_user_assigned_at','is_database_user_created_at','created_at','created_by'
+                                            ]"
+                            />
+                        </template>
+
+                        <template v-else-if="(column === 'app') && (typeof value === 'object' && value !== null)">
+                            <VhViewRow :label="column"
+                                       :value="value"
+                                       type="user"
+                                       :arrs="['name','slug','version']"
                             />
                         </template>
 
@@ -163,6 +175,17 @@ const toggleItemMenu = (event) => {
                         </template>
 
 
+                    </template>
+                    <template v-if="store.item.tenant && store.item.tenant.server">
+                        <VhViewRow
+                            label="Server Name"
+                            :value="store.item.tenant.server.name"
+                        />
+                        <VhViewRow
+                            label="Is Server Active"
+                            :value="store.item.tenant.server.is_active"
+                            type="yes-no"
+                        />
                     </template>
                     </tbody>
 

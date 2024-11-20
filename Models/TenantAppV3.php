@@ -118,16 +118,16 @@ class TenantAppV3 extends VaahModel
         )->select('id', 'uuid', 'first_name', 'last_name', 'email');
     }
 
-    public function saasTenant(){
+    public function tenant(){
         return $this->belongsTo(TenantV3::class,
             'vh_saas_tenant_id', 'id'
-        )->select('id','name','slug');
+        );
     }
 
-    public function saasApp(){
+    public function app(){
         return $this->belongsTo(AppV3::class,
             'vh_saas_app_id', 'id'
-        )->select('id','name','slug');
+        );
     }
 
     //-------------------------------------------------
@@ -283,20 +283,20 @@ class TenantAppV3 extends VaahModel
 
             if (isset($filter['search_by']) && $filter['search_by']) {
                 if ($filter['search_by'] === 'tenant') {
-                    $query->whereHas('saasTenant', function ($tenant) use ($search_item) {
+                    $query->whereHas('tenant', function ($tenant) use ($search_item) {
                         $tenant->where('name', 'like', '%' . $search_item . '%');
                     });
                 }elseif ($filter['search_by'] === 'app') {
-                    $query->whereHas('saasApp', function ($app) use ($search_item) {
+                    $query->whereHas('app', function ($app) use ($search_item) {
                         $app->where('name', 'like', '%' . $search_item . '%');
                     });
                 }
             } else {
                 $query->where(function ($q) use ($search_item) {
-                    $q->whereHas('saasTenant', function ($tenant) use ($search_item) {
+                    $q->whereHas('tenant', function ($tenant) use ($search_item) {
                         $tenant->where('name', 'like', '%' . $search_item . '%');
                     })
-                        ->orWhereHas('saasApp', function ($app) use ($search_item) {
+                        ->orWhereHas('app', function ($app) use ($search_item) {
                             $app->where('name', 'like', '%' . $search_item . '%');
                         });
                 });
@@ -312,28 +312,28 @@ class TenantAppV3 extends VaahModel
         $list->isActiveFilter($request->filter);
         $list->trashedFilter($request->filter);
         $list->searchFilter($request->filter);
-        $list->with(['saasTenant','saasApp'])->has('saasApp')->has('saasTenant');
+        $list->with(['tenant','app'])->has('app')->has('tenant');
 
         if(isset($request->q))
         {
             if(isset($request['search_by']) && $request['search_by'])
             {
                 if($request['search_by'] == 'tenent'){
-                    $list->whereHas('saasTenant', function ($tenant) use ($request) {
+                    $list->whereHas('tenant', function ($tenant) use ($request) {
                         $tenant->where('name', 'like',  '%'.$request->q.'%');
                     });
                 }elseif($request['search_by'] == 'app'){
-                    $list->whereHas('saasApp', function ($app) use ($request) {
+                    $list->whereHas('app', function ($app) use ($request) {
                         $app->where('name', 'like',  '%'.$request->q.'%');
                     });
                 }
 
             }else{
-                $list->whereHas('saasTenant', function ($tenant) use ($request) {
+                $list->whereHas('tenant', function ($tenant) use ($request) {
                     $tenant->where('name', 'like',  '%'.$request->q.'%');
                 });
 
-                $list->orWhereHas('saasApp', function ($app) use ($request) {
+                $list->orWhereHas('app', function ($app) use ($request) {
                     $app->where('name', 'like',  '%'.$request->q.'%');
                 });
             }
@@ -518,7 +518,7 @@ class TenantAppV3 extends VaahModel
     {
 
         $item = self::where('id', $id)
-            ->with(['saasTenant','saasApp','createdByUser', 'updatedByUser', 'deletedByUser'])
+            ->with(['tenant.server','app','createdByUser', 'updatedByUser', 'deletedByUser'])
             ->withTrashed()
             ->first();
 

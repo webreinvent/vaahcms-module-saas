@@ -1,7 +1,7 @@
 <script setup>
 import {vaah} from '../pinia/vaah.js'
 
-import { useAttrs } from 'vue'
+import { useAttrs ,computed} from 'vue'
 
 const attrs = useAttrs()
 
@@ -28,6 +28,14 @@ const props = defineProps({
   is_link:{
     type: String,
   },
+    btn:{
+      type: Boolean,
+      default: null
+    },
+    arrs: {
+        type: Array,
+        default: null,
+    },
 })
 
 
@@ -45,9 +53,27 @@ const props = defineProps({
       <td colspan="2" >
 
         <template v-if="typeof value === 'object' && value !== null">
-          <Button  @click="vaah().copy(value.id)"  class="p-button-outlined p-button-secondary p-button-sm" v-if="value.name">
-            {{value.name}}
-          </Button>
+            <span v-if="value.name">
+
+                <Button  @click="vaah().copy(value.id)"  class="p-button-outlined p-button-secondary p-button-sm" v-if="btn">
+                    {{value.name}}
+                </Button>
+                <span v-else>
+                    <template v-for="(val,index) in value">
+                        <tr v-if="props.arrs && props.arrs.includes(index)">
+                            <td :style="{width: label_width}"><b>{{vaah().toLabel(index)}}</b>
+                            </td>
+                            <span v-if="!index.indexOf('is_')">
+                                <Tag value="Yes" v-if="val===1 || val" severity="success"></Tag>
+                                <Tag v-else value="No" severity="danger"></Tag>
+                            </span>
+                            <span v-else>
+                            {{val}}
+                            </span>
+                        </tr>
+                    </template>
+                </span>
+            </span>
             <span v-else>
                 <template v-for="(val,index) in value"><tr><td :style="{width: label_width}"><b>{{vaah().toLabel(index)}}</b></td> {{val}}</tr></template>
             </span>
