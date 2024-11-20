@@ -30,7 +30,7 @@ const props = defineProps({
   },
     btn:{
       type: Boolean,
-      default: null
+      default: true
     },
     arrs: {
         type: Array,

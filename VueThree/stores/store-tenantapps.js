@@ -910,7 +910,7 @@ export const useTenantAppStore = defineStore({
                 });
                 item_menu.push({
                     label: 'Insert Sample Data',
-                    icon: 'pi pi-file-download',
+                    icon: 'pi pi-upload',
                     command: () => {
                         this.confirmInsertSampleData();
                     }
