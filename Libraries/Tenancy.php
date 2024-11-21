@@ -25,7 +25,7 @@ class Tenancy
         $this->db_manager = $db_manager;
 
         //set database name to default
-        $db_manager->connectToTenant();
+        return $db_manager->connectToTenant();
 
     }
 

@@ -120,6 +120,8 @@ class DatabaseManager
         }
 
         $this->setDefaultConnection($this->tenant->db_connection_name);
+
+        return $this->tenant->db_connection_name;
     }
     //--------------------------------------------------------
 
