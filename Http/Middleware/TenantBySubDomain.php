@@ -39,12 +39,13 @@ class TenantBySubDomain
 
         //initialize tenancy
         $tenancy = new Tenancy($tenant);
-        $tenancy->start();
+        $tenant_db_connection = $tenancy->start();
 
         //for controller
         $request->tenant = $tenant;
         $request->tenancy = $tenancy;
         $request->sub_domain = $sub_domain;
+        $request->tenant_db_connection = $tenant_db_connection;
 
         //for view
         \View::share('tenant', $tenant);
