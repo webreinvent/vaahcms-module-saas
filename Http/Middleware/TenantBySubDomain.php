@@ -41,11 +41,11 @@ class TenantBySubDomain
         $tenancy = new Tenancy($tenant);
         $tenant_db_connection = $tenancy->start();
 
-        //for controller
-        $request->tenant = $tenant;
-        $request->tenancy = $tenancy;
-        $request->sub_domain = $sub_domain;
-        $request->tenant_db_connection = $tenant_db_connection;
+        //for controller - use the request attributes bag instead of dynamic properties
+        $request->attributes->set('tenant', $tenant);
+        $request->attributes->set('tenancy', $tenancy);
+        $request->attributes->set('sub_domain', $sub_domain);
+        $request->attributes->set('tenant_db_connection', $tenant_db_connection);
 
         //for view
         \View::share('tenant', $tenant);
