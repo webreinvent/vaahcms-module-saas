@@ -43,9 +43,9 @@ class TenantByPath
         $tenancy = new Tenancy($tenant);
         $tenancy->start();
 
-        //for controller - use the request attributes bag instead of dynamic properties
-        $request->attributes->set('tenant', $tenant);
-        $request->attributes->set('tenancy', $tenancy);
+        //for controller
+        $request->tenant = $tenant;
+        $request->tenancy = $tenancy;
 
         //for view
         \View::share('tenant', $tenant);
