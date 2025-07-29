@@ -44,9 +44,11 @@ class TenantByPath
         $tenancy->start();
 
         //for controller
-        $request->tenant = $tenant;
-        $request->tenancy = $tenancy;
+        $request->merge([
+            'tenant' => $tenant
+        ]);
 
+        $request->attributes->set('tenancy', $tenancy);
         //for view
         \View::share('tenant', $tenant);
         \View::share('tenancy', $tenancy);
