@@ -41,12 +41,9 @@ class TenantBySubDomain
         $tenancy = new Tenancy($tenant);
         $tenant_db_connection = $tenancy->start();
 
-        $request->merge([
-            'tenant' => $tenant,
-            'sub_domain' => $sub_domain,
-            'tenant_db_connection' => $tenant_db_connection
-        ]);
-
+        $request->attributes->set('tenant', $tenant);
+        $request->attributes->set('sub_domain', $sub_domain);
+        $request->attributes->set('tenant_db_connection', $tenant_db_connection);
         $request->attributes->set('tenancy', $tenancy);
 
         //for view
