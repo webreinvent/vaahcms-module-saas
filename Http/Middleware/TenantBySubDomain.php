@@ -41,9 +41,10 @@ class TenantBySubDomain
         $tenancy = new Tenancy($tenant);
         $tenant_db_connection = $tenancy->start();
 
-        $request->attributes->set('tenant', $tenant);
-        $request->attributes->set('sub_domain', $sub_domain);
-        $request->attributes->set('tenant_db_connection', $tenant_db_connection);
+        $request->tenant = $tenant;
+        $request->sub_domain = $sub_domain;
+        $request->tenant_db_connection = $tenant_db_connection;
+
         $request->attributes->set('tenancy', $tenancy);
 
         //for view
